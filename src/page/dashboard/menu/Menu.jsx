@@ -1,4 +1,4 @@
-import Search from "./component/Search";
+import Search from "./component/search/Search";
 
 export default function Menu() {
     return (

@@ -4,7 +4,10 @@ export default function DropdownSetting() {
     return (
         <>
             <div className=""
-                style={{ marginBottom: 330, marginLeft: 270 }}>
+                style={{
+                    marginBottom: 330, marginLeft: 270,
+                    position: 'absolute',
+                }}>
                 <div tabIndex={0} role="button">
                     <ul tabIndex={0} className="dropdown-content z-[1] menu bg-white drop-shadow-lg border" style={{ width: 250, marginBottom: 2, borderRadius: 5, gap: 10, color: 'black', display: "block" }}>
                         <li>
@@ -28,7 +31,6 @@ export default function DropdownSetting() {
                                                 <li>
                                                     <div style={{ width: 140, height: 40 }}>Manage files</div>
                                                 </li>
-
                                             </ul>
                                         </div>
                                     </div>
@@ -109,7 +111,7 @@ export default function DropdownSetting() {
                         </li>
                     </ul>
                 </div>
-            </div>
+            </div >
         </>
     )
 }

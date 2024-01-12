@@ -132,6 +132,12 @@ export default function SideBar() {
                 <div
                     ref={dropdownRef}
                     style={{
+                        position: 'relative',
+                        //bottom: '100%',
+                        //left: 100,
+                        //bottom: 100,
+                        //transform: showDropdown ? 'translateY(-10   0%)' : 'translateY(0)',
+                        //transition: 'transform 0.3s ease-in-out', 
                         width: "100%",
                         height: 80,
                         display: "flex",
@@ -146,7 +152,7 @@ export default function SideBar() {
                     {selectedItem === "settings" ? (
                         <BsGearFill size={30} color={"white"} />
                     ) : (
-                        <BsGear size={30} color={"white"} />
+                        <BsGear className="z-0" size={30} color={"white"} />
                     )}
                     {showDropdown && <DropdownSetting />}
                 </div>
