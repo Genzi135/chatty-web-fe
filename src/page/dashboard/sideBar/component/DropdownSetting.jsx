@@ -5,7 +5,7 @@ export default function DropdownSetting() {
         <>
             <div className=""
                 style={{
-                    marginBottom: 330, marginLeft: 270,
+                    marginBottom: 350, marginLeft: 200,
                     position: 'absolute',
                 }}>
                 <div tabIndex={0} role="button">
@@ -46,12 +46,11 @@ export default function DropdownSetting() {
                                     </div>
                                     <div>
                                         <BsChevronRight size={15} color={"black"} />
-                                        <div tabIndex={0} className="dropdown-content z-[1] shadow-md" style={{ backgroundColor: 'white', padding: 10, gap: 10 }}>
+                                        <div tabIndex={0} className="dropdown-content z-[1] shadow-md p-2" style={{ backgroundColor: 'white', padding: 10, gap: 10 }}>
                                             <ul>
                                                 <li>
                                                     <div style={{ width: 140, height: 40 }}>Send log files</div>
                                                 </li>
-
                                             </ul>
                                         </div>
                                     </div>

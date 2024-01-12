@@ -1,11 +1,14 @@
 import React from "react";
 import { BsChatDotsFill, BsChatDots, BsJournalBookmark, BsJournalBookmarkFill, BsGear, BsGearFill, BsCheckSquare, BsCheckSquareFill } from "react-icons/bs";
 import DropdownSetting from "./component/dropdownSetting";
+import DropdownProfile from "./component/DropdownProfile";
 
 export default function SideBar() {
     const [selectedItem, setSelectedItem] = React.useState("chat");
     const [showDropdown, setShowDropdown] = React.useState(false);
+    const [showDropdownProfile, setShowDropdownProfile] = React.useState(false);
     const dropdownRef = React.useRef(null);
+    const dropdownProfileRef = React.useRef(null);
 
     const handleClickOutside = (event) => {
         if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -13,8 +16,17 @@ export default function SideBar() {
         }
     }
 
+    const handleClickOutsideProfile = (event) => {
+        if (dropdownProfileRef.current && !dropdownProfileRef.current.contains(event.target)) {
+            setShowDropdownProfile(false);
+        }
+    }
+
     const handleItemClick = (item) => {
-        if (item === "settings") {
+        if (item === "profile") {
+            setShowDropdownProfile(!showDropdownProfile);
+        }
+        else if (item === "settings") {
             setShowDropdown(!showDropdown);
         } else {
             setSelectedItem(item);
@@ -23,20 +35,27 @@ export default function SideBar() {
 
     React.useEffect(() => {
         document.addEventListener("click", handleClickOutside);
+        document.addEventListener("click", handleClickOutsideProfile);
         return () => {
-            document.removeEventListener("click", handleClickOutside)
+            document.removeEventListener("click", handleClickOutside);
+            document.removeEventListener("click", handleClickOutsideProfile);
         }
     }, [])
+
+
 
     return (
         <div style={{ width: 80, backgroundColor: "blue", display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: "center" }}>
             <div
+                ref={dropdownProfileRef}
                 className="avatar"
-                style={{ marginTop: 20, marginBottom: 10, padding: 10 }}
+                style={{ marginTop: 20, marginBottom: 10, padding: 10, position: 'relative' }}
+                onClick={() => handleItemClick("profile")}
             >
                 <div className="w-14 rounded-full">
                     <img src="https://res.cloudinary.com/diribdgsz/image/upload/v1704685598/chat-app/clone-avatar_a6lb3y.png" alt="avatar" />
                 </div>
+                {showDropdownProfile && <DropdownProfile />}
             </div>
             <div
                 style={{
