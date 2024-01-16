@@ -1,6 +1,13 @@
 import { BsGear, BsChevronRight, BsPerson, BsDatabase, BsTools, BsInfoCircle, BsGlobe } from "react-icons/bs";
+import { useNavigate } from 'react-router-dom';
 
 export default function DropdownSetting() {
+    const navigation = useNavigate();
+
+    const navigateHomePage = () => {
+        navigation('/authentication');
+    }
+
     return (
         <>
             <div className=""
@@ -106,7 +113,7 @@ export default function DropdownSetting() {
                         </li>
                         <div style={{ width: "100%", borderBottomWidth: 0.5 }}></div>
                         <li>
-                            <a style={{ color: 'red' }} >Logout</a>
+                            <a style={{ color: 'red' }} onClick={navigateHomePage}>Logout</a>
                         </li>
                     </ul>
                 </div>

@@ -1,9 +1,9 @@
 import React from "react";
 import { BsChatDotsFill, BsChatDots, BsJournalBookmark, BsJournalBookmarkFill, BsGear, BsGearFill, BsCheckSquare, BsCheckSquareFill } from "react-icons/bs";
-import DropdownSetting from "./component/dropdownSetting";
+import DropdownSetting from "./component/DropdownSetting";
 import DropdownProfile from "./component/DropdownProfile";
 
-export default function SideBar() {
+export default function SideBar({ selectedItems, onItemClick }) {
     const [selectedItem, setSelectedItem] = React.useState("chat");
     const [showDropdown, setShowDropdown] = React.useState(false);
     const [showDropdownProfile, setShowDropdownProfile] = React.useState(false);
@@ -30,6 +30,7 @@ export default function SideBar() {
             setShowDropdown(!showDropdown);
         } else {
             setSelectedItem(item);
+            onItemClick(item);
         }
     };
 
@@ -46,6 +47,7 @@ export default function SideBar() {
 
     return (
         <div style={{ width: 80, backgroundColor: "blue", display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: "center" }}>
+
             <div
                 ref={dropdownProfileRef}
                 className="avatar"
@@ -121,7 +123,7 @@ export default function SideBar() {
                             )}
                         </div>
                     </div>
-                    <div
+                    {/* <div
                         onClick={() => handleItemClick("todo")}
                         style={{
                             width: "100%",
@@ -146,7 +148,7 @@ export default function SideBar() {
                                 <BsCheckSquare size={30} color={"white"} />
                             )}
                         </div>
-                    </div>
+                    </div> */}
                 </div>
                 <div
                     ref={dropdownRef}

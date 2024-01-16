@@ -3,7 +3,7 @@ import { Routes, Route } from 'react-router-dom';
 
 import './App.css';
 import AuthPage from './page/authentication/AuthPage';
-import GettingStarted from './page/GettingStarted';
+import GettingStarted from './page/gettingStarted/GettingStarted';
 import DashBoard from './page/dashboard/Dashboard';
 
 function App() {
@@ -15,6 +15,7 @@ function App() {
         <Route path='/' element={<GettingStarted />} />
         <Route path='/authentication' element={<AuthPage />} />
         <Route path='/dashboard' element={<DashBoard />} />
+
       </Routes>
     </>
   );

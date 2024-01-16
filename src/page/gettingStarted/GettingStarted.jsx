@@ -7,7 +7,7 @@ function GettingStarted() {
             <h1>Getting Started</h1>
             <p>Welcome to our app! Click below to get start.</p>
 
-            <Link to="/dashboard"><button className='btn btn-primary'>Get Started</button></Link>
+            <Link to="/authentication"><button className='btn btn-primary'>Get Started</button></Link>
 
         </div>
     );

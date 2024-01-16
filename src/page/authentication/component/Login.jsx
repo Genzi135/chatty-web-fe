@@ -1,10 +1,19 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+var data = [{
+    username: "123",
+    password: "123",
+    remember: false
+}];
 
 // eslint-disable-next-line react/prop-types
 function Login({ onRegisterClick }) {
     const [phone, setPhone] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [rememberMe, setRememberMe] = React.useState(false);
+
+    const navigation = useNavigate();
 
     const handlePhoneChange = (e) => {
         setPhone(e.target.value);
@@ -18,10 +27,32 @@ function Login({ onRegisterClick }) {
         setRememberMe(!rememberMe);
     };
 
+    const checkRemember = () => {
+        data.forEach((items) => {
+            if (items.remember) {
+                setPhone(items.username);
+                setPassword(items.password);
+                setRememberMe(!rememberMe)
+            }
+        })
+    };
+
+    useEffect(checkRemember, []);
+
     const handleLogin = () => {
+        data.forEach((items) => {
+            if (phone === items.username && password === items.password) {
+                items.remember = rememberMe;
+                navigation('/dashboard')
+            }
+        })
         console.log('Logging in with phone:', phone, 'and password:', password);
         console.log('Remember me:', rememberMe);
     };
+
+    const keyPressed = (e) => {
+        (e.key === 'Enter') && handleLogin()
+    }
 
     return (
         <div className='card w-96 bg-white shadow-md'>
@@ -37,6 +68,7 @@ function Login({ onRegisterClick }) {
                         className='input input-bordered w-full bg-white'
                         value={phone}
                         onChange={handlePhoneChange}
+                        onKeyDown={keyPressed}
                     />
                 </div>
                 <div>
@@ -51,6 +83,7 @@ function Login({ onRegisterClick }) {
                         type='password'
                         value={password}
                         onChange={handlePasswordChange}
+                        onKeyDown={keyPressed}
                     />
                 </div>
                 <div className='form-control w-32'>
@@ -65,7 +98,7 @@ function Login({ onRegisterClick }) {
                     </label>
                 </div>
                 <div className='label form-control'>
-                    <button className='btn btn-primary w-32' onClick={handleLogin}>
+                    <button className='btn btn-primary w-32' onClick={handleLogin} onKeyDown={keyPressed} tabIndex="0">
                         LOGIN
                     </button>
                 </div>

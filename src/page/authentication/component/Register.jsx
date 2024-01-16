@@ -1,5 +1,6 @@
 // components/Register.js
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 // eslint-disable-next-line react/prop-types
 function Register({ onLoginClick }) {
@@ -7,6 +8,7 @@ function Register({ onLoginClick }) {
     const [password, setPassword] = React.useState('');
     const [confirm, setConfirm] = React.useState('');
     const [report, setReport] = React.useState('');
+    const navigate = useNavigate();
 
     const handlePhoneChange = (e) => {
         setPhone(e.target.value);
@@ -20,10 +22,19 @@ function Register({ onLoginClick }) {
         setConfirm(e.target.value);
     }
 
+    const data = []
+
     const handleRegister = () => {
         if (password === confirm) {
             setReport("");
             console.log("Phone number: " + phone, "Password: " + password)
+            data.push({
+                username: phone,
+                password: password,
+                remember: false
+            })
+            console.log(data)
+            navigate('/authentication')
         } else {
             const errorMessage = "*Password and password confirm not the same";
             setReport(errorMessage);
