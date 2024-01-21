@@ -15,7 +15,6 @@ function App() {
         <Route path='/' element={<GettingStarted />} />
         <Route path='/authentication' element={<AuthPage />} />
         <Route path='/dashboard' element={<DashBoard />} />
-
       </Routes>
     </>
   );

@@ -1,6 +1,7 @@
 import React from "react";
 import Menu from "./menu/Menu";
 import SideBar from "./sideBar/sideBar";
+import Chat from "./chat/Chat";
 
 
 export default function DashBoard() {
@@ -14,7 +15,7 @@ export default function DashBoard() {
             <div style={{ display: 'flex', width: "100vw", height: "100vh" }}>
                 <SideBar selectedItem={selected} onItemClick={handleItemClick} />
                 <Menu selectedItem={selected} />
-
+                <Chat />
             </div>
         </>
     )

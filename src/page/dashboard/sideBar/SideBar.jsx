@@ -1,10 +1,16 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable no-unused-vars */
 import React from "react";
-import { BsChatDotsFill, BsChatDots, BsJournalBookmark, BsJournalBookmarkFill, BsGear, BsGearFill, BsCheckSquare, BsCheckSquareFill } from "react-icons/bs";
+import {
+    BsChatDotsFill, BsChatDots, BsJournalBookmark, BsJournalBookmarkFill, BsGear, BsGearFill,
+    // BsCheckSquare, BsCheckSquareFill 
+} from "react-icons/bs";
 import DropdownSetting from "./component/DropdownSetting";
 import DropdownProfile from "./component/DropdownProfile";
+import { COLORS } from "../../../utils/COLORS";
 
 export default function SideBar({ selectedItems, onItemClick }) {
-    const [selectedItem, setSelectedItem] = React.useState("chat");
+    const [selectedItem, setSelectedItem] = React.useState("Chat");
     const [showDropdown, setShowDropdown] = React.useState(false);
     const [showDropdownProfile, setShowDropdownProfile] = React.useState(false);
     const dropdownRef = React.useRef(null);
@@ -73,7 +79,7 @@ export default function SideBar({ selectedItems, onItemClick }) {
                     width: "100%",
                 }}>
                     <div
-                        onClick={() => handleItemClick("chat")}
+                        onClick={() => handleItemClick("Chat")}
                         style={{
                             width: "100%",
                             height: 80,
@@ -82,7 +88,7 @@ export default function SideBar({ selectedItems, onItemClick }) {
                     >
                         <div
                             style={{
-                                backgroundColor: selectedItem === "chat" ? "darkBlue" : "",
+                                backgroundColor: selectedItem === "Chat" ? COLORS.bdSelected : "",
                                 width: "100%",
                                 height: "100%",
                                 display: "flex",
@@ -90,7 +96,7 @@ export default function SideBar({ selectedItems, onItemClick }) {
                                 justifyContent: "center",
                                 alignItems: "center",
                             }}>
-                            {selectedItem === "chat" ? (
+                            {selectedItem === "Chat" ? (
                                 <BsChatDotsFill size={30} color={"white"} />
                             ) : (
                                 <BsChatDots size={30} color={"white"} />
@@ -98,7 +104,7 @@ export default function SideBar({ selectedItems, onItemClick }) {
                         </div>
                     </div>
                     <div
-                        onClick={() => handleItemClick("contact")}
+                        onClick={() => handleItemClick("Contact")}
                         style={{
                             width: "100%",
                             height: 80,
@@ -108,7 +114,7 @@ export default function SideBar({ selectedItems, onItemClick }) {
                     >
                         <div
                             style={{
-                                backgroundColor: selectedItem === "contact" ? "darkBlue" : "",
+                                backgroundColor: selectedItem === "Contact" ? COLORS.bdSelected : "",
                                 width: "100%",
                                 height: "100%",
                                 display: "flex",
@@ -116,7 +122,7 @@ export default function SideBar({ selectedItems, onItemClick }) {
                                 justifyContent: "center",
                                 alignItems: "center",
                             }}>
-                            {selectedItem === "contact" ? (
+                            {selectedItem === "Contact" ? (
                                 <BsJournalBookmarkFill size={30} color={"white"} />
                             ) : (
                                 <BsJournalBookmark size={30} color={"white"} />

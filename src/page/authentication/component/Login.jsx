@@ -1,11 +1,7 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-var data = [{
-    username: "123",
-    password: "123",
-    remember: false
-}];
+import data from './data'
 
 // eslint-disable-next-line react/prop-types
 function Login({ onRegisterClick }) {

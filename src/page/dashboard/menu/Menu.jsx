@@ -6,10 +6,10 @@ import Search from "./component/search/Search";
 export default function Menu({ selectedItem }) {
     return (
         <>
-            <div style={{ width: 400, backgroundColor: 'white' }}>
+            <div style={{ width: 400, backgroundColor: 'white', borderRightWidth: 1 }}>
                 <Search />
-                {selectedItem === "chat" && <Chat />}
-                {selectedItem === "contact" && <Contact />}
+                {selectedItem === "Chat" && <Chat />}
+                {selectedItem === "Contact" && <Contact />}
                 {/* {selectedItem === "todo" && <Todo />} */}
             </div>
         </>
