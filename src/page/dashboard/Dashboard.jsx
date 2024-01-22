@@ -1,7 +1,7 @@
 import React from "react";
 import Menu from "./menu/Menu";
 import SideBar from "./sideBar/sideBar";
-import Chat from "./chat/Chat";
+import Chat from "./chat/ChatBox";
 
 
 export default function DashBoard() {

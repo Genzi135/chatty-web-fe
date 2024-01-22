@@ -16,13 +16,12 @@ export default function Chat() {
     return (
         <>
             <HeaderChat />
-            <Conversation />
-            <Conversation />
-            <Conversation />
-            <Conversation />
-            <Conversation />
-            <Conversation />
-            <Conversation />
+            <div style={{ width: "100%" }}>
+                <Conversation />
+                <Conversation />
+                <Conversation />
+            </div>
+
         </>
     )
 }
