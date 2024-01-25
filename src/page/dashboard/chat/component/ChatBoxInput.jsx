@@ -27,16 +27,16 @@ const ChatInput = () => {
 
     return (
         <>
-            <div style={{ width: '100%', height: 120, backgroundColor: COLORS.whiteBG }}>
-                <div style={{ height: '45%', width: '100%', borderBottomWidth: 1, display: 'flex', justifyContent: 'flex-start', alignItems: 'center', padding: 20, gap: 10 }}>
-                    <div style={{ width: 45, height: 45, display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: 4 }} className="hover:bg-gray-200">
-                        <BsIntersect size={25} color={'black'} />
+            <div style={{ width: '100%', height: 100, backgroundColor: COLORS.whiteBG }}>
+                <div style={{ height: '45%', width: '100%', borderBottomWidth: 1, display: 'flex', justifyContent: 'flex-start', alignItems: 'center', padding: 10, gap: 10 }}>
+                    <div style={{ width: 40, height: 40, display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: 4 }} className="hover:bg-gray-200">
+                        <BsIntersect size={20} color={'black'} />
                     </div>
-                    <div style={{ width: 45, height: 45, display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: 4 }} className="hover:bg-gray-200">
-                        <BsImage size={25} color="black" />
+                    <div style={{ width: 40, height: 40, display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: 4 }} className="hover:bg-gray-200">
+                        <BsImage size={20} color="black" />
                     </div>
-                    <div style={{ width: 45, height: 45, display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: 4 }} className="hover:bg-gray-200">
-                        <BsBandaid size={25} color="black" />
+                    <div style={{ width: 40, height: 40, display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: 4 }} className="hover:bg-gray-200">
+                        <BsBandaid size={20} color="black" />
                     </div>
                 </div>
                 <div style={{ height: '55%', width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -50,7 +50,7 @@ const ChatInput = () => {
                     />
                     <div style={{ height: '100%', display: 'flex', gap: 10, paddingRight: 20, justifyContent: 'center', alignItems: 'center' }}>
                         <div style={{ width: 45, height: 45, display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: 4 }} className="hover:bg-gray-200">
-                            <BsEmojiSmile size={28} color={'black'} />
+                            <BsEmojiSmile size={25} color={'black'} />
                         </div>
                         {isTyping ? (
                             <div
@@ -63,7 +63,7 @@ const ChatInput = () => {
 
                         ) : (
                             <div style={{ width: 45, height: 45, display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: 4 }} className="hover:bg-gray-200">
-                                <BsFillHandThumbsUpFill size={30} color={'orange'} />
+                                <BsFillHandThumbsUpFill size={27} color={'orange'} />
                             </div>
                         )}
                     </div>

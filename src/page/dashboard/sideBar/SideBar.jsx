@@ -8,13 +8,18 @@ import {
 import DropdownSetting from "./component/DropdownSetting";
 import DropdownProfile from "./component/DropdownProfile";
 import { COLORS } from "../../../utils/COLORS";
+import DUMMY_DATA from "../../../data/DUMMY_DATA";
 
-export default function SideBar({ selectedItems, onItemClick }) {
+export default function SideBar({ selectedItems, onItemClick, userid }) {
     const [selectedItem, setSelectedItem] = React.useState("Chat");
     const [showDropdown, setShowDropdown] = React.useState(false);
     const [showDropdownProfile, setShowDropdownProfile] = React.useState(false);
     const dropdownRef = React.useRef(null);
     const dropdownProfileRef = React.useRef(null);
+
+    const id = userid;
+
+    const [data, setData] = React.useState({});
 
     const handleClickOutside = (event) => {
         if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -49,10 +54,26 @@ export default function SideBar({ selectedItems, onItemClick }) {
         }
     }, [])
 
+    React.useEffect(() => {
+        const u1 = "u1";
+        console.log("user_id: " + userid)
+        console.log("u1: " + u1)
+        const userData = DUMMY_DATA.user.find((e) => e.id === userid);
+        console.log("data: " + userData)
+
+        if (userData) {
+            console.log("find: " + userData._id);
+            setData(userData)
+        } else {
+            console.log("Không tìm thấy user với _id là: " + u1);
+        }
+    }, [userid]);
+
+
 
 
     return (
-        <div style={{ width: 80, backgroundColor: "blue", display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: "center" }}>
+        <div style={{ width: 70, backgroundColor: "blue", display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: "center" }}>
 
             <div
                 ref={dropdownProfileRef}
@@ -60,8 +81,8 @@ export default function SideBar({ selectedItems, onItemClick }) {
                 style={{ marginTop: 20, marginBottom: 10, padding: 10, position: 'relative' }}
                 onClick={() => handleItemClick("profile")}
             >
-                <div className="w-14 rounded-full">
-                    <img src="https://res.cloudinary.com/diribdgsz/image/upload/v1704685598/chat-app/clone-avatar_a6lb3y.png" alt="avatar" />
+                <div className="w-12 rounded-full">
+                    <img src={data.avatar} alt="avatar" />
                 </div>
                 {showDropdownProfile && <DropdownProfile />}
             </div>
@@ -97,9 +118,9 @@ export default function SideBar({ selectedItems, onItemClick }) {
                                 alignItems: "center",
                             }}>
                             {selectedItem === "Chat" ? (
-                                <BsChatDotsFill size={30} color={"white"} />
+                                <BsChatDotsFill size={28} color={"white"} />
                             ) : (
-                                <BsChatDots size={30} color={"white"} />
+                                <BsChatDots size={28} color={"white"} />
                             )}
                         </div>
                     </div>
@@ -123,9 +144,9 @@ export default function SideBar({ selectedItems, onItemClick }) {
                                 alignItems: "center",
                             }}>
                             {selectedItem === "Contact" ? (
-                                <BsJournalBookmarkFill size={30} color={"white"} />
+                                <BsJournalBookmarkFill size={25} color={"white"} />
                             ) : (
-                                <BsJournalBookmark size={30} color={"white"} />
+                                <BsJournalBookmark size={25} color={"white"} />
                             )}
                         </div>
                     </div>

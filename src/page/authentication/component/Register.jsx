@@ -2,6 +2,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import DUMMY_DATA from '../../../data/DUMMY_DATA';
+
 // eslint-disable-next-line react/prop-types
 function Register({ onLoginClick }) {
     const [phone, setPhone] = React.useState('');
@@ -9,6 +11,8 @@ function Register({ onLoginClick }) {
     const [confirm, setConfirm] = React.useState('');
     const [report, setReport] = React.useState('');
     const navigate = useNavigate();
+
+    const data = DUMMY_DATA;
 
     const handlePhoneChange = (e) => {
         setPhone(e.target.value);
@@ -22,13 +26,11 @@ function Register({ onLoginClick }) {
         setConfirm(e.target.value);
     }
 
-    const data = []
-
     const handleRegister = () => {
         if (password === confirm) {
             setReport("");
             console.log("Phone number: " + phone, "Password: " + password)
-            data.push({
+            data.user.push({
                 username: phone,
                 password: password,
                 remember: false

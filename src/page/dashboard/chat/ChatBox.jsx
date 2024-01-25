@@ -5,7 +5,7 @@ import ChatInput from "./component/ChatBoxInput";
 import ConversationDrawer from "./component/ConversationDrawer";
 
 const ChatBox = () => {
-    const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+    const [isDrawerOpen, setIsDrawerOpen] = useState(true);
 
     const handleSidebarButtonClick = () => {
         setIsDrawerOpen(!isDrawerOpen);

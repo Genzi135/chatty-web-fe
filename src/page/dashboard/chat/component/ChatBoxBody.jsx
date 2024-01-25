@@ -13,8 +13,9 @@ const ChatBody = () => {
 
     return (
         <>
-            <div style={{ width: "100%", height: "100%", position: "relative", overflowY: "auto", scrollbarColor: "auto", padding: 5 }}
-                ref={chatContainerRef}>
+            <div style={{ width: "100%", height: "100%", position: "relative", overflowY: "auto", padding: 5 }}
+                ref={chatContainerRef}
+            >
                 <Message text={"hello Genzi"} type={"chat-start"} />
                 <Message text={"hi"} type={"chat-end"} />
                 <Message text={"My name is January14th"} type={"chat-start"} />

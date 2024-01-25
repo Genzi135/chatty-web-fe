@@ -1,13 +1,15 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import data from './data'
+import DUMMY_DATA from '../../../data/DUMMY_DATA';
 
 // eslint-disable-next-line react/prop-types
 function Login({ onRegisterClick }) {
     const [phone, setPhone] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [rememberMe, setRememberMe] = React.useState(false);
+
+    const data = DUMMY_DATA;
 
     const navigation = useNavigate();
 
@@ -24,7 +26,7 @@ function Login({ onRegisterClick }) {
     };
 
     const checkRemember = () => {
-        data.forEach((items) => {
+        data.user.forEach((items) => {
             if (items.remember) {
                 setPhone(items.username);
                 setPassword(items.password);
@@ -36,12 +38,12 @@ function Login({ onRegisterClick }) {
     useEffect(checkRemember, []);
 
     const handleLogin = () => {
-        data.forEach((items) => {
-            if (phone === items.username && password === items.password) {
-                items.remember = rememberMe;
-                navigation('/dashboard')
-            }
-        })
+        const user = data.user.find((e) => phone === e.phoneNumber && password === e.password)
+        if (user) {
+            localStorage.setItem("currentUser", JSON.stringify(user.id));
+            navigation("/dashboard");
+            console.log(localStorage.getItem("currentUser"));
+        }
         console.log('Logging in with phone:', phone, 'and password:', password);
         console.log('Remember me:', rememberMe);
     };
