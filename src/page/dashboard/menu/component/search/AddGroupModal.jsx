@@ -11,7 +11,7 @@ const AddGroupModal = () => {
     }
 
     React.useEffect(() => {
-        console.log(textInput)
+        console.log("text input: " + textInput)
     }, [textInput])
 
     return (

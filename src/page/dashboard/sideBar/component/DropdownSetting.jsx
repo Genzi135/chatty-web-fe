@@ -117,7 +117,7 @@ export default function DropdownSetting() {
                         </li>
                     </ul>
                 </div>
-            </div >
+            </div>
         </>
     )
 }

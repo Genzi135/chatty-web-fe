@@ -55,17 +55,12 @@ export default function SideBar({ selectedItems, onItemClick, userid }) {
     }, [])
 
     React.useEffect(() => {
-        const u1 = "u1";
-        console.log("user_id: " + userid)
-        console.log("u1: " + u1)
         const userData = DUMMY_DATA.user.find((e) => e.id === userid);
-        console.log("data: " + userData)
-
         if (userData) {
-            console.log("find: " + userData._id);
+            console.log("find: " + userData.id);
             setData(userData)
         } else {
-            console.log("Không tìm thấy user với _id là: " + u1);
+            console.log("Không tìm thấy user với _id là: " + userid);
         }
     }, [userid]);
 

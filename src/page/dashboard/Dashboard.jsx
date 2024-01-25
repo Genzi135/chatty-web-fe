@@ -6,7 +6,6 @@ export default function DashBoard() {
     const [selected, setSelected] = React.useState('Chat');
 
     const currentUser = localStorage.getItem("currentUser");
-    console.log("type: " + typeof currentUser)
 
     React.useEffect(() => {
         console.log("current: " + currentUser);
@@ -18,7 +17,7 @@ export default function DashBoard() {
     return (
         <>
             <div style={{ display: 'flex', width: "100vw", height: "100vh" }}>
-                <SideBar selectedItem={selected} onItemClick={handleItemClick} userid={currentUser} />
+                <SideBar selectedItem={selected} onItemClick={handleItemClick} userid={JSON.parse(currentUser)} />
                 <Menu selectedItem={selected} />
             </div>
         </>

@@ -10,7 +10,7 @@ const AddFriendModal = () => {
     }
 
     React.useEffect(() => {
-        console.log(phoneInput)
+        console.log("phone input: " + phoneInput)
     }, [phoneInput])
 
     return (
