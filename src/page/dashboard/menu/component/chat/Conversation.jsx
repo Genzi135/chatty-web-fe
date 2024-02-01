@@ -1,15 +1,23 @@
 import React from "react";
 import { FiMoreHorizontal } from "react-icons/fi";
 
-export default function Conversation() {
+const Conversation = ({ data }) => {
 
     const [isHover, setHover] = React.useState(false);
+
+    const handleMouseEnter = React.useCallback(() => {
+        setHover(true);
+    }, []);
+
+    const handleMouseLeave = React.useCallback(() => {
+        setHover(false);
+    }, []);
 
     return (
         <div>
             <div
-                onMouseEnter={() => setHover(true)}
-                onMouseLeave={() => setHover(false)}
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
                 style={{ width: "100%", height: 90, display: "flex", justifyContent: 'space-between', alignItems: "center", padding: 10 }}
                 className="hover:bg-gray-100">
                 <div style={{ display: "flex", justifyContent: 'center', alignItems: 'center', gap: 10 }} >
@@ -18,10 +26,10 @@ export default function Conversation() {
                     </div>
                     <div>
                         <div className="stat-title text-black">
-                            Name
+                            {data.conversationName}
                         </div>
                         <div className="text">
-                            message
+                            {data.lastMessageId}
                         </div>
                     </div>
                 </div>
@@ -32,7 +40,7 @@ export default function Conversation() {
                     </div>
                 ) : (
                     <div>
-                        <div>time</div>
+                        <div>{data.createAt}</div>
 
                     </div>
                 )}
@@ -40,3 +48,5 @@ export default function Conversation() {
         </div>
     )
 }
+
+export default Conversation;

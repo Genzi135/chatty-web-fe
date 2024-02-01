@@ -10,16 +10,12 @@ import DropdownProfile from "./component/DropdownProfile";
 import { COLORS } from "../../../utils/COLORS";
 import DUMMY_DATA from "../../../data/DUMMY_DATA";
 
-export default function SideBar({ selectedItems, onItemClick, userid }) {
+export default function SideBar({ selectedItems, onItemClick, dataIn }) {
     const [selectedItem, setSelectedItem] = React.useState("Chat");
     const [showDropdown, setShowDropdown] = React.useState(false);
     const [showDropdownProfile, setShowDropdownProfile] = React.useState(false);
     const dropdownRef = React.useRef(null);
     const dropdownProfileRef = React.useRef(null);
-
-    const id = userid;
-
-    const [data, setData] = React.useState({});
 
     const handleClickOutside = (event) => {
         if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -54,19 +50,6 @@ export default function SideBar({ selectedItems, onItemClick, userid }) {
         }
     }, [])
 
-    React.useEffect(() => {
-        const userData = DUMMY_DATA.user.find((e) => e.id === userid);
-        if (userData) {
-            console.log("find: " + userData.id);
-            setData(userData)
-        } else {
-            console.log("Không tìm thấy user với _id là: " + userid);
-        }
-    }, [userid]);
-
-
-
-
     return (
         <div style={{ width: 70, backgroundColor: "blue", display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: "center" }}>
 
@@ -77,7 +60,7 @@ export default function SideBar({ selectedItems, onItemClick, userid }) {
                 onClick={() => handleItemClick("profile")}
             >
                 <div className="w-12 rounded-full">
-                    <img src={data.avatar} alt="avatar" />
+                    <img src={dataIn.avatar} alt="avatar" />
                 </div>
                 {showDropdownProfile && <DropdownProfile />}
             </div>
