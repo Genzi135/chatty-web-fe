@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import FriendList from "./FriendList";
 import FriendRequest from "./FriendRequest";
 import GroupList from "./GroupList";

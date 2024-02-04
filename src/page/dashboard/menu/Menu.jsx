@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React from "react";
 import Chat from "./component/chat/Chat";
 import Contact from "./component/contact/Contact";
