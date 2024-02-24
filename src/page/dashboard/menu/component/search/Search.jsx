@@ -25,6 +25,7 @@ export default function Search() {
                 <dialog id="AddGroupModal" className="modal">
                     <AddGroupModal />
                 </dialog>
+
             </div>
         </>
     )

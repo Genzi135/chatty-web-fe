@@ -5,6 +5,7 @@ import SideBar from "./sideBar/SideBar";
 import DUMMY_DATA from "../../data/DUMMY_DATA";
 import ChatBox from "./chatbox/ChatBox";
 import Contact from "../dashboard/contact/index";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function DashBoard() {
     const [selected, setSelected] = React.useState('Chat');
@@ -13,6 +14,9 @@ export default function DashBoard() {
     const currentUser = localStorage.getItem("currentUser");
 
     const [menu, setMenu] = React.useState('FR');
+
+    const dispatch = useDispatch();
+    const userData = useSelector((state) => state.user)
 
 
     const id = JSON.parse(currentUser)
@@ -31,6 +35,10 @@ export default function DashBoard() {
         if (conversations) {
             setConversation(conversations);
         }
+    }
+
+    const getUser = () => {
+        const user = DUMMY_DATA.user.find()
     }
 
     React.useEffect(() => {

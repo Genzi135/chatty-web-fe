@@ -2,12 +2,16 @@ import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import DUMMY_DATA from '../../../data/DUMMY_DATA';
+import { useDispatch, useSelector } from 'react-redux';
 
 // eslint-disable-next-line react/prop-types
 function Login({ onRegisterClick }) {
     const [phone, setPhone] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [rememberMe, setRememberMe] = React.useState(false);
+
+    const dispatch = useDispatch();
+    const userData = useSelector((state) => state.user)
 
     const data = DUMMY_DATA;
 
@@ -44,6 +48,7 @@ function Login({ onRegisterClick }) {
             navigation("/dashboard");
             console.log(localStorage.getItem("currentUser"));
         }
+        console.log(userData)
         console.log('Logging in with phone:', phone, 'and password:', password);
         console.log('Remember me:', rememberMe);
     };
