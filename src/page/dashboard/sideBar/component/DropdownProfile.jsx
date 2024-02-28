@@ -1,15 +1,14 @@
 import { Link } from "react-router-dom";
 import ProfileModal from "./ProfileModal";
 
-export default function DropdownProfile() {
+export default function DropdownProfile({ handleOpenModal }) {
     let name = "Genzi";
 
     const openProfileModal = () => {
-        const modal = document.getElementById("profileModal");
-        console.log(modal)
-        modal.showModal();
         console.log("open Click")
     };
+
+
 
     return (
         <>
@@ -20,7 +19,7 @@ export default function DropdownProfile() {
                 </div>
                 <ul className="menu">
                     <div style={{ width: "100%", borderBottomWidth: 0.5 }}></div>
-                    <li style={{}}><div onClick={() => { document.getElementById("profileModall").showModal() }}>Profile</div></li>
+                    <li style={{}}><div onClick={() => handleOpenModal()}>Profile</div></li>
                     <li>
                         <a>
                             Settings
@@ -31,9 +30,9 @@ export default function DropdownProfile() {
                 </ul>
             </div>
 
-            <dialog id="profileModall" className="modal" style={{ zIndex: 100 }}>
+            {/* <dialog id="profileModal" className="modal">
                 <ProfileModal />
-            </dialog>
+            </dialog> */}
 
         </>
     )

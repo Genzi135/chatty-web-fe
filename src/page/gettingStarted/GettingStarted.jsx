@@ -1,6 +1,16 @@
 // components/GettingStarted.js
+import React from 'react';
 import { Link } from 'react-router-dom';
 function GettingStarted() {
+
+    const [dataSource, setDataSource] = React.useState(null);
+
+    // async function getData("http://ec2-52-221-252-41.ap-southeast-1.compute.amazonaws.com:8555/users/getMe") {
+    //     const resp = await fetch();
+    //     setDataSource(resp)
+    // }
+
+    console.log(dataSource)
     return (
         <div style={{ width: '100vw', height: '100vh', display: 'flex', justifyContent: 'space-around', alignItems: 'center', backgroundColor: 'white' }}>
             <div style={{ width: '70%', height: '100%', display: 'flex', justifyContent: 'space-around', alignItems: 'center', }}>

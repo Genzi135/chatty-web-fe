@@ -9,6 +9,7 @@ import DropdownSetting from "./component/DropdownSetting";
 import DropdownProfile from "./component/DropdownProfile";
 import { COLORS } from "../../../utils/COLORS";
 import DUMMY_DATA from "../../../data/DUMMY_DATA";
+import ProfileModal from "./component/ProfileModal";
 
 export default function SideBar({ selectedItems, onItemClick, dataIn }) {
     const [selectedItem, setSelectedItem] = React.useState("Chat");
@@ -50,6 +51,10 @@ export default function SideBar({ selectedItems, onItemClick, dataIn }) {
         }
     }, [])
 
+    const openModal = () => {
+        document.getElementById("profileModal").showModal();
+    }
+
     return (
         <div style={{ width: 70, backgroundColor: "blue", display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: "center" }}>
 
@@ -62,7 +67,7 @@ export default function SideBar({ selectedItems, onItemClick, dataIn }) {
                 <div className="w-12 rounded-full">
                     <img src={dataIn.avatar} alt="avatar" />
                 </div>
-                {showDropdownProfile && <DropdownProfile />}
+                {showDropdownProfile && <DropdownProfile handleOpenModal={openModal} />}
             </div>
             <div
                 style={{
@@ -128,6 +133,9 @@ export default function SideBar({ selectedItems, onItemClick, dataIn }) {
                             )}
                         </div>
                     </div>
+                    <dialog id="profileModal" className="modal">
+                        <ProfileModal />
+                    </dialog>
                     {/* <div
                         onClick={() => handleItemClick("todo")}
                         style={{
@@ -180,7 +188,7 @@ export default function SideBar({ selectedItems, onItemClick, dataIn }) {
                     ) : (
                         <BsGear className="z-0" size={30} color={"white"} />
                     )}
-                    {showDropdown && <DropdownSetting />}
+                    {showDropdown && <DropdownSetting handleOpenModal={openModal} />}
                 </div>
 
             </div>

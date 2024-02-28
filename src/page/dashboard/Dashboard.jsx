@@ -58,7 +58,7 @@ export default function DashBoard() {
     console.log("Select: " + selected)
     return (
         <>
-            <div style={{ display: 'flex', width: "100vw", height: "100vh" }}>
+            <div style={{ display: 'flex', width: "100vw", height: "100vh", zIndex: 1 }}>
                 <SideBar selectedItem={selected} onItemClick={handleItemClick} dataIn={data} />
                 <Menu selectedItem={selected} onMenuClick={handleMenuClick} />
                 {selected === 'Chat' && <ChatBox />}

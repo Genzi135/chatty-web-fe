@@ -1,7 +1,7 @@
 import { BsGear, BsChevronRight, BsPerson, BsDatabase, BsTools, BsInfoCircle, BsGlobe } from "react-icons/bs";
 import { useNavigate } from 'react-router-dom';
 
-export default function DropdownSetting() {
+export default function DropdownSetting({ handleOpenModal }) {
     const navigation = useNavigate();
 
     const navigateHomePage = () => {
@@ -18,7 +18,7 @@ export default function DropdownSetting() {
                 <div tabIndex={0} role="button">
                     <ul tabIndex={0} className="dropdown-content z-[1] menu bg-white drop-shadow-lg border" style={{ width: 250, marginBottom: 2, borderRadius: 5, gap: 10, color: 'black', display: "block" }}>
                         <li>
-                            <a ><BsPerson size={20} /> Account information</a>
+                            <a ><BsPerson size={20} /> <div onClick={() => handleOpenModal()}>Account information</div></a>
                         </li>
                         <li>
                             <a ><BsGear size={20} /> Settings</a>
