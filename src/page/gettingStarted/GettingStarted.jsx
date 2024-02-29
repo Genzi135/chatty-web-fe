@@ -1,6 +1,7 @@
 // components/GettingStarted.js
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { pageimg } from '../../data/DUMMY_DATA';
 function GettingStarted() {
 
     const [dataSource, setDataSource] = React.useState(null);
@@ -26,7 +27,7 @@ function GettingStarted() {
                     </div>
                 </div>
                 <div>
-                    <img src='https://res.cloudinary.com/diribdgsz/image/upload/v1708778645/chat-app/message-bubbles-chat-icon-white-background_97458-458_vo9znm.avif' style={{ width: '100%', height: '100%' }} />
+                    <img src={pageimg[0]} style={{ width: '100%', height: '100%' }} />
                 </div>
             </div>
         </div>
