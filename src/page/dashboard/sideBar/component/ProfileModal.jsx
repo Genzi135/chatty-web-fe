@@ -2,9 +2,29 @@ import { BsCamera, BsXLg } from "react-icons/bs";
 import { COLORS } from "../../../../utils/COLORS";
 import { CiEdit } from "react-icons/ci";
 import { useSelector } from "react-redux";
+import axios from "axios";
+import { BASE_URL } from "../../../../data/DUMMY_DATA";
+import React from "react";
 
 const ProfileModal = () => {
     const userData = useSelector(state => state.user)
+
+    const [data, setData] = React.useState(null);
+
+    const getData = async () => {
+        const respone = await axios({
+            url: BASE_URL + "/api/v1/users/getMe",
+            method: 'get',
+            headers: "Bearer" + ' ' + userData.accessToken
+        })
+        console.log(respone)
+        setData(respone);
+
+    }
+    React.useEffect(() => {
+        getData()
+    }, [])
+
     return (
         <>
             <div style={{ width: 400, backgroundColor: 'white', maxHeight: "80%", borderRadius: 5, color: COLORS.text, display: "flex", flexDirection: 'column', justifyContent: 'space-between' }}>
