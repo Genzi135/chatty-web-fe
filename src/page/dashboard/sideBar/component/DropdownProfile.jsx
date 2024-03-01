@@ -1,8 +1,10 @@
+/* eslint-disable no-unused-vars */
 import { Link } from "react-router-dom";
 import ProfileModal from "./ProfileModal";
+import { useSelector } from "react-redux";
 
 export default function DropdownProfile({ handleOpenModal }) {
-    let name = "Genzi";
+    const userData = useSelector(state => state.user)
 
     const openProfileModal = () => {
         console.log("open Click")
@@ -15,7 +17,7 @@ export default function DropdownProfile({ handleOpenModal }) {
             <div style={{ position: 'absolute', backgroundColor: 'white', borderRadius: 5, width: 300, height: 170, color: 'black', gap: 20, marginLeft: 65, borderWidth: 0.5 }}
                 className="shadow-xl">
                 <div style={{ fontSize: 30, paddingLeft: 20 }}>
-                    {name}
+                    {userData.name}
                 </div>
                 <ul className="menu">
                     <div style={{ width: "100%", borderBottomWidth: 0.5 }}></div>

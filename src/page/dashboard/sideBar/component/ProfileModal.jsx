@@ -1,8 +1,10 @@
 import { BsCamera, BsXLg } from "react-icons/bs";
 import { COLORS } from "../../../../utils/COLORS";
 import { CiEdit } from "react-icons/ci";
+import { useSelector } from "react-redux";
 
 const ProfileModal = () => {
+    const userData = useSelector(state => state.user)
     return (
         <>
             <div style={{ width: 400, backgroundColor: 'white', maxHeight: "80%", borderRadius: 5, color: COLORS.text, display: "flex", flexDirection: 'column', justifyContent: 'space-between' }}>
@@ -35,7 +37,7 @@ const ProfileModal = () => {
                             </div>
                             <div className="flex" style={{ marginLeft: 140, gap: 10 }}>
                                 <h1 style={{ fontSize: 20 }}>
-                                    Name
+                                    {userData.name}
                                 </h1>
                                 <div style={{ marginTop: 4, width: 30, height: 30, borderRadius: 30 }} className="flex justify-center items-center hover:bg-gray-300"><CiEdit size={20} /></div>
                             </div>
@@ -50,9 +52,9 @@ const ProfileModal = () => {
                                 <div>Phone number</div>
                             </div>
                             <div style={{ display: 'flex', flexDirection: "column", gap: 10 }}>
-                                <div>Gender</div>
-                                <div>Birthday</div>
-                                <div>Phone number</div>
+                                <div>{userData.gender}</div>
+                                <div>{userData.dateOfBirth}</div>
+                                <div>{userData.phone}</div>
                             </div>
                         </div>
                         <div style={{ color: 'gray', fontSize: 14 }}>Just your friend can see your number</div>

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import DUMMY_DATA, { BASE_URL } from '../../../data/DUMMY_DATA';
 import { useDispatch, useSelector } from 'react-redux';
+import { setUser } from '../../../hooks/redux/reducer';
 
 // eslint-disable-next-line react/prop-types
 function Login({ onRegisterClick }) {
@@ -10,6 +11,7 @@ function Login({ onRegisterClick }) {
     const [password, setPassword] = React.useState('');
     const [rememberMe, setRememberMe] = React.useState(false);
 
+    const dispatch = useDispatch();
 
     const data = DUMMY_DATA;
 
@@ -54,7 +56,8 @@ function Login({ onRegisterClick }) {
         if (response.data.status === "success")
             // if (user) {
             //     localStorage.setItem("currentUser", JSON.stringify(user.id));
-            navigation("/dashboard");
+            dispatch(setUser(response.data.data.user))
+        navigation("/dashboard");
         //     console.log(localStorage.getItem("currentUser"));
         // }
         // console.log(userData)

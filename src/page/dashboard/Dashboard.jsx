@@ -22,6 +22,8 @@ export default function DashBoard() {
     const id = JSON.parse(currentUser)
     const user = DUMMY_DATA.user.find((e) => e.id === id);
 
+    console.log(userData)
+
     const getData = () => {
         if (user) {
             setData(user);
@@ -59,7 +61,7 @@ export default function DashBoard() {
     return (
         <>
             <div style={{ display: 'flex', width: "100vw", height: "100vh", zIndex: 1 }}>
-                <SideBar selectedItem={selected} onItemClick={handleItemClick} dataIn={data} />
+                <SideBar selectedItem={selected} onItemClick={handleItemClick} />
                 <Menu selectedItem={selected} onMenuClick={handleMenuClick} />
                 {selected === 'Chat' && <ChatBox />}
                 {selected === 'Contact' && <Contact menu={menu} />}

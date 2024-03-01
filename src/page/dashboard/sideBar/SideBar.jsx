@@ -10,13 +10,16 @@ import DropdownProfile from "./component/DropdownProfile";
 import { COLORS } from "../../../utils/COLORS";
 import DUMMY_DATA from "../../../data/DUMMY_DATA";
 import ProfileModal from "./component/ProfileModal";
+import { useSelector } from "react-redux";
 
-export default function SideBar({ selectedItems, onItemClick, dataIn }) {
+export default function SideBar({ selectedItems, onItemClick }) {
     const [selectedItem, setSelectedItem] = React.useState("Chat");
     const [showDropdown, setShowDropdown] = React.useState(false);
     const [showDropdownProfile, setShowDropdownProfile] = React.useState(false);
     const dropdownRef = React.useRef(null);
     const dropdownProfileRef = React.useRef(null);
+
+    const userData = useSelector(state => state.user)
 
     const handleClickOutside = (event) => {
         if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -65,7 +68,7 @@ export default function SideBar({ selectedItems, onItemClick, dataIn }) {
                 onClick={() => handleItemClick("profile")}
             >
                 <div className="w-12 rounded-full">
-                    <img src={dataIn.avatar} alt="avatar" />
+                    <img src={userData.avatar} alt="avatar" />
                 </div>
                 {showDropdownProfile && <DropdownProfile handleOpenModal={openModal} />}
             </div>
