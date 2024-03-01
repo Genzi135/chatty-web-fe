@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-
-import DUMMY_DATA from '../../../data/DUMMY_DATA';
+import axios from 'axios';
+import DUMMY_DATA, { BASE_URL } from '../../../data/DUMMY_DATA';
 import { useDispatch, useSelector } from 'react-redux';
 
 // eslint-disable-next-line react/prop-types
@@ -10,8 +10,6 @@ function Login({ onRegisterClick }) {
     const [password, setPassword] = React.useState('');
     const [rememberMe, setRememberMe] = React.useState(false);
 
-    const dispatch = useDispatch();
-    const userData = useSelector((state) => state.user)
 
     const data = DUMMY_DATA;
 
@@ -41,16 +39,27 @@ function Login({ onRegisterClick }) {
 
     useEffect(checkRemember, []);
 
-    const handleLogin = () => {
-        const user = data.user.find((e) => phone === e.phoneNumber && password === e.password)
-        if (user) {
-            localStorage.setItem("currentUser", JSON.stringify(user.id));
+    const handleLogin = async () => {
+        //const user = data.user.find((e) => phone === e.phoneNumber && password === e.password)
+        console.log(BASE_URL + "/api/v1/auth/login")
+        const response = await axios({
+            url: BASE_URL + "/api/v1/auth/login",
+            method: "post",
+            data: {
+                phone: phone,
+                password: password
+            }
+        })
+        console.log(response)
+        if (response.data.status === "success")
+            // if (user) {
+            //     localStorage.setItem("currentUser", JSON.stringify(user.id));
             navigation("/dashboard");
-            console.log(localStorage.getItem("currentUser"));
-        }
-        console.log(userData)
-        console.log('Logging in with phone:', phone, 'and password:', password);
-        console.log('Remember me:', rememberMe);
+        //     console.log(localStorage.getItem("currentUser"));
+        // }
+        // console.log(userData)
+        // console.log('Logging in with phone:', phone, 'and password:', password);
+        // console.log('Remember me:', rememberMe);
     };
 
     const keyPressed = (e) => {
