@@ -39,8 +39,12 @@ function GettingStarted() {
 
 
             <div style={{ width: '70%', height: '100%', display: 'flex', justifyContent: 'space-around', alignItems: 'center', }}>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-                    <img src='https://res.cloudinary.com/diribdgsz/image/upload/v1708776305/chat-app/Chatty_foylcy.png' style={{ width: 50, height: 50, borderRadius: 15 }} />
+                <div
+                    onClick={() => { }}
+                    style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+                    <img
+
+                        src='https://res.cloudinary.com/diribdgsz/image/upload/v1708776305/chat-app/Chatty_foylcy.png' style={{ width: 50, height: 50, borderRadius: 15 }} />
                     <div className='page' style={{ display: 'flex', flexDirection: 'column', gap: 20, color: 'black' }}>
                         <h1 style={{ color: '' }}>Hello! How are you today?</h1>
                         <p>Welcome to Chatty where you can chat with your friends</p>
