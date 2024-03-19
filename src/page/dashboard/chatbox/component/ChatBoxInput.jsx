@@ -219,7 +219,7 @@ const ChatInput = () => {
             <div>
               <div style={{ borderTopWidth: 1, marginLeft: 20, marginRight: 20 }}>
               </div>
-              <div style={{ paddingLeft: 20, position: 'relative', width: 'auto', height: 'auto', maxWidth: 120, maxHeight: 120, paddingBottom: 10, paddingTop: 10 }}
+              <div style={{ overflow: 'hidden', paddingLeft: 20, position: 'relative', width: 'auto', height: 'auto', maxWidth: 80, maxHeight: 80, paddingBottom: 20, paddingTop: 10 }}
 
               >
                 <span style={{

@@ -12,18 +12,9 @@ export default function DashBoard() {
     const [data, setData] = React.useState({});
     const [conversation, setConversation] = React.useState([]);
     const currentUser = localStorage.getItem("currentUser");
-
     const [menu, setMenu] = React.useState('FR');
-
-    const dispatch = useDispatch();
-    const userData = useSelector((state) => state.user)
-
-
     const id = JSON.parse(currentUser)
     const user = DUMMY_DATA.user.find((e) => e.id === id);
-
-    console.log(userData)
-
     const getData = () => {
         if (user) {
             setData(user);

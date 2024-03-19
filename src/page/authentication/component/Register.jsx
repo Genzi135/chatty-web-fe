@@ -1,8 +1,9 @@
 // components/Register.js
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import DUMMY_DATA, { BASE_URL } from '../../../data/DUMMY_DATA';
+import { BASE_URL } from '../../../data/DUMMY_DATA';
+import DateInput from '../../../component/DateInput';
+import { COLORS } from '../../../utils/COLORS';
 
 // eslint-disable-next-line react/prop-types
 function Register({ onLoginClick }) {
@@ -12,10 +13,8 @@ function Register({ onLoginClick }) {
     const [email, setEmail] = React.useState('');
     const [name, setName] = React.useState('');
     const [dob, setDob] = React.useState("");
+    const [gender, setGender] = React.useState('male');
     const [report, setReport] = React.useState('');
-    const navigate = useNavigate();
-
-    const data = DUMMY_DATA;
 
     const handlePhoneChange = (e) => {
         setPhone(e.target.value);
@@ -38,18 +37,12 @@ function Register({ onLoginClick }) {
     }
 
     const handleDobChange = (e) => {
-        setDob(e.target.value);
+        setDob(e);
     }
 
     const handleRegister = async () => {
-        if (password === confirm) {
-            setReport("");
-            console.log("Phone number: " + phone, "Password: " + password)
-            data.user.push({
-                username: phone,
-                password: password,
-                remember: false
-            })
+        console.log("dob: ", dob)
+        try {
             const response = await axios({
                 url: BASE_URL + "/api/v1/auth/register",
                 method: "post",
@@ -58,21 +51,30 @@ function Register({ onLoginClick }) {
                     email: email,
                     password: password,
                     phone: phone,
+                    gender: gender,
                     dateOfBirth: dob
                 }
             })
-            console.log(response)
-            navigate('/authentication')
-        } else {
-            const errorMessage = "*Password and password confirm not the same";
-            setReport(errorMessage);
-            console.log(errorMessage);
+            setPhone('');
+            setEmail('');
+            setPassword('');
+            setConfirm('');
+            setName('');
+            setGender('male');
+            setDob('')
+            onLoginClick()
+
+            console.log("dob", dob)
+        } catch (error) {
+            console.log(error)
+            setReport(error.response.data.message)
         }
     }
 
     return (
+
         <div className='card w-96 bg-white shadow-md'>
-            <div className='card-body' style={{ gap: 20 }}>
+            <div className='card-body' style={{ gap: 10 }}>
                 <h2 className='card-title' style={{ color: 'black', fontSize: 25 }}>Register</h2>
                 <div style={{
                     display: 'flex', flexDirection: 'row', gap: 5
@@ -94,20 +96,7 @@ function Register({ onLoginClick }) {
                         onChange={handleEmailChange}
                     />
                 </div>
-                <div>
-                    <span className='label-text' style={{ color: 'black' }}>Name</span>
-                    <input className='input input-bordered w-full bg-white'
-                        value={name}
-                        onChange={handleNameChange}
-                    />
-                </div>
-                <div>
-                    <span className='label-text' style={{ color: 'black' }}>Birthday</span>
-                    <input className='input input-bordered w-full bg-white'
-                        value={dob}
-                        onChange={handleDobChange}
-                    />
-                </div>
+
                 <div>
                     <div className='label'>
                         <span className='label-text' style={{ color: 'black' }}>Password</span>
@@ -128,6 +117,39 @@ function Register({ onLoginClick }) {
                         value={confirm}
                         onChange={handleConfirmChange} />
                 </div>
+
+                <div >
+                    <span className='label-text' style={{ color: 'black' }}>Name</span>
+                    <input className='input input-bordered w-full bg-white'
+                        value={name}
+                        onChange={handleNameChange}
+                    />
+                </div>
+                <h1 className='text-black'>
+                    Gender
+                </h1>
+                <form style={{ display: 'flex', gap: 30, alignItems: 'center', color: COLORS.text }}>
+                    <div>
+                        <label>
+                            <input type="radio" value={'Male'} checked={gender === 'male'} onChange={() => setGender('male')} />
+                            Male
+                        </label>
+                    </div>
+                    <div>
+                        <label>
+                            <input type="radio" value={'Female'} checked={gender === 'female'} onChange={() => setGender('female')} />
+                            Female
+                        </label>
+                    </div>
+                </form>
+                <div>
+                    {/* <span className='label-text' style={{ color: 'black' }}>Birthday</span>
+                    <input className='input input-bordered w-full bg-white'
+                        value={dob}
+                        onChange={handleDobChange}
+                    /> */}
+                    <DateInput onDateChange={handleDobChange} />
+                </div>
                 <span className='label-text' style={{ color: 'red' }}>{report}</span>
 
                 <div className='label form-control'>
@@ -135,7 +157,9 @@ function Register({ onLoginClick }) {
                         onClick={handleRegister}>REGISTER</button>
                 </div>
             </div>
+
         </div>
+
     );
 }
 

@@ -14,7 +14,7 @@ export default function DropdownProfile({ handleOpenModal }) {
 
     return (
         <>
-            <div style={{ position: 'absolute', backgroundColor: 'white', borderRadius: 5, width: 300, height: 170, color: 'black', gap: 20, marginLeft: 65, borderWidth: 0.5 }}
+            <div style={{ position: 'absolute', backgroundColor: 'white', borderRadius: 5, width: 300, height: 170, color: 'black', gap: 20, marginLeft: 65, borderWidth: 0.5, zIndex: 555 }}
                 className="shadow-xl">
                 <div style={{ fontSize: 30, paddingLeft: 20 }}>
                     {userData.name}

@@ -13,7 +13,7 @@ export default function DropdownSetting({ handleOpenModal }) {
             <div className=""
                 style={{
                     marginBottom: 350, marginLeft: 200,
-                    position: 'absolute',
+                    position: 'absolute', zIndex: 555
                 }}>
                 <div tabIndex={0} role="button">
                     <ul tabIndex={0} className="dropdown-content z-[1] menu bg-white drop-shadow-lg border" style={{ width: 250, marginBottom: 2, borderRadius: 5, gap: 10, color: 'black', display: "block" }}>

@@ -14,6 +14,9 @@ const Conversation = ({ data }) => {
         setHover(false);
     }, []);
 
+    // console.log(userMember, "u");
+    React.useEffect(() => {
+    }, [])
     return (
         <div>
             <div
@@ -22,12 +25,14 @@ const Conversation = ({ data }) => {
                 style={{ width: "100%", height: 90, display: "flex", justifyContent: 'space-between', alignItems: "center", padding: 10 }}
                 className="hover:bg-gray-100">
                 <div style={{ display: "flex", justifyContent: 'center', alignItems: 'center', gap: 10 }} >
-                    <div className="w-12 rounded-full">
-                        <img src="https://res.cloudinary.com/diribdgsz/image/upload/v1704685598/chat-app/clone-avatar_a6lb3y.png" alt="avatar" />
+                    <div className="avatar">
+                        <div className="w-12 rounded-full">
+                            <img src={data.members[1].avatar} alt="avatar" />
+                        </div>
                     </div>
                     <div>
                         <div className="stat-title text-black">
-                            {data.conversationName}
+                            {data.name}
                         </div>
                         <div className="text">
                             {data.lastMessageId}

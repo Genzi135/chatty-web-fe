@@ -8,9 +8,12 @@ import {
 import DropdownSetting from "./component/DropdownSetting";
 import DropdownProfile from "./component/DropdownProfile";
 import { COLORS } from "../../../utils/COLORS";
-import DUMMY_DATA from "../../../data/DUMMY_DATA";
+import DUMMY_DATA, { BASE_URL } from "../../../data/DUMMY_DATA";
 import ProfileModal from "./component/ProfileModal";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
+import { setUser } from "../../../hooks/redux/reducer";
+import { data } from "autoprefixer";
 
 export default function SideBar({ selectedItems, onItemClick }) {
     const [selectedItem, setSelectedItem] = React.useState("Chat");
@@ -19,7 +22,28 @@ export default function SideBar({ selectedItems, onItemClick }) {
     const dropdownRef = React.useRef(null);
     const dropdownProfileRef = React.useRef(null);
 
-    const userData = useSelector(state => state.user)
+    // eslint-disable-next-line no-unused-vars
+    const [userData, setData] = React.useState({});
+    const userToken = JSON.parse(localStorage.getItem("userToken"))
+
+    const dispatch = useDispatch()
+
+    const getData = async () => {
+        const respone = await axios({
+            url: BASE_URL + "/api/v1/users/getMe",
+            method: 'get',
+            headers: { Authorization: `Bearer ${userToken}` },
+
+        })
+        setData(respone.data.data);
+        dispatch(setUser(respone.data.data))
+    }
+
+
+    React.useEffect(() => {
+        getData()
+    }, [])
+
 
     const handleClickOutside = (event) => {
         if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {

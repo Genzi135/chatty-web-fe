@@ -1,15 +1,45 @@
 import { BsXLg } from "react-icons/bs";
 import { COLORS } from "../../../../../utils/COLORS";
 import React from "react";
+import axios from "axios";
+import { BASE_URL } from "../../../../../data/DUMMY_DATA";
+import UserCard from "./UserCard";
 
 const AddFriendModal = () => {
     const [phoneInput, setPhoneInput] = React.useState('');
+    const [dataSource, setDataSource] = React.useState(null);
+    const [report, setReport] = React.useState('');
+
+    const userToken = JSON.parse(localStorage.getItem("userToken"))
 
     const handleInput = (text) => {
         setPhoneInput(text)
     }
 
+    const handleSearch = async () => {
+        if (phoneInput.length !== 10) {
+            setReport("phone number must be 10 character")
+            setDataSource(null)
+        } else {
+            try {
+                const respone = await axios({
+                    url: BASE_URL + "/api/v1/users/findByPhone/" + phoneInput,
+                    headers: { Authorization: `Bearer ${userToken}` },
+                })
+                console.log(respone)
+                setDataSource(respone.data.data)
+                setReport('')
+            } catch (error) {
+                console.log(error)
+                setReport(error.response.data.message)
+            }
+        }
+
+    }
+
     React.useEffect(() => {
+        setReport('')
+        setDataSource(null)
         console.log("phone input: " + phoneInput)
     }, [phoneInput])
 
@@ -36,8 +66,14 @@ const AddFriendModal = () => {
                         <input onChange={(e) => handleInput(e.target.value)} type="text" placeholder="Phone number" style={{ width: "100%", height: 40, backgroundColor: COLORS.whiteBG, padding: 10, outline: "none" }} />
                     </div>
                 </div>
+                <div style={{ padding: 10 }}>
+                    <h1 style={{ color: 'red', fontSize: 15 }}>
+                        {report}
+                    </h1>
+                </div>
                 <div>
                     {/* list in here */}
+                    {dataSource && <UserCard data={dataSource} />}
                 </div>
             </div>
             <div style={{ display: "flex", justifyContent: 'flex-end', alignItems: "center", gap: 20, padding: 20, borderTopWidth: 1 }}>
@@ -52,7 +88,7 @@ const AddFriendModal = () => {
                 </div>
                 <div>
                     <button
-                        onClick={() => { }}
+                        onClick={() => { handleSearch() }}
                         className="hover:bg-blue-700 bg-blue-600"
                         style={{ width: 100, height: 45, display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: 5, }}>
                         <h1 style={{ color: COLORS.whiteBG, fontWeight: '500' }}>Search</h1>
