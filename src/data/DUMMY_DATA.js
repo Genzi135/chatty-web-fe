@@ -5,7 +5,7 @@
 //bgClone: https://res.cloudinary.com/diribdgsz/image/upload/v1704685988/chat-app/clone-background_bb1l7i.png
 //avaClone: https://res.cloudinary.com/diribdgsz/image/upload/v1704685598/chat-app/clone-avatar_a6lb3y.png
 
-export const BASE_URL = "http://ec2-52-221-252-41.ap-southeast-1.compute.amazonaws.com:8555";
+export const BASE_URL = "//ec2-52-221-252-41.ap-southeast-1.compute.amazonaws.com:8555";
 
 
 export const pageimg = [

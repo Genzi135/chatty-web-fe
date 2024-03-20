@@ -40,7 +40,6 @@ function GettingStarted() {
 
             <div style={{ width: '70%', height: '100%', display: 'flex', justifyContent: 'space-around', alignItems: 'center', }}>
                 <div
-                    onClick={() => { }}
                     style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
                     <img
 
@@ -48,14 +47,14 @@ function GettingStarted() {
                     <div className='page' style={{ display: 'flex', flexDirection: 'column', gap: 20, color: 'black' }}>
                         <h1 style={{ color: '' }}>Hello! How are you today?</h1>
                         <p>Welcome to Chatty where you can chat with your friends</p>
-                        <Link to="/authentication"><button className='btn btn-primary'>Getting Started</button></Link>
+                        <Link to="/authentication"><button className='btn btn-primary text-white'>Getting Started</button></Link>
                     </div>
 
                 </div>
 
                 <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: 10 }}>
                     <img src={pageimg[currentImgIndex]} style={{ width: 700, height: 500 }} />
-                    <div style={{ position: 'relative', width: 300, height: 10, border: '1px solid #ccc', borderRadius: '5px', overflow: 'hidden', opacity: '50%' }}>
+                    <div style={{ position: 'relative', width: 300, height: 5, border: '1px solid #ccc', borderRadius: '5px', overflow: 'hidden', opacity: '50%' }}>
                         <div style={{ width: `${progress}%`, height: '100%', backgroundColor: 'blue', position: 'absolute', top: 0, left: 0 }}></div>
                     </div>
                 </div>
