@@ -77,7 +77,7 @@ function Login({ onRegisterClick }) {
     }
 
     return (
-        <div className='card w-96 bg-white shadow-md'>
+        <div className='card w-96 bg-white shadow-2xl'>
             <div className='card-body' style={{ gap: 20 }}>
                 <h2 className='card-title' style={{ color: 'black', fontSize: 25 }}>Login</h2>
                 <div style={{ display: 'flex', flexDirection: 'row', gap: 10 }}>
@@ -123,7 +123,7 @@ function Login({ onRegisterClick }) {
                     </label>
                 </div>
                 <div className='label form-control'>
-                    <button className='btn btn-primary w-32' onClick={handleLogin} onKeyDown={keyPressed} tabIndex="0">
+                    <button className='btn btn-primary w-32 text-white' onClick={handleLogin} onKeyDown={keyPressed} tabIndex="0">
                         LOGIN
                     </button>
                 </div>
