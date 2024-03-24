@@ -5,6 +5,7 @@ import { BASE_URL } from '../../../data/DUMMY_DATA';
 import DateInput from '../../../component/DateInput';
 import { COLORS } from '../../../utils/COLORS';
 import { BsXLg } from 'react-icons/bs';
+import NotificationForm from '../../../component/NotiForm';
 
 // eslint-disable-next-line react/prop-types
 function Register({ onLoginClick }) {
@@ -16,6 +17,10 @@ function Register({ onLoginClick }) {
     const [dob, setDob] = React.useState("");
     const [gender, setGender] = React.useState('male');
     const [report, setReport] = React.useState('');
+
+    const [notiType, setNotiType] = React.useState('');
+
+    const [isNoti, setNoti] = React.useState(false);
 
     const [loading, setLoading] = React.useState(false);
 
@@ -107,11 +112,20 @@ function Register({ onLoginClick }) {
             setName('');
             setGender('male');
             setDob('')
-            onLoginClick()
-
-            console.log("dob", dob)
+            setNotiType(response.data.status)
+            setNoti(true)
+            setTimeout(() => {
+                setNoti(false);
+                setLoading(false)
+                onLoginClick()
+            }, 2000);
         } catch (error) {
-            console.log(error)
+            // setNotiType(error.response.data.status)
+            // setNoti(true)
+            // setTimeout(() => {
+            //     setNoti(false);
+            // }, 2000);
+            setLoading(false)
             setReport(error.response.data.message)
         }
         setLoading(false)
@@ -233,7 +247,7 @@ function Register({ onLoginClick }) {
                     </div>
                 </dialog>
             </div>
-
+            <NotificationForm isOpen={isNoti} type={notiType} />
         </div>
 
     );
