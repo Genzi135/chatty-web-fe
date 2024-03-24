@@ -35,19 +35,35 @@ function DateInput({ onDateChange }) {
 
         if (
             numericDay > 0 &&
-            numericDay <= daysInMonth(numericMonth, numericYear) &&
             numericMonth > 0 &&
-            numericMonth <= 12 &&
-            numericYear > 0
+            numericYear > 0 &&
+            numericMonth <= 12
         ) {
-            // Format ngày với số 0 trước nếu cần
+            if (numericMonth === 2 && isLeapYear(numericYear) && numericDay === 29) {
+                console.log("Leap year: February can't have 29th day.");
+                return;
+            }
+            if (numericMonth === 2 && !isLeapYear(numericYear) && numericDay > 28) {
+                console.log("Non-leap year: February can't have more than 28 days.");
+                setDay('28');
+                return;
+            }
+            if ([4, 6, 9, 11].includes(numericMonth) && numericDay === 31) {
+                console.log("Invalid date: This month can't have 31st day.");
+                setDay('30');
+                return;
+            }
+
             const formattedDay = numericDay < 10 ? `0${numericDay}` : numericDay;
-            const date = `${year}-${month}-${formattedDay}`;
+            const formattedMonth = numericMonth < 10 ? `0${numericMonth}` : numericMonth;
+            const date = `${year}-${formattedMonth}-${formattedDay}`;
             if (onDateChange && typeof onDateChange === 'function') {
                 onDateChange(date);
             }
         }
     };
+
+
 
     const generateOptions = (start, end) => {
         const options = [];

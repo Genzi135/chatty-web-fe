@@ -11,6 +11,7 @@ function Login({ onRegisterClick }) {
     const [password, setPassword] = React.useState('');
     const [rememberMe, setRememberMe] = React.useState(false);
     const [report, setReport] = React.useState('');
+    const [loading, setLoading] = React.useState(false);
 
     const dispatch = useDispatch();
 
@@ -43,8 +44,7 @@ function Login({ onRegisterClick }) {
     useEffect(checkRemember, []);
 
     const handleLogin = async () => {
-        //const user = data.user.find((e) => phone === e.phoneNumber && password === e.password)
-        console.log(BASE_URL + "/api/v1/auth/login")
+        setLoading(true);
         try {
             const response = await axios({
                 url: BASE_URL + "/api/v1/auth/login",
@@ -70,6 +70,8 @@ function Login({ onRegisterClick }) {
             console.log(error)
             setReport(error.response.data.message)
         }
+
+        setLoading(false)
     };
 
     const keyPressed = (e) => {
@@ -96,7 +98,7 @@ function Login({ onRegisterClick }) {
                 <div>
                     <div className='label'>
                         <span className='label-text' style={{ color: 'black' }}>Password</span>
-                        <span className='label-text-alt'>
+                        <span className='label-text-alt opacity-0'>
                             <a className='link link-primary'>Forgot password?</a>
                         </span>
                     </div>
@@ -109,7 +111,7 @@ function Login({ onRegisterClick }) {
                     />
                 </div>
                 <div>
-                    <span style={{ color: 'red' }}>{report}</span>
+                    <span style={{ color: 'red', fontSize: 13 }}>{report}</span>
                 </div>
                 <div className='form-control w-32'>
                     <label className='cursor-pointer label'>
@@ -124,7 +126,11 @@ function Login({ onRegisterClick }) {
                 </div>
                 <div className='label form-control'>
                     <button className='btn btn-primary w-32 text-white' onClick={handleLogin} onKeyDown={keyPressed} tabIndex="0">
-                        LOGIN
+                        {loading ? <div>
+                            <span className="loading loading-dots loading-sm"></span>
+                        </div> : <div>
+                            LOGIN
+                        </div>}
                     </button>
                 </div>
             </div>

@@ -4,6 +4,7 @@ import axios from 'axios';
 import { BASE_URL } from '../../../data/DUMMY_DATA';
 import DateInput from '../../../component/DateInput';
 import { COLORS } from '../../../utils/COLORS';
+import { BsXLg } from 'react-icons/bs';
 
 // eslint-disable-next-line react/prop-types
 function Register({ onLoginClick }) {
@@ -16,8 +17,17 @@ function Register({ onLoginClick }) {
     const [gender, setGender] = React.useState('male');
     const [report, setReport] = React.useState('');
 
+    const [loading, setLoading] = React.useState(false);
+
     const handlePhoneChange = (e) => {
-        setPhone(e.target.value);
+        const input = e.target.value;
+        const regex = /^[0-9]*$/;
+        if (regex.test(input)) {
+            setPhone(input);
+        } else {
+            setReport("Please enter only numbers.");
+        }
+
     }
 
     const handlePasswordChange = (e) => {
@@ -40,8 +50,43 @@ function Register({ onLoginClick }) {
         setDob(e);
     }
 
+    const handleContinue = () => {
+        const isValid = handleCheckConfirm();
+        if (isValid === true) {
+            document.getElementById("registerModal").showModal();
+            setReport('')
+        } else {
+            console.log('Fail')
+        }
+    }
+
+    const handleCheckConfirm = () => {
+        if (phone === '') {
+            setReport('Phone must not be empty');
+            return false;
+        } if (phone.length < 10 || phone.length > 10) {
+            setReport('Phone must be 10 character');
+            return false;
+        } else if (password === '') {
+            setReport('Password must not be empty');
+            return false;
+        } else if (confirm === '') {
+            setReport('Confirm password must not be empty');
+            return false;
+        } else if (password.length < 6 && confirm.length < 6) {
+            setReport('Password must be at least 6 characters long');
+            return false;
+        } else if (password !== confirm) {
+            setReport("Password are not the same!");
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
     const handleRegister = async () => {
-        console.log("dob: ", dob)
+        setLoading(true)
         try {
             const response = await axios({
                 url: BASE_URL + "/api/v1/auth/register",
@@ -69,12 +114,13 @@ function Register({ onLoginClick }) {
             console.log(error)
             setReport(error.response.data.message)
         }
+        setLoading(false)
     }
 
     return (
 
-        <div className='card w-96 bg-white shadow-md'>
-            <div className='card-body' style={{ gap: 10 }}>
+        <div className='card w-96 bg-white shadow-2xl'>
+            <div className='card-body' style={{ gap: 20 }}>
                 <h2 className='card-title' style={{ color: 'black', fontSize: 25 }}>Register</h2>
                 <div style={{
                     display: 'flex', flexDirection: 'row', gap: 5
@@ -89,13 +135,7 @@ function Register({ onLoginClick }) {
                         onChange={handlePhoneChange}
                     />
                 </div>
-                <div>
-                    <span className='label-text' style={{ color: 'black' }}>Email</span>
-                    <input className='input input-bordered w-full bg-white'
-                        value={email}
-                        onChange={handleEmailChange}
-                    />
-                </div>
+
 
                 <div>
                     <div className='label'>
@@ -117,45 +157,81 @@ function Register({ onLoginClick }) {
                         value={confirm}
                         onChange={handleConfirmChange} />
                 </div>
+                <span className='label-text' style={{ color: 'red', fontSize: 13 }}>{report}</span>
 
-                <div >
-                    <span className='label-text' style={{ color: 'black' }}>Name</span>
-                    <input className='input input-bordered w-full bg-white'
-                        value={name}
-                        onChange={handleNameChange}
-                    />
+
+                <div className='label form-control'>
+                    <button className='btn btn-primary w-32 text-white font-bold'
+                        onClick={handleContinue}>CONTINUE</button>
                 </div>
-                <h1 className='text-black'>
-                    Gender
-                </h1>
-                <form style={{ display: 'flex', gap: 30, alignItems: 'center', color: COLORS.text }}>
-                    <div>
-                        <label>
-                            <input type="radio" value={'Male'} checked={gender === 'male'} onChange={() => setGender('male')} />
-                            Male
-                        </label>
-                    </div>
-                    <div>
-                        <label>
-                            <input type="radio" value={'Female'} checked={gender === 'female'} onChange={() => setGender('female')} />
-                            Female
-                        </label>
-                    </div>
-                </form>
-                <div>
-                    {/* <span className='label-text' style={{ color: 'black' }}>Birthday</span>
+
+                <dialog id='registerModal'>
+                    <div className='w-96 bg-white shadow-2xl'>
+                        <div className='card-body' style={{ gap: 20 }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', zIndex: 555 }}>
+                                <h1 style={{ fontWeight: '500', color: 'black', fontSize: 20 }}>Your information</h1>
+                                <form method="dialog" className="modal-backdrop" style={{ borderRightColor: 'red' }} >
+                                    <button
+                                        className=" hover:bg-gray-200"
+                                        style={{ width: 35, height: 35, display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: 30, }}>
+                                        <BsXLg size={25} color={COLORS.text} />
+                                    </button>
+                                </form>
+                            </div>
+                            <div>
+                                <span className='label-text' style={{ color: 'black' }}>Email</span>
+                                <input className='input input-bordered w-full bg-white text-black'
+                                    value={email}
+                                    onChange={handleEmailChange}
+                                />
+                            </div>
+                            <div >
+                                <span className='label-text' style={{ color: 'black' }}>Name</span>
+                                <input className='input input-bordered w-full bg-white text-black'
+                                    value={name}
+                                    onChange={handleNameChange}
+                                />
+                            </div>
+                            <h1 className='text-black'>
+                                Gender
+                            </h1>
+                            <form style={{ display: 'flex', gap: 30, alignItems: 'center', color: COLORS.text }}>
+                                <div>
+                                    <label>
+                                        <input type="radio" value={'Male'} checked={gender === 'male'} onChange={() => setGender('male')} />
+                                        Male
+                                    </label>
+                                </div>
+                                <div>
+                                    <label>
+                                        <input type="radio" value={'Female'} checked={gender === 'female'} onChange={() => setGender('female')} />
+                                        Female
+                                    </label>
+                                </div>
+                            </form>
+                            <div>
+                                {/* <span className='label-text' style={{ color: 'black' }}>Birthday</span>
                     <input className='input input-bordered w-full bg-white'
                         value={dob}
                         onChange={handleDobChange}
                     /> */}
-                    <DateInput onDateChange={handleDobChange} />
-                </div>
-                <span className='label-text' style={{ color: 'red' }}>{report}</span>
+                                <DateInput onDateChange={handleDobChange} />
+                            </div>
+                            <span className='label-text' style={{ color: 'red', fontSize: 13 }}>{report}</span>
 
-                <div className='label form-control'>
-                    <button className='btn btn-primary w-32'
-                        onClick={handleRegister}>REGISTER</button>
-                </div>
+                            <div className='label form-control'>
+                                <button className='btn btn-primary w-32  text-white font-bold'
+                                    onClick={handleRegister}>
+                                    {loading ? <div>
+                                        <span className="loading loading-dots loading-sm"></span>
+                                    </div> : <div>
+                                        LOGIN
+                                    </div>}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </dialog>
             </div>
 
         </div>
