@@ -1,14 +1,18 @@
 import axios from "axios";
 import { COLORS } from "../../../../../utils/COLORS";
 import { BASE_URL } from "../../../../../data/DUMMY_DATA";
+import React from "react";
 
 const UserCard = (data) => {
 
+    const [loading, setLoading] = React.useState(false);
+
     const userToken = JSON.parse(localStorage.getItem("userToken"))
 
+    console.log(data)
 
     const handleAddFriendRequest = async () => {
-        console.log(data.data._id)
+        setLoading(true)
         try {
             const respone = await axios({
                 url: BASE_URL + "/api/v1/friends/request/" + data.data._id,
@@ -21,6 +25,8 @@ const UserCard = (data) => {
             console.log(error)
 
         }
+        setLoading(false)
+
     }
     return (
         <div style={{ padding: 10, }}>
@@ -39,12 +45,21 @@ const UserCard = (data) => {
                 </div>
 
                 <div>
-                    <button
+                    {data.data.friend === null ? <button
                         onClick={() => handleAddFriendRequest()}
                         className="hover:bg-blue-200"
                         style={{ color: COLORS.bg, borderWidth: 1, borderColor: COLORS.bg, borderRadius: 10, width: 70, height: 35, fontSize: 15, fontWeight: 500 }}>
-                        Add
-                    </button>
+                        {loading ? <div>
+                            <span className="loading loading-dots loading-sm"></span>
+                        </div> : <div>
+                            ADD
+                        </div>}
+                    </button> : <button
+                        className=""
+                        style={{ color: 'grey', borderWidth: 1, borderColor: 'grey', borderRadius: 10, width: 70, height: 35, fontSize: 15, fontWeight: 500 }}
+                    >ADD</button>
+                    }
+
                 </div>
             </div>
         </div>

@@ -6,6 +6,9 @@ import DateInput from '../../../component/DateInput';
 import { COLORS } from '../../../utils/COLORS';
 import { BsXLg } from 'react-icons/bs';
 import NotificationForm from '../../../component/NotiForm';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { setUser } from '../../../hooks/redux/reducer';
 
 // eslint-disable-next-line react/prop-types
 function Register({ onLoginClick }) {
@@ -23,6 +26,9 @@ function Register({ onLoginClick }) {
     const [isNoti, setNoti] = React.useState(false);
 
     const [loading, setLoading] = React.useState(false);
+
+    const dispatch = useDispatch();
+    const navigation = useNavigate();
 
     const handlePhoneChange = (e) => {
         const input = e.target.value;
@@ -114,17 +120,31 @@ function Register({ onLoginClick }) {
             setDob('')
             setNotiType(response.data.status)
             setNoti(true)
-            setTimeout(() => {
+            setTimeout(async () => {
                 setNoti(false);
+                setLoading(true);
+                try {
+                    const response = await axios({
+                        url: BASE_URL + "/api/v1/auth/login",
+                        method: "post",
+                        data: {
+                            phone: phone,
+                            password: password
+                        }
+                    })
+                    if (response.data.status === "success")
+                        setReport('');
+                    dispatch(setUser(response.data.data.user))
+                    localStorage.setItem("userToken", JSON.stringify(response.data.data.token.access_token))
+                    navigation("/dashboard");
+                } catch (error) {
+                    console.log(error)
+                    setReport(error.response.data.message)
+                }
+
                 setLoading(false)
-                onLoginClick()
             }, 2000);
         } catch (error) {
-            // setNotiType(error.response.data.status)
-            // setNoti(true)
-            // setTimeout(() => {
-            //     setNoti(false);
-            // }, 2000);
             setLoading(false)
             setReport(error.response.data.message)
         }

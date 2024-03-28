@@ -6,7 +6,7 @@ import { useDispatch } from 'react-redux';
 import { setUser } from '../../../hooks/redux/reducer';
 
 // eslint-disable-next-line react/prop-types
-function Login({ onRegisterClick }) {
+function Login({ onRegisterClick, onForgotPasswordClick }) {
     const [phone, setPhone] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [rememberMe, setRememberMe] = React.useState(false);
@@ -55,17 +55,10 @@ function Login({ onRegisterClick }) {
                 }
             })
             if (response.data.status === "success")
-                // if (user) {
-                //     localStorage.setItem("currentUser", JSON.stringify(user.id));
                 setReport('');
             dispatch(setUser(response.data.data.user))
             localStorage.setItem("userToken", JSON.stringify(response.data.data.token.access_token))
             navigation("/dashboard");
-            //     console.log(localStorage.getItem("currentUser"));
-            // }
-            // console.log(userData)
-            // console.log('Logging in with phone:', phone, 'and password:', password);
-            // console.log('Remember me:', rememberMe);
         } catch (error) {
             console.log(error)
             setReport(error.response.data.message)
@@ -98,8 +91,8 @@ function Login({ onRegisterClick }) {
                 <div>
                     <div className='label'>
                         <span className='label-text' style={{ color: 'black' }}>Password</span>
-                        <span className='label-text-alt opacity-0'>
-                            <a className='link link-primary'>Forgot password?</a>
+                        <span className='label-text-alt '>
+                            <a className='link link-primary' onClick={onForgotPasswordClick}>Forgot password?</a>
                         </span>
                     </div>
                     <input
@@ -134,6 +127,7 @@ function Login({ onRegisterClick }) {
                     </button>
                 </div>
             </div>
+
         </div>
     );
 }

@@ -8,6 +8,7 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "../../../../hooks/redux/reducer";
 import { redirect } from "react-router-dom";
+import { render } from "react-dom";
 
 const ProfileModal = () => {
 
@@ -24,6 +25,7 @@ const ProfileModal = () => {
     const [reportStt, setReportStt] = React.useState('');
     const [avatar, setAvatar] = React.useState(null);
     const [inputAva, setInputAva] = React.useState(null);
+    const [loading, setLoading] = React.useState(false);
 
     const userToken = JSON.parse(localStorage.getItem("userToken"))
 
@@ -52,7 +54,7 @@ const ProfileModal = () => {
 
     const handleConfirm = async () => {
         console.log(name, `${years}-${months}-${days}`)
-
+        setLoading(true)
         try {
             const respone = await axios({
                 url: BASE_URL + "/api/v1/users/updateMe",
@@ -76,10 +78,12 @@ const ProfileModal = () => {
             console.log(error);
             setReportStt(error.response.data.message)
         }
+        setLoading(false);
 
     }
 
     const handleUploadAvatar = async () => {
+        setLoading(true)
         try {
 
             const respone = await axios({
@@ -96,9 +100,10 @@ const ProfileModal = () => {
         } catch (error) {
             console.log(error)
         }
+        setLoading(false)
         setAvatar(null)
         setInputAva(null);
-        redirect("/dashboard");
+        setViewState('Profile')
     }
 
     React.useEffect(() => {
@@ -358,7 +363,11 @@ const ProfileModal = () => {
                             onClick={() => { handleUploadAvatar() }}
                             className="hover:bg-blue-700 bg-blue-600"
                             style={{ width: 100, height: 45, display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: 5, }}>
-                            <h1 style={{ color: COLORS.whiteBG, fontWeight: '500' }}>Confirm</h1>
+                            <h1 style={{ color: COLORS.whiteBG, fontWeight: '500' }}>{loading ? <div>
+                                <span className="loading loading-dots loading-sm"></span>
+                            </div> : <div>
+                                Confirm
+                            </div>}</h1>
                         </button>
                     </div>
                 </div>

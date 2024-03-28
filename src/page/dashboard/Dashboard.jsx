@@ -15,6 +15,7 @@ export default function DashBoard() {
     const [menu, setMenu] = React.useState('FR');
     const id = JSON.parse(currentUser)
     const user = DUMMY_DATA.user.find((e) => e.id === id);
+
     const getData = () => {
         if (user) {
             setData(user);
@@ -22,6 +23,10 @@ export default function DashBoard() {
             console.log("load data fail" + JSON.stringify(data))
         }
     }
+
+    // const userCurrent = localStorage.getItem("userToken");
+
+    // console.log("id: ", userCurrent)
 
     const getConversationByIdMember = () => {
         const conversations = DUMMY_DATA.conversation.filter((e) => e.memberId.includes(id));

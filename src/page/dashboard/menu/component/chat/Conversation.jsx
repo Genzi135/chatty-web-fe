@@ -27,7 +27,7 @@ const Conversation = ({ data }) => {
                 <div style={{ display: "flex", justifyContent: 'center', alignItems: 'center', gap: 10 }} >
                     <div className="avatar">
                         <div className="w-12 rounded-full">
-                            <img src={data.creator.avatar} alt="avatar" />
+                            <img src={data.image} alt="avatar" />
                         </div>
                     </div>
                     <div>

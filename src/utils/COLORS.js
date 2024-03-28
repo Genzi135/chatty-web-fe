@@ -3,5 +3,6 @@ export const COLORS = {
     bdSelected: "#072ac8",
     bgComponentSelected: "#a2d6f9",
     text: "#000000",
-    whiteBG: '#FFFFFF'
+    whiteBG: '#FFFFFF',
+    success: '#00d928'
 }
