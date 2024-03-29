@@ -39,10 +39,15 @@ export default function SideBar({ selectedItems, onItemClick }) {
         dispatch(setUser(respone.data.data))
     }
 
+    const dataSource = useSelector((state) => state.user);
 
     React.useEffect(() => {
         getData()
     }, [])
+
+    React.useEffect(() => {
+        setData(dataSource)
+    }, [dataSource])
 
 
     const handleClickOutside = (event) => {
@@ -163,42 +168,12 @@ export default function SideBar({ selectedItems, onItemClick }) {
                     <dialog id="profileModal" className="modal">
                         <ProfileModal />
                     </dialog>
-                    {/* <div
-                        onClick={() => handleItemClick("todo")}
-                        style={{
-                            width: "100%",
-                            height: 80,
 
-                        }}
-                        className="hover:bg-blue-600"
-                    >
-                        <div
-                            style={{
-                                backgroundColor: selectedItem === "todo" ? "darkBlue" : "",
-                                width: "100%",
-                                height: "100%",
-                                display: "flex",
-                                flexDirection: "column",
-                                justifyContent: "center",
-                                alignItems: "center",
-                            }}>
-                            {selectedItem === "todo" ? (
-                                <BsCheckSquareFill size={30} color={"white"} />
-                            ) : (
-                                <BsCheckSquare size={30} color={"white"} />
-                            )}
-                        </div>
-                    </div> */}
                 </div>
                 <div
                     ref={dropdownRef}
                     style={{
                         position: 'relative',
-                        //bottom: '100%',
-                        //left: 100,
-                        //bottom: 100,
-                        //transform: showDropdown ? 'translateY(-10   0%)' : 'translateY(0)',
-                        //transition: 'transform 0.3s ease-in-out', 
                         width: "100%",
                         height: 80,
                         display: "flex",

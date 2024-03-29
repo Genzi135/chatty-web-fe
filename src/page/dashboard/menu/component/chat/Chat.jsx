@@ -5,11 +5,16 @@ import HeaderChat from "./HeaderChat"
 import axios from "axios";
 import { BASE_URL } from "../../../../../data/DUMMY_DATA";
 import { COLORS } from "../../../../../utils/COLORS";
+import { useDispatch, useSelector } from "react-redux";
+import { setConversation } from "../../../../../hooks/redux/reducer";
 
 export default function Chat() {
 
     const userToken = JSON.parse(localStorage.getItem("userToken"))
 
+    const dispatch = useDispatch();
+
+    const dataSources = useSelector(state => state.currentConversation)
 
     const [dataSource, setDataSource] = React.useState([]);
 
@@ -27,21 +32,18 @@ export default function Chat() {
             console.log(error)
         }
     }
-    console.log(dataSource)
-
     const chatClick = (conversation) => {
         console.log("click")
-        console.log(conversation)
+        dispatch(setConversation(conversation))
+        console.log(dataSources)
     }
 
     React.useEffect(() => {
-        console.log("in Chat")
         getData();
-        console.log(dataSource)
     }, [])
 
     return (
-        <>
+        <div>
             <HeaderChat />
             <div style={{ width: "100%" }}>
                 {dataSource !== null ? (dataSource.map((conversation, index) => (
@@ -53,6 +55,6 @@ export default function Chat() {
                 </div>)
                 }
             </div>
-        </>
+        </div>
     )
 }

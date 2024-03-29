@@ -13,6 +13,11 @@ export const setUser = (user) => ({
     payload: user
 })
 
+export const setConversation = (conversation) => ({
+    type: "CHANGE_CONVERSATION",
+    payload: conversation
+})
+
 const initialState = {
     view: {
         menu: "Chat",
@@ -26,20 +31,20 @@ const initialState = {
         fullName: "",
         nickName: "",
         gender: "",
-        dob: "",
+        dateOfBirth: "",
         avatar: "",
         bg: "",
         bio: "",
     },
     currentConversation: {
-        id: "",
-        ownerId: "",
-        memberId: [],
-        type: "",
-        conversationName: "",
-        lastMessageId: "",
-        pinMessageId: [],
-        createAt: "",
+        // id: "",
+        // ownerId: "",
+        // members: [],
+        // type: "",
+        // conversationName: "",
+        // lastMessageId: "",
+        // pinMessageId: [],
+        // createAt: "",
     }
 }
 
@@ -55,6 +60,11 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 user: action.payload
+            }
+        case 'CHANGE_CONVERSATION':
+            return {
+                ...state,
+                currentConversation: action.payload
             }
         default:
             return state;

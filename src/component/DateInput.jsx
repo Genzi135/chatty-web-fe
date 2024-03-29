@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { COLORS } from "../utils/COLORS";
 
 function DateInput({ onDateChange }) {
@@ -6,27 +6,33 @@ function DateInput({ onDateChange }) {
     const [month, setMonth] = useState('');
     const [year, setYear] = useState('');
 
+    useEffect(() => {
+        handleDateChange();
+    }, [day, month, year]);
+
     const isLeapYear = (year) => {
         return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
     };
 
-    // const daysInMonth = (month, year) => {
-    //     const daysMap = {
-    //         1: 31,
-    //         2: isLeapYear(year) ? 29 : 28,
-    //         3: 31,
-    //         4: 30,
-    //         5: 31,
-    //         6: 30,
-    //         7: 31,
-    //         8: 31,
-    //         9: 30,
-    //         10: 31,
-    //         11: 30,
-    //         12: 31
-    //     };
-    //     return daysMap[month];
-    // };
+    const daysInMonth = (month, year) => {
+        if (month === 2) {
+            return isLeapYear(year) ? 29 : 28;
+        }
+        const daysMap = {
+            1: 31,
+            3: 31,
+            4: 30,
+            5: 31,
+            6: 30,
+            7: 31,
+            8: 31,
+            9: 30,
+            10: 31,
+            11: 30,
+            12: 31
+        };
+        return daysMap[month];
+    };
 
     const handleDateChange = () => {
         const numericDay = parseInt(day, 10);
@@ -39,18 +45,9 @@ function DateInput({ onDateChange }) {
             numericYear > 0 &&
             numericMonth <= 12
         ) {
-            if (numericMonth === 2 && isLeapYear(numericYear) && numericDay === 29) {
-                console.log("Leap year: February can't have 29th day.");
-                return;
-            }
-            if (numericMonth === 2 && !isLeapYear(numericYear) && numericDay > 28) {
-                console.log("Non-leap year: February can't have more than 28 days.");
-                setDay('28');
-                return;
-            }
-            if ([4, 6, 9, 11].includes(numericMonth) && numericDay === 31) {
-                console.log("Invalid date: This month can't have 31st day.");
-                setDay('30');
+            const maxDay = daysInMonth(numericMonth, numericYear);
+            if (numericDay > maxDay) {
+                setDay(maxDay.toString());
                 return;
             }
 
@@ -62,8 +59,6 @@ function DateInput({ onDateChange }) {
             }
         }
     };
-
-
 
     const generateOptions = (start, end) => {
         const options = [];
@@ -78,19 +73,19 @@ function DateInput({ onDateChange }) {
             <div>Birthday</div>
             <div style={{ display: 'flex', gap: 40, justifyContent: 'center', alignItems: 'center' }}>
                 <div>
-                    <select style={{ backgroundColor: COLORS.whiteBG, width: 80, height: 30 }} onChange={(e) => { setDay(e.target.value); handleDateChange(); }} value={day}>
+                    <select style={{ backgroundColor: COLORS.whiteBG, width: 80, height: 30 }} onChange={(e) => { setDay(e.target.value); }} value={day}>
                         <option value="">Day</option>
-                        {generateOptions(1, 31)}
+                        {generateOptions(1, daysInMonth(parseInt(month), parseInt(year)))}
                     </select>
                 </div>
                 <div>
-                    <select style={{ backgroundColor: COLORS.whiteBG, width: 80, height: 30 }} onChange={(e) => { setMonth(e.target.value); handleDateChange(); }} value={month}>
+                    <select style={{ backgroundColor: COLORS.whiteBG, width: 80, height: 30 }} onChange={(e) => { setMonth(e.target.value); }} value={month}>
                         <option value="">Month</option>
                         {generateOptions(1, 12)}
                     </select>
                 </div>
                 <div>
-                    <select style={{ backgroundColor: COLORS.whiteBG, width: 80, height: 30 }} onChange={(e) => { setYear(e.target.value); handleDateChange(); }} value={year}>
+                    <select style={{ backgroundColor: COLORS.whiteBG, width: 80, height: 30 }} onChange={(e) => { setYear(e.target.value); }} value={year}>
                         <option value="">Year</option>
                         {generateOptions(1900, new Date().getFullYear())}
                     </select>

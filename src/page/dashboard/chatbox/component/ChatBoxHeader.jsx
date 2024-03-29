@@ -3,12 +3,10 @@
 import React from "react";
 import { COLORS } from "../../../../utils/COLORS";
 import { BsLayoutSidebarReverse, BsLayoutSidebarInsetReverse } from "react-icons/bs";
+import { useSelector } from "react-redux";
 
-const ChatBoxHeader = (
-    // { onSideBarClick }
-    { onSidebarButtonClick, isDrawerOpen }
-) => {
-
+const ChatBoxHeader = ({ onSidebarButtonClick, isDrawerOpen }) => {
+    const conversationData = useSelector((state) => state.currentConversation)
     const [sideBarSelected, setSideBarSelected] = React.useState(false);
 
     const handleOpenSiderBar = () => {
@@ -18,11 +16,14 @@ const ChatBoxHeader = (
     return (<>
         <div style={{ width: '100%', height: 90, backgroundColor: COLORS.whiteBG, display: 'flex', justifyContent: "space-between", alignItems: 'center', padding: 10, paddingLeft: 15 }}>
             <div style={{ display: 'flex', gap: 20 }}>
-                <div className="w-12 rounded-full">
-                    <img src="https://res.cloudinary.com/diribdgsz/image/upload/v1704685598/chat-app/clone-avatar_a6lb3y.png" alt="avatar" />
+                <div className="avatar">
+                    <div className="w-12 rounded-full">
+                        <img src={conversationData.image} alt="avatar" />
+                    </div>
+
                 </div>
-                <div>
-                    <h1 className="card-title text-black">Name</h1>
+                <div className="flex items-center">
+                    <h1 className="card-title text-black">{conversationData.name}</h1>
                 </div>
             </div>
             <div onClick={onSidebarButtonClick}>

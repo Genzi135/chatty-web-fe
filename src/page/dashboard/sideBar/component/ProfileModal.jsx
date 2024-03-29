@@ -7,20 +7,15 @@ import { BASE_URL } from "../../../../data/DUMMY_DATA";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "../../../../hooks/redux/reducer";
-import { redirect } from "react-router-dom";
-import { render } from "react-dom";
+import DateInput from "../../../../component/DateInput";
 
 const ProfileModal = () => {
 
+    let userData = useSelector(state => state.user)
     // eslint-disable-next-line no-unused-vars
     const [viewState, setViewState] = React.useState('Profile');
-    const userData = useSelector(state => state.user)
-    const [date, setDate] = React.useState('');
-    //const [data, setData] = React.useState(userData);
     const [name, setName] = React.useState('');
-    const [days, setDay] = React.useState('');
-    const [months, setMonths] = React.useState('');
-    const [years, setYear] = React.useState('');
+    const [dateOfBirth, setDateOfBirth] = React.useState('');
     const [gender, setGender] = React.useState(userData.gender);
     const [reportStt, setReportStt] = React.useState('');
     const [avatar, setAvatar] = React.useState(null);
@@ -31,29 +26,29 @@ const ProfileModal = () => {
 
     const dispatch = useDispatch()
 
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        const day = date.getDate().toString().padStart(2, '0');
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const year = date.getFullYear().toString();
+        return `${day}/${month}/${year}`;
+    }
+
     const getData = async () => {
         const respone = await axios({
             url: BASE_URL + "/api/v1/users/getMe",
             method: 'get',
             headers: { Authorization: `Bearer ${userToken}` },
         })
-        //setData(respone.data.data);
         dispatch(setUser(respone.data.data))
     }
 
-    const formatDateString = () => {
-        const date = new Date(userData.dateOfBirth);
-        const year = date.getFullYear();
-        let month = date.getMonth() + 1;
-        let day = date.getDate();
-        month = month < 10 ? '0' + month : month;
-        day = day < 10 ? '0' + day : day;
-        const formattedDate = `${year}-${month}-${day}`;
-        setDate(formattedDate);
-    };
+    const handleDateChange = (e) => {
+        setDateOfBirth(e);
+    }
 
     const handleConfirm = async () => {
-        console.log(name, `${years}-${months}-${days}`)
+        console.log(dateOfBirth)
         setLoading(true)
         try {
             const respone = await axios({
@@ -64,15 +59,13 @@ const ProfileModal = () => {
                 data: {
                     name: name,
                     gender: 'male',
-                    dateOfBirth: `${years}-${months}-${days}`
+                    dateOfBirth: dateOfBirth
                 }
             })
             setName('');
-            setDay('');
-            setMonths('');
-            setYear('');
-            getData();
+            setDateOfBirth('');
             setReportStt('');
+            getData();
             setViewState('Profile');
         } catch (error) {
             console.log(error);
@@ -96,6 +89,7 @@ const ProfileModal = () => {
                 },
                 data: { avatar: inputAva },
             })
+            console.log(respone)
 
         } catch (error) {
             console.log(error)
@@ -103,11 +97,11 @@ const ProfileModal = () => {
         setLoading(false)
         setAvatar(null)
         setInputAva(null);
+        getData();
         setViewState('Profile')
     }
 
     React.useEffect(() => {
-        formatDateString();
         setViewState('Profile');
     }, [])
 
@@ -167,7 +161,7 @@ const ProfileModal = () => {
                                 </div>
                                 <div style={{ display: 'flex', flexDirection: "column", gap: 10 }}>
                                     <div>{userData.gender}</div>
-                                    <div>{date}</div>
+                                    <div>{formatDate(userData.dateOfBirth)}</div>
                                     <div>{userData.phone}</div>
                                 </div>
                             </div>
@@ -224,13 +218,13 @@ const ProfileModal = () => {
                     <form style={{ display: 'flex', gap: 30, alignItems: 'center' }}>
                         <div>
                             <label>
-                                <input type="radio" value={'Male'} checked={gender === 'male'} onChange={() => setGender('male')} />
+                                <input type="radio" value={'male'} checked={gender === 'male'} onChange={() => setGender('male')} />
                                 Male
                             </label>
                         </div>
                         <div>
                             <label>
-                                <input type="radio" value={'Female'} checked={gender === 'female'} onChange={() => setGender('female')} />
+                                <input type="radio" value={'female'} checked={gender === 'female'} onChange={() => setGender('female')} />
                                 Female
                             </label>
                         </div>
@@ -240,7 +234,7 @@ const ProfileModal = () => {
                         <div>Please following format dd-MM-yyyy</div>
                         <div>Example: 01-01-1999</div>
                     </div>
-                    <div style={{ display: 'flex', gap: 40, justifyContent: 'center', alignItems: 'center' }}>
+                    {/* <div style={{ display: 'flex', gap: 40, justifyContent: 'center', alignItems: 'center' }}>
                         <div>
                             <input style={{ backgroundColor: COLORS.whiteBG, width: 80, height: 30 }} placeholder="Days" onChange={(e) => { setDay(e.target.value) }} value={days} />
                         </div>
@@ -250,7 +244,8 @@ const ProfileModal = () => {
                         <div>
                             <input style={{ backgroundColor: COLORS.whiteBG, width: 80, height: 30 }} placeholder="Years" onChange={(e) => { setYear(e.target.value) }} value={years} />
                         </div>
-                    </div>
+                    </div> */}
+                    <DateInput onDateChange={handleDateChange} />
                     <div style={{ color: 'red', fontSize: 12 }}>
                         {reportStt}
                     </div>

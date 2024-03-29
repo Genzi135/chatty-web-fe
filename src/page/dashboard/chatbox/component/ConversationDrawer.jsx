@@ -6,12 +6,15 @@ import React from "react";
 import FileAccodion from "./accordion/FileAccordion";
 import LinkAccordian from "./accordion/LinkAccordion";
 import PrivateSettingAccordion from "./accordion/PrivatedSettingAccordion";
+import { useSelector } from "react-redux";
 
 const ConversationDrawer = () => {
     const [isPhotoVidOpen, setPhotoVidOpen] = React.useState(true);
     const [isFileOpen, setFileOpen] = React.useState(true);
     const [isLinkOpen, setLinkOpen] = React.useState(true);
     const [isPrivateSettingOpen, setPrivateSettingOpen] = React.useState(true);
+
+    const conversationData = useSelector((state) => state.currentConversation);
 
     return (<>
         <div style={{ width: 500, position: 'relative', backgroundColor: 'white', borderLeftWidth: 2 }}>
@@ -21,13 +24,16 @@ const ConversationDrawer = () => {
             </div>
             <div style={{ overflowY: "auto", height: "calc(100% - 74px)" }}>
                 <div style={{ height: 280, borderBottomWidth: 10, justifyContent: "center", alignItems: "center", display: 'flex', flexDirection: "column" }}>
-                    <div className="w-14 rounded-full" style={{ marginBottom: 20 }}>
-                        <img src="https://res.cloudinary.com/diribdgsz/image/upload/v1704685598/chat-app/clone-avatar_a6lb3y.png" alt="avatar" />
+                    <div className="avatar">
+                        <div className="w-14 rounded-full" style={{ marginBottom: 20 }}>
+                            <img src={conversationData.image} alt="avatar" />
+                        </div>
+
                     </div>
                     <div
                         className="text-black"
                         style={{ display: 'flex', gap: 10, justifyContent: "center", alignItems: 'center', marginBottom: 20 }}>
-                        <div className="font-semibold text-black">Name</div>
+                        <div className="font-semibold text-black">{conversationData.name}</div>
                         <div className="bg-gray-200 rounded-full w-7 h-7 hover:bg-gray-300"
                             style={{ display: 'flex', justifyContent: "center", alignItems: "center" }}
                         >

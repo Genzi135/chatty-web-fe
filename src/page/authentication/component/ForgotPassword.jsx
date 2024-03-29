@@ -44,25 +44,26 @@ const ForgotPassword = ({ onLoginClick }) => {
     const handleEmailSend = async () => {
 
         if (email !== '') {
+            console.log(email)
+            try {
+                setCountdown(300);
+                setIsCountingDown(true);
+                setLoading(true)
+                const response = await axios({
+                    url: BASE_URL + "/api/v1/users/forgetPassword",
+                    method: 'post',
+                    data: { email: email }
+                })
+                console.log(response)
 
-            // try {
-            setCountdown(300);
-            setIsCountingDown(true);
-            setLoading(true)
-            //     const response = await axios({
-            //         url: BASE_URL + "/api/v1/users/forgetPassword",
-            //         method: 'post',
-            //         body: { email: email }
-            //     })
-            //     console.log(response)
+                setStep('step2')
+                setReport('')
+            } catch (error) {
+                console.log(error);
+                setReport(error.response.data.message)
+            }
 
-            setStep('step2')
-            setReport('')
             setLoading(false)
-            // } catch (error) {
-            //     console.log(error);
-            //     setReport(error.response.data.message)
-            // }
         } else {
             setReport('Email must not be empty');
         }
@@ -71,23 +72,25 @@ const ForgotPassword = ({ onLoginClick }) => {
     const verifyOTP = async () => {
         if (OTP !== '') {
 
-            // try {
-            setLoading(true)
-            //     const response = await axios({
-            //         url: BASE_URL + "/api/v1/users/verifyForgetPasswordOTP",
-            //         method: 'post',
-            //         body: {
-            //             email: email,
-            //             opt: OTP
-            //         }
-            //     })
-            //     console.log(response)
-            setStep('step3')
-            setReport('')
-            // } catch (error) {
-            //     console.log(error);
-            //     setReport(error.response.data.message)
-            // }
+            try {
+                setLoading(true)
+                const response = await axios({
+                    url: BASE_URL + "/api/v1/users/verifyForgetPasswordOTP",
+                    method: 'post',
+                    data: {
+                        email: email,
+                        otp: OTP
+                    }
+                })
+                console.log(response)
+                setStep('step3')
+                setReport('')
+
+            } catch (error) {
+                console.log(error);
+                setReport(error.response.data.message)
+            }
+
             setLoading(false)
         } else {
             setReport('OTP must not be empty');
@@ -99,24 +102,24 @@ const ForgotPassword = ({ onLoginClick }) => {
 
         if (password !== '') {
 
-            // try {
-            setLoading(true)
-            //     const response = await axios({
-            //         url: BASE_URL + "/api/v1/users/verifyForgetPasswordOTP",
-            //         method: 'post',
-            //         body: {
-            //             email: email,
-            //             opt: OTP
-            //         }
-            //     })
-            //     console.log(response)
-            setStep('done')
-            setReport('')
-            onDoneClick();
-            // } catch (error) {
-            //     console.log(error);
-            //     setReport(error.response.data.message)
-            // }
+            try {
+                setLoading(true)
+                const response = await axios({
+                    url: BASE_URL + "/api/v1/users/resetPassword",
+                    method: 'post',
+                    data: {
+                        email: email,
+                        password: password
+                    }
+                })
+                console.log(response)
+                setStep('done')
+                setReport('')
+                onDoneClick();
+            } catch (error) {
+                console.log(error);
+                setReport(error.response.data.message)
+            }
 
             setLoading(false)
         } else {
