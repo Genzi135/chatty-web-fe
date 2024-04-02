@@ -7,12 +7,16 @@ import {
   BsImage,
   BsBandaid,
 } from "react-icons/bs";
+import axios from "axios";
+import { BASE_URL } from "../../../../data/DUMMY_DATA";
+import { useSelector } from "react-redux";
 
 const ChatInput = () => {
   const [isTyping, setTyping] = useState(false);
   const [inputMessage, setInputMessage] = useState("");
-
   const [inputImage, setInputImage] = useState(null);
+  const currentConversation = useSelector((state) => state.currentConversation)
+  const userToken = JSON.parse(localStorage.getItem("userToken"));
 
   const handleChangeInput = (e) => {
     const text = e.target.value;
@@ -21,12 +25,24 @@ const ChatInput = () => {
 
   useEffect(() => {
     setTyping(!!inputMessage.trim());
-    console.log("inputImage:", inputImage);
-    //create url for image
   }, [inputMessage, inputImage]);
 
-  const handleSendMessage = () => {
-    console.log("Sending message:", inputMessage);
+  const handleSendMessage = async () => {
+    if (inputMessage) {
+      try {
+        const respone = await axios({
+          url: BASE_URL + "/api/v1/conservations/" + `${currentConversation._id}/messages/sendText`,
+          method: 'POST',
+          headers: { Authorization: `Bearer ${userToken}` },
+          data: {
+            content: inputMessage
+          }
+        });
+        console.log(respone)
+      } catch (error) {
+        console.log(error);
+      }
+    }
     setInputMessage("");
     setInputImage(null)
     setTyping(false);

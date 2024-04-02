@@ -1,16 +1,17 @@
 /* eslint-disable no-unused-vars */
 import { Link } from "react-router-dom";
 import ProfileModal from "./ProfileModal";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { setConversation, setLogOut } from "../../../../hooks/redux/reducer";
 
 export default function DropdownProfile({ handleOpenModal }) {
     const userData = useSelector(state => state.user)
-
-    const openProfileModal = () => {
-        console.log("open Click")
-    };
-
-
+    const dispatch = useDispatch();
+    const navigateHomePage = () => {
+        dispatch(setLogOut());
+        localStorage.removeItem("userToken");
+        dispatch(setConversation({}));
+    }
 
     return (
         <>
@@ -28,7 +29,9 @@ export default function DropdownProfile({ handleOpenModal }) {
                         </a>
                     </li>
                     <div style={{ width: "100%", borderBottomWidth: 0.5 }}></div>
-                    <li><Link to={"/authentication"}>Log out</Link></li>
+                    <li><div onClick={
+                        () => { navigateHomePage() }
+                    }>Log out</div></li>
                 </ul>
             </div>
 

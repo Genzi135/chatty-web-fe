@@ -3,6 +3,26 @@ import React from "react";
 import { FiMoreHorizontal } from "react-icons/fi";
 
 const Conversation = ({ data }) => {
+    function formatTime(datetimeString) {
+        const datetime = new Date(datetimeString);
+        const hour = datetime.getHours().toString().padStart(2, '0');
+        const minute = datetime.getMinutes().toString().padStart(2, '0');
+        return `${hour}:${minute}`;
+    }
+    const formatDate = (updatedAt) => {
+        const today = new Date();
+        const updatedDate = new Date(updatedAt);
+        const isToday = updatedDate.getDate() === today.getDate() &&
+            updatedDate.getMonth() === today.getMonth() &&
+            updatedDate.getFullYear() === today.getFullYear();
+        if (isToday) {
+            const diff = today.getTime() - updatedDate.getTime();
+            const minutes = Math.floor(diff / 60000);
+            return `${minutes} minutes ago`;
+        } else {
+            return updatedDate.toLocaleString();
+        }
+    }
 
     const [isHover, setHover] = React.useState(false);
 
@@ -35,7 +55,7 @@ const Conversation = ({ data }) => {
                             {data.name}
                         </div>
                         <div className="text">
-                            {data.lastMessageId}
+                            {data.lastMessage !== null ? data.lastMessage.content : ""}
                         </div>
                     </div>
                 </div>
@@ -46,7 +66,7 @@ const Conversation = ({ data }) => {
                     </div>
                 ) : (
                     <div>
-                        <div>{data.createAt}</div>
+                        <div>{data.lastMessage !== null ? formatDate(data.lastMessage.updatedAt) : ""}</div>
 
                     </div>
                 )}

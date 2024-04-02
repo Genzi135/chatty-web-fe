@@ -2,7 +2,7 @@
 /* eslint-disable no-unused-vars */
 import React from "react";
 import { COLORS } from "../../../utils/COLORS";
-import { BsCheckCircleFill, BsChevronDoubleRight } from "react-icons/bs";
+import { BsCheckCircleFill, BsChevronDoubleRight, BsEye, BsEyeSlash } from "react-icons/bs";
 import axios from "axios";
 import { BASE_URL } from "../../../data/DUMMY_DATA";
 
@@ -17,6 +17,12 @@ const ForgotPassword = ({ onLoginClick }) => {
 
     const [countdown, setCountdown] = React.useState(300);
     const [isCountingDown, setIsCountingDown] = React.useState(false);
+
+
+    const [showPassword, setShowPassword] = React.useState(false);
+    const toggleShowPassword = () => {
+        setShowPassword(!showPassword);
+    };
 
     // const handlePhoneChange = (e) => {
     //     const input = e.target.value;
@@ -276,12 +282,20 @@ const ForgotPassword = ({ onLoginClick }) => {
                     <BsChevronDoubleRight />
                     <h5 style={{ cursor: 'default' }}>Done </h5>
                 </div>
-                <div>
-                    <span className='label-text' style={{ color: 'black' }}>New Password</span>
-                    <input type="password" className='input input-bordered w-full bg-white text-black'
+                <div style={{ position: 'relative' }}>
+                    <input
+                        className='input input-bordered w-full bg-white'
+                        type={showPassword ? 'text' : 'password'}
                         value={password}
                         onChange={handlePasswordChange}
                     />
+
+                    {showPassword ? <div
+                        style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)' }}
+                        onClick={toggleShowPassword}><BsEye /></div> : <div
+                            style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)' }}
+                            onClick={toggleShowPassword}><BsEyeSlash /></div>}
+
                 </div>
                 <span className='label-text' style={{ color: 'red', fontSize: 13 }}>{report}</span>
                 <div className='label form-control'>

@@ -73,9 +73,9 @@ function DateInput({ onDateChange }) {
             <div>Birthday</div>
             <div style={{ display: 'flex', gap: 40, justifyContent: 'center', alignItems: 'center' }}>
                 <div>
-                    <select style={{ backgroundColor: COLORS.whiteBG, width: 80, height: 30 }} onChange={(e) => { setDay(e.target.value); }} value={day}>
-                        <option value="">Day</option>
-                        {generateOptions(1, daysInMonth(parseInt(month), parseInt(year)))}
+                    <select style={{ backgroundColor: COLORS.whiteBG, width: 80, height: 30 }} onChange={(e) => { setYear(e.target.value); }} value={year}>
+                        <option value="">Year</option>
+                        {generateOptions(1950, new Date().getFullYear())}
                     </select>
                 </div>
                 <div>
@@ -85,9 +85,9 @@ function DateInput({ onDateChange }) {
                     </select>
                 </div>
                 <div>
-                    <select style={{ backgroundColor: COLORS.whiteBG, width: 80, height: 30 }} onChange={(e) => { setYear(e.target.value); }} value={year}>
-                        <option value="">Year</option>
-                        {generateOptions(1900, new Date().getFullYear())}
+                    <select style={{ backgroundColor: COLORS.whiteBG, width: 80, height: 30 }} onChange={(e) => { setDay(e.target.value); }} value={day}>
+                        <option value="">Day</option>
+                        {generateOptions(1, daysInMonth(parseInt(month), parseInt(year)))}
                     </select>
                 </div>
             </div>

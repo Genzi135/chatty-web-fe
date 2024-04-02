@@ -4,11 +4,10 @@ import axios from 'axios';
 import { BASE_URL } from '../../../data/DUMMY_DATA';
 import DateInput from '../../../component/DateInput';
 import { COLORS } from '../../../utils/COLORS';
-import { BsXLg } from 'react-icons/bs';
+import { BsEye, BsEyeSlash, BsXLg } from 'react-icons/bs';
 import NotificationForm from '../../../component/NotiForm';
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import { setUser } from '../../../hooks/redux/reducer';
+import { setLogOut, setLogin, setUser } from '../../../hooks/redux/reducer';
 
 // eslint-disable-next-line react/prop-types
 function Register({ onLoginClick }) {
@@ -27,8 +26,16 @@ function Register({ onLoginClick }) {
 
     const [loading, setLoading] = React.useState(false);
 
+    const [showPassword, setShowPassword] = React.useState(false);
+    const toggleShowPassword = () => {
+        setShowPassword(!showPassword);
+    };
+    const [showPasswordC, setShowPasswordC] = React.useState(false);
+    const toggleShowPasswordC = () => {
+        setShowPasswordC(!showPasswordC);
+    };
+
     const dispatch = useDispatch();
-    const navigation = useNavigate();
 
     const handlePhoneChange = (e) => {
         const input = e.target.value;
@@ -96,6 +103,26 @@ function Register({ onLoginClick }) {
         }
     }
 
+    const setLoginIn = async () => {
+        let userToken = JSON.parse(localStorage.getItem("userToken"));
+        if (!userToken) {
+            dispatch(setLogOut());
+            return;
+        }
+        try {
+            const respone = await axios({
+                url: BASE_URL + "/api/v1/users/getMe",
+                method: 'get',
+                headers: { Authorization: `Bearer ${userToken}` },
+            });
+            dispatch(setUser(respone.data.data));
+            dispatch(setLogin());
+        } catch (error) {
+            console.log(error);
+            dispatch(setLogOut());
+        }
+    }
+
     const handleRegister = async () => {
         setLoading(true)
         try {
@@ -136,7 +163,7 @@ function Register({ onLoginClick }) {
                         setReport('');
                     dispatch(setUser(response.data.data.user))
                     localStorage.setItem("userToken", JSON.stringify(response.data.data.token.access_token))
-                    navigation("/dashboard");
+                    setLoginIn();
                 } catch (error) {
                     console.log(error)
                     setReport(error.response.data.message)
@@ -172,24 +199,46 @@ function Register({ onLoginClick }) {
 
 
                 <div>
-                    <div className='label'>
-                        <span className='label-text' style={{ color: 'black' }}>Password</span>
+                    <div style={{ position: 'relative' }}>
+                        <div className='label'>
+                            <span className='label-text' style={{ color: 'black' }}>Password</span>
+                        </div>
+                        <input
+                            className='input input-bordered w-full bg-white'
+                            type={showPassword ? 'text' : 'password'}
+                            value={password}
+                            onChange={handlePasswordChange}
+                        />
+
+                        {showPassword ? <div
+                            style={{ position: 'absolute', right: '10px', top: 60, transform: 'translateY(-50%)' }}
+                            onClick={toggleShowPassword}><BsEye /></div> : <div
+                                style={{ position: 'absolute', right: '10px', top: 60, transform: 'translateY(-50%)' }}
+                                onClick={toggleShowPassword}><BsEyeSlash /></div>}
+
                     </div>
-                    <input
-                        type='password'
-                        className='input input-bordered w-full bg-white'
-                        value={password}
-                        onChange={handlePasswordChange} />
                 </div>
                 <div>
-                    <div className='label'>
-                        <span className='label-text' style={{ color: 'black' }}>Confirm password</span>
+                    <div
+                        style={{ position: 'relative' }}>
+                        <div className='label'>
+                            <span className='label-text' style={{ color: 'black' }}>Confirm password</span>
+                        </div>
+                        <input
+                            className='input input-bordered w-full bg-white'
+                            type={showPasswordC ? 'text' : 'password'}
+                            value={confirm}
+                            onChange={handleConfirmChange}
+                        />
+
+                        {showPasswordC ? <div
+
+                            style={{ position: 'absolute', right: '10px', top: 60, transform: 'translateY(-50%)' }}
+                            onClick={toggleShowPasswordC}><BsEye /></div> : <div
+                                style={{ position: 'absolute', right: '10px', top: 60, transform: 'translateY(-50%)' }}
+                                onClick={toggleShowPasswordC}><BsEyeSlash /></div>}
+
                     </div>
-                    <input
-                        type='password'
-                        className='input input-bordered w-full bg-white'
-                        value={confirm}
-                        onChange={handleConfirmChange} />
                 </div>
                 <span className='label-text' style={{ color: 'red', fontSize: 13 }}>{report}</span>
 

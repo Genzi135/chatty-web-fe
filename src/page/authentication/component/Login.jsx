@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import DUMMY_DATA, { BASE_URL } from '../../../data/DUMMY_DATA';
 import { useDispatch } from 'react-redux';
-import { setUser } from '../../../hooks/redux/reducer';
+import { setLogin, setUser } from '../../../hooks/redux/reducer';
+import { BsEye, BsEyeSlash } from 'react-icons/bs';
 
 // eslint-disable-next-line react/prop-types
 function Login({ onRegisterClick, onForgotPasswordClick }) {
@@ -12,12 +12,13 @@ function Login({ onRegisterClick, onForgotPasswordClick }) {
     const [rememberMe, setRememberMe] = React.useState(false);
     const [report, setReport] = React.useState('');
     const [loading, setLoading] = React.useState(false);
+    const [showPassword, setShowPassword] = React.useState(false);
 
     const dispatch = useDispatch();
 
     const data = DUMMY_DATA;
 
-    const navigation = useNavigate();
+    // const navigation = useNavigate();
 
     const handlePhoneChange = (e) => {
         setPhone(e.target.value);
@@ -27,9 +28,9 @@ function Login({ onRegisterClick, onForgotPasswordClick }) {
         setPassword(e.target.value);
     };
 
-    const handleRememberMeChange = () => {
-        setRememberMe(!rememberMe);
-    };
+    // const handleRememberMeChange = () => {
+    //     setRememberMe(!rememberMe);
+    // };
 
     const checkRemember = () => {
         data.user.forEach((items) => {
@@ -58,10 +59,15 @@ function Login({ onRegisterClick, onForgotPasswordClick }) {
                 setReport('');
             dispatch(setUser(response.data.data.user))
             localStorage.setItem("userToken", JSON.stringify(response.data.data.token.access_token))
-            navigation("/dashboard");
+            dispatch(setLogin())
         } catch (error) {
             console.log(error)
-            setReport(error.response.data.message)
+            if (error.response.data.message === 'Bad credentials.') {
+                setReport('Phone or password is not correct')
+            } else {
+
+                setReport(error.response.data.message)
+            }
         }
 
         setLoading(false)
@@ -70,6 +76,9 @@ function Login({ onRegisterClick, onForgotPasswordClick }) {
     const keyPressed = (e) => {
         (e.key === 'Enter') && handleLogin()
     }
+    const toggleShowPassword = () => {
+        setShowPassword(!showPassword);
+    };
 
     return (
         <div className='card w-96 bg-white shadow-2xl'>
@@ -95,18 +104,27 @@ function Login({ onRegisterClick, onForgotPasswordClick }) {
                             <a className='link link-primary' onClick={onForgotPasswordClick}>Forgot password?</a>
                         </span>
                     </div>
-                    <input
-                        className='input input-bordered w-full bg-white'
-                        type='password'
-                        value={password}
-                        onChange={handlePasswordChange}
-                        onKeyDown={keyPressed}
-                    />
+                    <div style={{ position: 'relative' }}>
+                        <input
+                            className='input input-bordered w-full bg-white'
+                            type={showPassword ? 'text' : 'password'}
+                            value={password}
+                            onChange={handlePasswordChange}
+                            onKeyDown={keyPressed}
+                        />
+
+                        {showPassword ? <div
+                            style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)' }}
+                            onClick={toggleShowPassword}><BsEye /></div> : <div
+                                style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)' }}
+                                onClick={toggleShowPassword}><BsEyeSlash /></div>}
+
+                    </div>
                 </div>
                 <div>
                     <span style={{ color: 'red', fontSize: 13 }}>{report}</span>
                 </div>
-                <div className='form-control w-32'>
+                {/* <div className='form-control w-32'>
                     <label className='cursor-pointer label'>
                         <input
                             type='checkbox'
@@ -116,7 +134,7 @@ function Login({ onRegisterClick, onForgotPasswordClick }) {
                         />
                         <span className='label-text' style={{ color: 'black' }}>Remember me</span>
                     </label>
-                </div>
+                </div> */}
                 <div className='label form-control'>
                     <button className='btn btn-primary w-32 text-white' onClick={handleLogin} onKeyDown={keyPressed} tabIndex="0">
                         {loading ? <div>

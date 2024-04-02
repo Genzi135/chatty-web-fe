@@ -1,12 +1,16 @@
 import { BsGear, BsChevronRight, BsPerson, BsDatabase, BsTools, BsInfoCircle, BsGlobe } from "react-icons/bs";
-import { useNavigate } from 'react-router-dom';
+import { useDispatch } from "react-redux";
+import { setConversation, setLogOut } from "../../../../hooks/redux/reducer";
 
 export default function DropdownSetting({ handleOpenModal }) {
-    const navigation = useNavigate();
+    const dispatch = useDispatch();
 
     const navigateHomePage = () => {
-        navigation('/authentication');
+        dispatch(setLogOut());
+        localStorage.removeItem("userToken");
+        dispatch(setConversation({}));
     }
+
 
     return (
         <>

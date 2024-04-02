@@ -9,40 +9,15 @@ import { useDispatch, useSelector } from "react-redux";
 
 export default function DashBoard() {
     const [selected, setSelected] = React.useState('Chat');
-    const [data, setData] = React.useState({});
-    const [conversation, setConversation] = React.useState([]);
-    const currentUser = localStorage.getItem("currentUser");
     const [menu, setMenu] = React.useState('FR');
-    const id = JSON.parse(currentUser)
-    const user = DUMMY_DATA.user.find((e) => e.id === id);
 
-    const getData = () => {
-        if (user) {
-            setData(user);
-        } else {
-            console.log("load data fail" + JSON.stringify(data))
-        }
-    }
 
     // const userCurrent = localStorage.getItem("userToken");
 
     // console.log("id: ", userCurrent)
 
-    const getConversationByIdMember = () => {
-        const conversations = DUMMY_DATA.conversation.filter((e) => e.memberId.includes(id));
-        if (conversations) {
-            setConversation(conversations);
-        }
-    }
-
-    const getUser = () => {
-        const user = DUMMY_DATA.user.find()
-    }
 
     React.useEffect(() => {
-        getConversationByIdMember();
-        getData();
-        console.log("in Dashboard")
     }, [])
 
     const handleItemClick = (text) => {

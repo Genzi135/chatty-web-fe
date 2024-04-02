@@ -6,7 +6,6 @@ import React from "react";
 const PrivateSettingAccordion = () => {
     const [isHideChecked, setHideChecked] = React.useState(false);
     React.useEffect(() => {
-        console.log(isHideChecked)
     }, [])
     return (
         <div style={{ width: "100%" }}>

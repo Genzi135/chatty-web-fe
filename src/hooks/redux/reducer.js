@@ -3,9 +3,12 @@ export const setView = (view) => ({
     payload: view
 })
 
-export const setLogin = (auth) => ({
+export const setLogin = () => ({
     type: 'SET_LOGIN',
-    payload: auth,
+})
+
+export const setLogOut = () => ({
+    type: 'SET_LOGOUT',
 })
 
 export const setUser = (user) => ({
@@ -45,7 +48,8 @@ const initialState = {
         // lastMessageId: "",
         // pinMessageId: [],
         // createAt: "",
-    }
+    },
+    login: false
 }
 
 const reducer = (state = initialState, action) => {
@@ -65,6 +69,16 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 currentConversation: action.payload
+            }
+        case 'SET_LOGIN':
+            return {
+                ...state,
+                login: true
+            }
+        case 'SET_LOGOUT':
+            return {
+                ...state,
+                login: false
             }
         default:
             return state;
