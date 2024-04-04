@@ -1,11 +1,11 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 import React from "react";
 import Menu from "./menu/Menu";
 import SideBar from "./sideBar/SideBar";
-import DUMMY_DATA from "../../data/DUMMY_DATA";
 import ChatBox from "./chatbox/ChatBox";
 import Contact from "../dashboard/contact/index";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 export default function DashBoard() {
     const [selected, setSelected] = React.useState('Chat');
@@ -28,7 +28,15 @@ export default function DashBoard() {
         setMenu(text)
         console.log(menu)
     }
-    console.log("Select: " + selected)
+
+
+    // const currentUser = useSelector((state) => state.user);
+
+    // React.useEffect(() => {
+    //     console.log("user connected")
+
+    // }, [])
+
     return (
         <>
             <div style={{ display: 'flex', width: "100vw", height: "100vh", zIndex: 1 }}>

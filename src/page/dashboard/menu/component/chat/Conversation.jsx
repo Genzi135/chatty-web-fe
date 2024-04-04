@@ -3,12 +3,7 @@ import React from "react";
 import { FiMoreHorizontal } from "react-icons/fi";
 
 const Conversation = ({ data }) => {
-    function formatTime(datetimeString) {
-        const datetime = new Date(datetimeString);
-        const hour = datetime.getHours().toString().padStart(2, '0');
-        const minute = datetime.getMinutes().toString().padStart(2, '0');
-        return `${hour}:${minute}`;
-    }
+
     const formatDate = (updatedAt) => {
         const today = new Date();
         const updatedDate = new Date(updatedAt);
@@ -18,7 +13,15 @@ const Conversation = ({ data }) => {
         if (isToday) {
             const diff = today.getTime() - updatedDate.getTime();
             const minutes = Math.floor(diff / 60000);
-            return `${minutes} minutes ago`;
+            if (minutes === 0) {
+                return "now";
+            } else
+                if (minutes >= 60) {
+                    const hours = Math.floor(minutes / 60);
+                    return `${hours} ${hours > 1 ? 'hours' : 'hour'} ago`;
+                } else {
+                    return `${minutes} ${minutes > 1 ? 'minutes' : 'minute'} ago`;
+                }
         } else {
             return updatedDate.toLocaleString();
         }
@@ -55,7 +58,11 @@ const Conversation = ({ data }) => {
                             {data.name}
                         </div>
                         <div className="text">
-                            {data.lastMessage !== null ? data.lastMessage.content : ""}
+                            {data.isReadMessage ? (<div className="text-gray-400 overflow-hidden text-ellipsis whitespace-nowrap w-40">
+                                {data.lastMessage !== null ? data.lastMessage.content : ""}
+                            </div>) : (<div className="text-black overflow-hidden text-ellipsis whitespace-nowrap w-40">
+                                {data.lastMessage !== null ? data.lastMessage.content : ""}
+                            </div>)}
                         </div>
                     </div>
                 </div>
@@ -66,7 +73,7 @@ const Conversation = ({ data }) => {
                     </div>
                 ) : (
                     <div>
-                        <div>{data.lastMessage !== null ? formatDate(data.lastMessage.updatedAt) : ""}</div>
+                        <div style={{ fontSize: 12 }}>{data.lastMessage !== null ? formatDate(data.lastMessage.updatedAt) : ""}</div>
 
                     </div>
                 )}

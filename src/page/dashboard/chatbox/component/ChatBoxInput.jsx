@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { COLORS } from "../../../../utils/COLORS";
 import {
   BsEmojiSmile,
@@ -9,14 +9,20 @@ import {
 } from "react-icons/bs";
 import axios from "axios";
 import { BASE_URL } from "../../../../data/DUMMY_DATA";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { setReplyMessage } from "../../../../hooks/redux/reducer";
 
 const ChatInput = () => {
   const [isTyping, setTyping] = useState(false);
   const [inputMessage, setInputMessage] = useState("");
   const [inputImage, setInputImage] = useState(null);
-  const currentConversation = useSelector((state) => state.currentConversation)
+  const currentConversation = useSelector((state) => state.currentConversation);
   const userToken = JSON.parse(localStorage.getItem("userToken"));
+  const repMess = useSelector((state) => state.replyMessage);
+
+  // const socket = io(BASE_URL);
+
+  const dispatch = useDispatch();
 
   const handleChangeInput = (e) => {
     const text = e.target.value;
@@ -28,29 +34,81 @@ const ChatInput = () => {
   }, [inputMessage, inputImage]);
 
   const handleSendMessage = async () => {
+    if (repMess && inputMessage) {
+      hanldeReplyMessage();
+      dispatch(setReplyMessage({}))
+    }
     if (inputMessage) {
-      try {
-        const respone = await axios({
-          url: BASE_URL + "/api/v1/conservations/" + `${currentConversation._id}/messages/sendText`,
-          method: 'POST',
-          headers: { Authorization: `Bearer ${userToken}` },
-          data: {
-            content: inputMessage
-          }
-        });
-        console.log(respone)
-      } catch (error) {
-        console.log(error);
-      }
+      handleSendTextMessage();
+    }
+    if (inputImage) {
+      handleSendIMG();
     }
     setInputMessage("");
     setInputImage(null)
     setTyping(false);
+    ///
+    // if (inputMessage) {
+    //   try {
+    //     socket.emit('send_message', {
+    //       conversationId: currentConversation._id,
+    //       content: inputMessage,
+    //       token: userToken
+    //     });
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // }
+    // setInputMessage("");
+    // setInputImage(null);
+    // setTyping(false);
   };
+
+  const handleSendTextMessage = async () => {
+    // socket.emit("message:send", { message: inputMessage, currentConversationId: currentConversation._id })
+    try {
+      const respone = await axios({
+        url: BASE_URL + "/api/v1/conservations/" + `${currentConversation._id}/messages/sendText`,
+        method: 'POST',
+        headers: { Authorization: `Bearer ${userToken}` },
+        data: {
+          content: inputMessage
+        }
+      });
+      console.log(respone)
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const handleSendIMG = async () => {
+    console.log(inputImage);
+  }
+
+  const hanldeReplyMessage = async () => {
+    console.log(repMess)
+    // try {
+    //   const respone = await axios({
+    //     url: BASE_URL + "/api/v1/conservations/" + `${currentConversation._id}/messages/replyText/${repMess._id}`,
+    //     method: 'POST',
+    //     headers: { Authorization: `Bearer ${userToken}` },
+    //     data: {
+    //       content: inputMessage
+    //     }
+    //   });
+    //   console.log(respone)
+    // } catch (error) {
+    //   console.log(error);
+    // }
+  }
 
   const enterPressed = (e) => {
     e.key === "Enter" && handleSendMessage();
   };
+
+  React.useEffect(() => {
+
+  }, [])
 
   return (
     <>

@@ -66,6 +66,7 @@ const ProfileModal = () => {
             method: 'get',
             headers: { Authorization: `Bearer ${userToken}` },
         })
+        console.log("getmeee")
         dispatch(setUser(respone.data.data))
     }
 

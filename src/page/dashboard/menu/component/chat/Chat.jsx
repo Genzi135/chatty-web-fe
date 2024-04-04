@@ -16,7 +16,9 @@ export default function Chat() {
 
     const dataSources = useSelector(state => state.currentConversation)
 
-    const [dataSource, setDataSource] = React.useState([]);
+    const data = useSelector((state) => state.listConversation)
+
+    const [listConversation, setListConversation] = React.useState([]);
 
 
     const getData = async () => {
@@ -26,27 +28,44 @@ export default function Chat() {
                 method: 'get',
                 headers: { Authorization: `Bearer ${userToken}` },
             })
-            console.log(respone)
-            setDataSource(respone.data.data)
+            console.log(respone.data.data)
+            // setDataSource(respone.data.data)
+            setListConversation(respone.data.data)
         } catch (error) {
             console.log(error)
         }
     }
+
+    const setIsReadConveration = async (id) => {
+        try {
+            const respone = await axios({
+                url: BASE_URL + "/api/v1/conservations/" + `${id}`,
+                method: 'get',
+                headers: { Authorization: `Bearer ${userToken}` },
+            })
+            console.log(respone.data.data)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     const chatClick = (conversation) => {
         console.log("click")
         dispatch(setConversation(conversation))
         console.log(dataSources)
+        setIsReadConveration(conversation._id)
     }
+
 
     React.useEffect(() => {
         getData();
-    }, [])
+    }, [data])
 
     return (
         <div>
             <HeaderChat />
             <div style={{ width: "100%" }}>
-                {dataSource !== null ? (dataSource.map((conversation, index) => (
+                {listConversation.length > 0 ? (listConversation.map((conversation, index) => (
                     <div key={index} onClick={() => chatClick(conversation)}>
                         <Conversation data={conversation} />
                     </div>

@@ -34,6 +34,7 @@ const Main = () => {
         getData();
     }, []);
 
+
     return (
         <>
             {isLogin ? (

@@ -2,11 +2,12 @@ import { CiEdit } from "react-icons/ci";
 import { BsPinAngle, BsPeople, BsAlarm, BsBell, BsCaretRightFill, BsCaretDownFill } from "react-icons/bs";
 import { COLORS } from "../../../../utils/COLORS";
 import PhotoVidAccordion from "./accordion/PhotoVidAccordion";
-import React from "react";
+import React, { useEffect } from "react";
 import FileAccodion from "./accordion/FileAccordion";
 import LinkAccordian from "./accordion/LinkAccordion";
 import PrivateSettingAccordion from "./accordion/PrivatedSettingAccordion";
 import { useSelector } from "react-redux";
+
 
 const ConversationDrawer = () => {
     const [isPhotoVidOpen, setPhotoVidOpen] = React.useState(true);
@@ -15,6 +16,9 @@ const ConversationDrawer = () => {
     const [isPrivateSettingOpen, setPrivateSettingOpen] = React.useState(true);
 
     const conversationData = useSelector((state) => state.currentConversation);
+
+
+
 
     return (<>
         <div style={{ width: 500, position: 'relative', backgroundColor: 'white', borderLeftWidth: 2 }}>

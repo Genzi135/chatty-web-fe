@@ -21,6 +21,21 @@ export const setConversation = (conversation) => ({
     payload: conversation
 })
 
+export const setCurrentMessage = (message) => ({
+    type: "CHANGE_MESSAGE",
+    payload: message
+})
+
+export const setListConversation = (arr) => ({
+    type: 'SET_LIST_CONVERSATION',
+    payload: arr
+})
+
+export const setReplyMessage = (obj) => ({
+    type: "REPLY_MESSAGE",
+    payload: obj
+})
+
 const initialState = {
     view: {
         menu: "Chat",
@@ -39,17 +54,11 @@ const initialState = {
         bg: "",
         bio: "",
     },
-    currentConversation: {
-        // id: "",
-        // ownerId: "",
-        // members: [],
-        // type: "",
-        // conversationName: "",
-        // lastMessageId: "",
-        // pinMessageId: [],
-        // createAt: "",
-    },
-    login: false
+    currentConversation: {},
+    login: false,
+    message: "",
+    listConversation: [],
+    replyMessage: {},
 }
 
 const reducer = (state = initialState, action) => {
@@ -79,6 +88,21 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 login: false
+            }
+        case 'CHANGE_MESSAGE':
+            return {
+                ...state,
+                message: action.payload
+            }
+        case 'SET_LIST_CONVERSATION':
+            return {
+                ...state,
+                listConversation: action.payload
+            }
+        case 'REPLY_MESSAGE':
+            return {
+                ...state,
+                replyMessage: action.payload
             }
         default:
             return state;

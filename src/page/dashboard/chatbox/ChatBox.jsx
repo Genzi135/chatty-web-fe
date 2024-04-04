@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import ChatBody from "./component/ChatBoxBody";
 import ChatBoxHeader from "./component/ChatBoxHeader";
 import ChatInput from "./component/ChatBoxInput";
@@ -10,6 +10,7 @@ import { BASE_URL } from "../../../data/DUMMY_DATA";
 import axios from "axios";
 
 const ChatBox = () => {
+
     const [isDrawerOpen, setIsDrawerOpen] = useState(true);
     const currentConversation = useSelector((state) => state.currentConversation);
     const userToken = JSON.parse(localStorage.getItem("userToken"))
@@ -45,15 +46,22 @@ const ChatBox = () => {
         getMessageByConversation();
     }, [currentConversation])
 
+
+
+
+
     return (
         <div style={{ width: "100%", height: "100%" }}>
+            {/* <div>Socket.IO connection</div>; */}
             {Object.keys(currentConversation).length === 0 ? (
                 <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: COLORS.whiteBG, width: '100%', height: '100%' }}>
                     <LandingPage />
                 </div>
             ) : (
-                <div style={{ width: "100%", backgroundColor: 'gray', height: "100%", display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-                    <div style={{ width: "100%", backgroundColor: 'gray', height: "100%", display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                <div
+                    className="bg-gray-300"
+                    style={{ width: "100%", height: "100%", display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+                    <div style={{ width: "100%", height: "100%", display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                         <ChatBoxHeader onSidebarButtonClick={handleSidebarButtonClick} isDrawerOpen={isDrawerOpen} />
                         <ChatBody messageData={messageData} />
                         <ChatInput />
