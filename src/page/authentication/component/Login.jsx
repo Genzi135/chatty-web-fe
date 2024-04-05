@@ -62,12 +62,14 @@ function Login({ onRegisterClick, onForgotPasswordClick }) {
             dispatch(setLogin())
         } catch (error) {
             console.log(error)
+            setLoading(false)
             if (error.response.data.message === 'Bad credentials.') {
                 setReport('Phone or password is not correct')
             } else {
 
                 setReport(error.response.data.message)
             }
+
         }
 
         setLoading(false)

@@ -3,11 +3,12 @@ import ChatBody from "./component/ChatBoxBody";
 import ChatBoxHeader from "./component/ChatBoxHeader";
 import ChatInput from "./component/ChatBoxInput";
 import ConversationDrawer from "./component/ConversationDrawer";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import LandingPage from "../../../component/LandingPage";
 import { COLORS } from "../../../utils/COLORS";
 import { BASE_URL } from "../../../data/DUMMY_DATA";
 import axios from "axios";
+import { setListMessage } from "../../../hooks/redux/reducer";
 
 const ChatBox = () => {
 
@@ -15,7 +16,8 @@ const ChatBox = () => {
     const currentConversation = useSelector((state) => state.currentConversation);
     const userToken = JSON.parse(localStorage.getItem("userToken"))
 
-    const [messageData, setMessageData] = useState([]);
+    const dataSource = useSelector((state) => state.listMessage);
+    const dispatch = useDispatch();
 
     const handleSidebarButtonClick = () => {
         setIsDrawerOpen(!isDrawerOpen);
@@ -34,8 +36,7 @@ const ChatBox = () => {
                         limit: 50
                     }
                 });
-                console.log(response.data)
-                setMessageData(response.data.data);
+                dispatch(setListMessage(response.data.data))
             } catch (error) {
                 console.log(error);
             }
@@ -51,7 +52,7 @@ const ChatBox = () => {
 
 
     return (
-        <div style={{ width: "100%", height: "100%" }}>
+        <div style={{ width: "100%", height: "100%", minWidth: 800 }}>
             {/* <div>Socket.IO connection</div>; */}
             {Object.keys(currentConversation).length === 0 ? (
                 <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: COLORS.whiteBG, width: '100%', height: '100%' }}>
@@ -59,11 +60,11 @@ const ChatBox = () => {
                 </div>
             ) : (
                 <div
-                    className="bg-gray-300"
+                    className="bg-gray-200"
                     style={{ width: "100%", height: "100%", display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
                     <div style={{ width: "100%", height: "100%", display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                         <ChatBoxHeader onSidebarButtonClick={handleSidebarButtonClick} isDrawerOpen={isDrawerOpen} />
-                        <ChatBody messageData={messageData} />
+                        <ChatBody />
                         <ChatInput />
                     </div>
                     {isDrawerOpen && <ConversationDrawer />}

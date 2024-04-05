@@ -28,21 +28,21 @@ export default function SideBar({ selectedItems, onItemClick }) {
 
     const dispatch = useDispatch()
 
-    // const getData = async () => {
-    //     const respone = await axios({
-    //         url: BASE_URL + "/api/v1/users/getMe",
-    //         method: 'get',
-    //         headers: { Authorization: `Bearer ${userToken}` },
+    const getData = async () => {
+        const respone = await axios({
+            url: BASE_URL + "/api/v1/users/getMe",
+            method: 'get',
+            headers: { Authorization: `Bearer ${userToken}` },
 
-    //     })
-    //     setData(respone.data.data);
-    //     dispatch(setUser(respone.data.data))
-    // }
+        })
+        setData(respone.data.data);
+        dispatch(setUser(respone.data.data))
+    }
 
     const dataSource = useSelector((state) => state.user);
 
     React.useEffect(() => {
-        // getData()
+        getData()
     }, [])
 
     React.useEffect(() => {

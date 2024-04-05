@@ -1,8 +1,13 @@
 /* eslint-disable react/prop-types */
 import React from "react";
 import { FiMoreHorizontal } from "react-icons/fi";
+import { useDispatch, useSelector } from "react-redux";
+import { COLORS } from "../../../../../utils/COLORS";
 
 const Conversation = ({ data }) => {
+
+    const currentConversation = useSelector((state) => state.currentConversation);
+
 
     const formatDate = (updatedAt) => {
         const today = new Date();
@@ -39,13 +44,13 @@ const Conversation = ({ data }) => {
 
     // console.log(userMember, "u");
     React.useEffect(() => {
-    }, [])
+    }, [currentConversation])
     return (
         <div>
             <div
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
-                style={{ width: "100%", height: 90, display: "flex", justifyContent: 'space-between', alignItems: "center", padding: 10 }}
+                style={{ width: "100%", height: 90, display: "flex", justifyContent: 'space-between', alignItems: "center", padding: 10, backgroundColor: currentConversation._id === data._id ? COLORS.bgConver : "white" }}
                 className="hover:bg-gray-100">
                 <div style={{ display: "flex", justifyContent: 'center', alignItems: 'center', gap: 10 }} >
                     <div className="avatar">

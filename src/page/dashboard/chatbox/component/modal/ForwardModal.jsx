@@ -1,8 +1,10 @@
 import axios from "axios";
 import React from "react";
 import { BASE_URL } from "../../../../../data/DUMMY_DATA";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { COLORS } from "../../../../../utils/COLORS";
+import { addMess, updateConversationLastMessage } from "../../../../../hooks/redux/reducer";
+import { useSocket } from "../../../../../hooks/context/socketContext";
 
 const ForwardModal = ({ onClose }) => {
     const [dataSource, setDataSource] = React.useState([]);
@@ -15,6 +17,9 @@ const ForwardModal = ({ onClose }) => {
 
     const mess = useSelector((state) => state.message)
 
+    const dispatch = useDispatch();
+    const currentConversation = useSelector((state) => state.currentConversation);
+    const { socket } = useSocket();
 
     const getData = async () => {
         try {
@@ -25,7 +30,6 @@ const ForwardModal = ({ onClose }) => {
                 headers: { Authorization: `Bearer ${userToken}` },
             });
             setLoading(false)
-            console.log(response);
             setDataSource(response.data.data);
         } catch (error) {
             console.log(error);
@@ -44,6 +48,12 @@ const ForwardModal = ({ onClose }) => {
                     }
                 });
                 console.log(response);
+                dispatch(addMess(response.data.data));
+                dispatch(updateConversationLastMessage(currentConversation._id, response.data.data))
+                socket.emit("message:send", {
+                    ...response.data.data,
+                    conversation: currentConversation
+                })
             } catch (error) {
                 console.log(error);
             }
@@ -64,7 +74,9 @@ const ForwardModal = ({ onClose }) => {
     }, []);
 
     return (
-        <div style={{ backgroundColor: "white", width: 400, height: 600, zIndex: 666, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', padding: 10 }}>
+        <div
+
+            style={{ backgroundColor: "white", width: 400, height: 600, zIndex: 666, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', padding: 10 }}>
 
             <div style={{ color: 'black' }}>
                 <div className="text-black p-3 text-lg font-semibold">

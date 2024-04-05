@@ -6,15 +6,18 @@ import axios from "axios";
 import { BASE_URL } from "../../../../../data/DUMMY_DATA";
 import { COLORS } from "../../../../../utils/COLORS";
 import { useDispatch, useSelector } from "react-redux";
-import { setConversation } from "../../../../../hooks/redux/reducer";
+import { setConversation, updateConversationIsReadMessageFalse, updateConversationLastMessage } from "../../../../../hooks/redux/reducer";
+import { useSocket } from "../../../../../hooks/context/socketContext";
 
 export default function Chat() {
 
     const userToken = JSON.parse(localStorage.getItem("userToken"))
 
+    const { socket } = useSocket();
+
     const dispatch = useDispatch();
 
-    const dataSources = useSelector(state => state.currentConversation)
+    const currentConversation = useSelector((state) => state.currentConversation)
 
     const data = useSelector((state) => state.listConversation)
 
@@ -28,8 +31,6 @@ export default function Chat() {
                 method: 'get',
                 headers: { Authorization: `Bearer ${userToken}` },
             })
-            console.log(respone.data.data)
-            // setDataSource(respone.data.data)
             setListConversation(respone.data.data)
         } catch (error) {
             console.log(error)
@@ -43,19 +44,42 @@ export default function Chat() {
                 method: 'get',
                 headers: { Authorization: `Bearer ${userToken}` },
             })
-            console.log(respone.data.data)
+            console.log("read: ", respone);
+            dispatch(setConversation(respone.data.data))
         } catch (error) {
             console.log(error)
         }
     }
 
     const chatClick = (conversation) => {
-        console.log("click")
         dispatch(setConversation(conversation))
-        console.log(dataSources)
         setIsReadConveration(conversation._id)
     }
 
+    React.useEffect(() => {
+        socket.on("message:receive", (response) => {
+            listConversation.forEach((conversation) => {
+                if (response.conversation._id === conversation._id) {
+                    const updatedConversation = {
+                        ...conversation,
+                        lastMessage: response.lastMessage
+                    };
+                    dispatch(updateConversationLastMessage(updatedConversation._id, updatedConversation.lastMessage));
+                }
+                if (response.conversation._id === conversation._id) {
+                    const updatedConversation = {
+                        ...conversation,
+                        lastMessage: response.lastMessage
+                    };
+                    dispatch(updateConversationIsReadMessageFalse(updatedConversation._id));
+                }
+            });
+        });
+    }, [dispatch, listConversation]);
+
+    React.useEffect(() => {
+        console.log(listConversation);
+    }, [listConversation])
 
     React.useEffect(() => {
         getData();

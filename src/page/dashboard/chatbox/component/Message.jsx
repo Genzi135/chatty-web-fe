@@ -5,6 +5,7 @@ import axios from "axios";
 import { BASE_URL } from "../../../../data/DUMMY_DATA";
 import React from "react";
 import { setCurrentMessage, setReplyMessage } from "../../../../hooks/redux/reducer";
+import { useSocket } from "../../../../hooks/context/socketContext";
 
 // eslint-disable-next-line react/prop-types
 const Message = ({ message, onOpenFWM }) => {
@@ -20,7 +21,11 @@ const Message = ({ message, onOpenFWM }) => {
 
 const UserMessage = ({ message, onOpenFWM }) => {
 
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
+    const currentConversation = useSelector((state) => state.currentConversation);
+    const userToken = JSON.parse(localStorage.getItem("userToken"));
+    const { socket } = useSocket();
+
 
     function formatTime(datetimeString) {
         const datetime = new Date(datetimeString);
@@ -28,7 +33,7 @@ const UserMessage = ({ message, onOpenFWM }) => {
         const minute = datetime.getMinutes().toString().padStart(2, '0');
         return `${hour}:${minute}`;
     }
-    const userToken = JSON.parse(localStorage.getItem("userToken"))
+
 
     const handleDeleteMessage = async (id) => {
         try {
@@ -38,6 +43,10 @@ const UserMessage = ({ message, onOpenFWM }) => {
                 headers: { Authorization: `Bearer ${userToken}` }
             })
             console.log(response)
+            // socket.emit("message:send", {
+            //     ...response.data.data,
+            //     conversation: currentConversation
+            // })
         } catch (error) {
             console.log(error)
         }
@@ -62,10 +71,11 @@ const UserMessage = ({ message, onOpenFWM }) => {
         setShowOption(false)
     }, [])
     return (
+
         <div
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}
-            style={{ width: '100%', display: 'flex', justifyContent: "flex-end", marginTop: 5 }}>
+            style={{ width: '100%', display: 'flex', justifyContent: "flex-end", marginBottom: 5 }}>
             {isShowOption && <div style={{ backgroundColor: '', display: 'flex', alignItems: 'center', marginRight: 10, opacity: '80%' }}>
                 <div className="flex gap-2 bg-white p-1 rounded-md">
                     <div
@@ -88,9 +98,18 @@ const UserMessage = ({ message, onOpenFWM }) => {
                     </div>
                 </div>
             </div>}
+
             <div
                 className="shadow-xl"
                 style={{ maxWidth: '60%', borderRadius: 10, backgroundColor: COLORS.bgComponentSelected, wordWrap: 'break-word', padding: 10, color: message.isDelete ? 'grey' : COLORS.text }}>
+                {message.parent && message.content !== "This message has been deleted" && <div className="bg-blue-100 p-2 w-48 border-l-4 border-blue-600 rounded-lg mb-2">
+                    <div className="font-medium">
+                        {message.parent.name}
+                    </div>
+                    <div className="text-ellipsis overflow-hidden whitespace-nowrap text-gray-500">
+                        {message.parent.content}
+                    </div>
+                </div>}
                 <div style={{ wordBreak: 'break-all' }}>
                     {message.content}
 
@@ -101,12 +120,19 @@ const UserMessage = ({ message, onOpenFWM }) => {
                     {formatTime(message.createdAt)}
                 </div>
             </div>
+
         </div>
+
     )
 }
 
 const FriendMessage = ({ message, onOpenFWM }) => {
-    const dispatch = useDispatch()
+
+    const dispatch = useDispatch();
+    const currentConversation = useSelector((state) => state.currentConversation);
+    const userToken = JSON.parse(localStorage.getItem("userToken"));
+    const { socket } = useSocket();
+
     function formatTime(datetimeString) {
         const datetime = new Date(datetimeString);
         const hour = datetime.getHours().toString().padStart(2, '0');
@@ -115,7 +141,10 @@ const FriendMessage = ({ message, onOpenFWM }) => {
     }
     const onClickForwardMessage = (message) => {
         dispatch(setCurrentMessage(message))
-        onOpenFWM();
+        onOpenFWM()
+    }
+    const hanldeReplyMessage = async () => {
+        dispatch(setReplyMessage(message));
     }
     const [isShowOption, setShowOption] = React.useState(false)
 
@@ -132,7 +161,7 @@ const FriendMessage = ({ message, onOpenFWM }) => {
 
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}
-            style={{ width: '100%', display: 'flex', justifyContent: "flex-start", marginTop: 5, }}>
+            style={{ width: '100%', display: 'flex', justifyContent: "flex-start", marginBottom: 5, }}>
             <div className="avatar">
                 <div className="avatar w-8 h-8 rounded-full mr-2">
                     <img src={message.avatar} alt="avatar" />
@@ -141,6 +170,14 @@ const FriendMessage = ({ message, onOpenFWM }) => {
             <div
                 className="shadow-xl"
                 style={{ maxWidth: '60%', borderRadius: 10, backgroundColor: "white", wordWrap: 'break-word', padding: 10, color: COLORS.text }}>
+                {message.parent && message.content !== "This message has been deleted" && <div className="bg-blue-100 p-2 w-48 border-l-4 border-blue-600 rounded-lg mb-2">
+                    <div className="font-medium">
+                        {message.parent.name}
+                    </div>
+                    <div className="text-ellipsis overflow-hidden whitespace-nowrap text-gray-500">
+                        {message.parent.content}
+                    </div>
+                </div>}
                 <div style={{ wordBreak: 'break-all' }}>
                     {message.content}
                 </div>
@@ -155,6 +192,7 @@ const FriendMessage = ({ message, onOpenFWM }) => {
                     <div
                         className="hover:bg-blue-300 p-1 rounded-md tooltip"
                         data-tip="Reply"
+                        onClick={() => { hanldeReplyMessage() }}
                     >
                         <BsArrow90DegDown size={15} color={COLORS.text} />
                     </div>

@@ -1,3 +1,4 @@
+/* eslint-disable no-case-declarations */
 export const setView = (view) => ({
     type: 'CHANGE_VIEW',
     payload: view
@@ -31,10 +32,36 @@ export const setListConversation = (arr) => ({
     payload: arr
 })
 
+export const setListMessage = (arr) => ({
+    type: 'SET_LIST_MESSAGE',
+    payload: arr
+})
+
 export const setReplyMessage = (obj) => ({
     type: "REPLY_MESSAGE",
     payload: obj
 })
+
+export const addMess = (mess) => ({
+    type: "ADD_MESSAGE",
+    payload: mess
+})
+
+export const updateConversationLastMessage = (conversationId, newLastMessage) => ({
+    type: 'UPDATE_CONVERSATION_LAST_MESSAGE',
+    payload: { conversationId, newLastMessage }
+});
+
+export const updateConversationIsReadMessageFalse = (conversationId) => ({
+    type: 'UPDATE_CONVERSATION_IS_READ_MESSAGE_TRUE',
+    payload: { conversationId }
+});
+
+export const setLastMessage = (lastMessage) => ({
+    type: 'SET_LAST_MESSAGE',
+    payload: lastMessage
+})
+
 
 const initialState = {
     view: {
@@ -59,6 +86,7 @@ const initialState = {
     message: "",
     listConversation: [],
     replyMessage: {},
+    listMessage: []
 }
 
 const reducer = (state = initialState, action) => {
@@ -103,6 +131,52 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 replyMessage: action.payload
+            }
+        case 'SET_LIST_MESSAGE':
+            return {
+                ...state,
+                listMessage: action.payload
+            }
+        case 'ADD_MESSAGE':
+            return {
+                ...state,
+                listMessage: state.listMessage.concat(action.payload)
+            }
+        case 'UPDATE_CONVERSATION_LAST_MESSAGE':
+            const { conversationId, newLastMessage } = action.payload;
+            return {
+                ...state,
+                listConversation: state.listConversation.map(conversation => {
+                    if (conversation._id === conversationId) {
+                        return {
+                            ...conversation,
+                            lastMessage: newLastMessage
+                        };
+                    }
+                    return conversation;
+                })
+            };
+        case 'UPDATE_CONVERSATION_IS_READ_MESSAGE_TRUE':
+            const { conversation_id } = action.payload;
+            return {
+                ...state,
+                listConversation: state.listConversation.map(conversation => {
+                    if (conversation._id === conversation_id) {
+                        return {
+                            ...conversation,
+                            isReadMessage: true
+                        };
+                    }
+                    return conversation;
+                })
+            };
+        case 'SET_LAST_MESSAGE':
+            return {
+                ...state,
+                currentConversation: {
+                    ...state.currentConversation,
+                    lastMessage: action.payload
+                }
             }
         default:
             return state;
