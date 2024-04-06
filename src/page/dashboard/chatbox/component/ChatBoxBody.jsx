@@ -49,8 +49,11 @@ const ChatBody = () => {
 
     useEffect(() => {
         socket.on("message:receive", (response) => {
-            dispatch(addMess(response))
-            setDataSource(listMessage);
+            console.log('mess res: ', response);
+            if (response.conversation._id === currentConversation._id) {
+                dispatch(addMess(response))
+                setDataSource(listMessage);
+            }
         });
     }, [])
 
