@@ -50,6 +50,7 @@ const ChatBody = () => {
     useEffect(() => {
         socket.on("message:receive", (response) => {
             console.log('mess res: ', response);
+            console.log("list mess: ", dataSource.listMessage);
             if (response.conversation._id === currentConversation._id) {
                 dispatch(addMess(response))
                 setDataSource(listMessage);

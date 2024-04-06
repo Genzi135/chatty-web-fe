@@ -138,10 +138,13 @@ const reducer = (state = initialState, action) => {
                 listMessage: action.payload
             }
         case 'ADD_MESSAGE':
+            console.log(state);
             return {
                 ...state,
                 listMessage: [...state.listMessage, action.payload]
+
             };
+
         case 'UPDATE_CONVERSATION_LAST_MESSAGE':
             const { conversationId, newLastMessage } = action.payload;
             return {
