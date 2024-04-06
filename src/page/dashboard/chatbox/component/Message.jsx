@@ -76,7 +76,7 @@ const UserMessage = ({ message, onOpenFWM }) => {
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}
             style={{ width: '100%', display: 'flex', justifyContent: "flex-end", marginBottom: 5 }}>
-            {isShowOption && <div style={{ backgroundColor: '', display: 'flex', alignItems: 'center', marginRight: 10, opacity: '80%' }}>
+            {isShowOption && message.content !== "This message has been deleted" && <div style={{ backgroundColor: '', display: 'flex', alignItems: 'center', marginRight: 10, opacity: '80%' }}>
                 <div className="flex gap-2 bg-white p-1 rounded-md">
                     <div
                         className="hover:bg-blue-300 p-1 rounded-md tooltip"
@@ -187,7 +187,7 @@ const FriendMessage = ({ message, onOpenFWM }) => {
                     {formatTime(message.createdAt)}
                 </div>
             </div>
-            {isShowOption && <div style={{ backgroundColor: '', display: 'flex', alignItems: 'center', marginLeft: 10, opacity: '80%' }}>
+            {isShowOption && message.content !== "This message has been deleted" && <div style={{ backgroundColor: '', display: 'flex', alignItems: 'center', marginLeft: 10, opacity: '80%' }}>
                 <div className="flex gap-2 bg-white p-1 rounded-md">
                     <div
                         className="hover:bg-blue-300 p-1 rounded-md tooltip"

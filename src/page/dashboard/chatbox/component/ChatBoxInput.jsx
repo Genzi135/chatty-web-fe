@@ -18,9 +18,9 @@ import { useSocket } from "../../../../hooks/context/socketContext";
 const ChatInput = () => {
   const [isTyping, setTyping] = useState(false);
   const [inputMessage, setInputMessage] = useState("");
-  const [inputImage, setInputImage] = useState([]);
-  const [inputImages, setInputImages] = useState([]);
-  const [inputFile, setInputFile] = useState([]);
+  const [inputImage, setInputImage] = useState(null);
+  const [inputImages, setInputImages] = useState(null);
+  const [inputFile, setInputFile] = useState(null);
   const currentConversation = useSelector((state) => state.currentConversation);
   const userToken = JSON.parse(localStorage.getItem("userToken"));
 

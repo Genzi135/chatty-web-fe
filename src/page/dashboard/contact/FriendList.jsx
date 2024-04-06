@@ -124,7 +124,7 @@ const FriendList = () => {
                                         </div>
                                     </div>
                                 </div>
-                                <div
+                                {/* <div
                                     //ref={dropdownRef}
                                     style={{ height: 30, width: 30, borderRadius: 2, display: "flex", justifyContent: 'center', alignItems: 'center', position: "relative" }}
                                     className="hover:bg-gray-300 cursor-pointer"
@@ -132,7 +132,7 @@ const FriendList = () => {
                                 >
 
                                     <FiMoreHorizontal size={18} />
-                                </div>
+                                </div> */}
                             </div>
                         ))}
                 </div>
