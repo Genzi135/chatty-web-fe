@@ -9,10 +9,12 @@ import { useSocket } from "../../../../hooks/context/socketContext";
 
 // eslint-disable-next-line react/prop-types
 const Message = ({ message, onOpenFWM }) => {
+    const current = useSelector((state) => state.user)
     return (
         <>
             {
-                // eslint-disable-next-line react/prop-types
+                // eslint-disable-next-line react/prop-types  
+
                 message.isMine ? <UserMessage message={message} onOpenFWM={onOpenFWM} /> : <FriendMessage message={message} onOpenFWM={onOpenFWM} />
             }
         </>

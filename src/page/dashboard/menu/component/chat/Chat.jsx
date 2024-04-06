@@ -44,7 +44,6 @@ export default function Chat() {
                 method: 'get',
                 headers: { Authorization: `Bearer ${userToken}` },
             })
-            console.log("read: ", respone);
             dispatch(setConversation(respone.data.data))
         } catch (error) {
             console.log(error)
@@ -79,7 +78,10 @@ export default function Chat() {
 
     React.useEffect(() => {
         getData();
+        // setListConversation(data);
     }, [data])
+
+
 
     return (
         <div>
