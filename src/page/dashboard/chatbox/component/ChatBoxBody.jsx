@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import Message from "./Message";
 import ForwardModal from "./modal/ForwardModal";
 import { useDispatch, useSelector } from "react-redux";
-import { addMess, setListMessage } from "../../../../hooks/redux/reducer";
+import { addMess } from "../../../../hooks/redux/reducer";
 import axios from "axios";
 import { useSocket } from "../../../../hooks/context/socketContext";
 import { BASE_URL } from "../../../../data/DUMMY_DATA";

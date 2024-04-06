@@ -8,6 +8,11 @@ import {
   BsBandaid,
   BsX,
   BsFileEarmarkWord,
+  BsFileEarmarkWordFill,
+  BsFileEarmarkPptFill,
+  BsFileEarmarkXFill,
+  BsFileEarmarkZipFill,
+  BsFillFileEarmarkTextFill,
 } from "react-icons/bs";
 import axios from "axios";
 import { BASE_URL } from "../../../../data/DUMMY_DATA";
@@ -67,6 +72,7 @@ const ChatInput = () => {
   }, [inputMessage, inputImage]);
 
   const handleSendMessage = async () => {
+    console.log("rep", replyMessage);
     if (typeof replyMessage === 'object' && Object.keys(replyMessage).length !== 0) {
       hanldeReplyMessage();
       dispatch(setReplyMessage({}))
@@ -289,7 +295,7 @@ const ChatInput = () => {
               id="file"
               value={""}
               multiple
-              accept=".doc, .docx, .ppt, .pptx, .xls, .xlsx, .rar"
+              accept=".doc, .docx, .ppt, .pptx, .xls, .xlsx, .rar .zar .txt"
               onChange={(e) => {
                 const files = e.target.files;
                 if (files.length <= 5) {
@@ -315,7 +321,7 @@ const ChatInput = () => {
 
           </div>
           <div>
-            {reply.content && reply.content !== 'This message has been deleted' && (<div
+            {reply && reply !== null && Object.keys(replyMessage).length !== 0 && reply.content !== 'This message has been deleted' && (<div
               className="text-black w-72 shadow-lg border-blue-700 p-1 rounded-lg flex justify-between ">
               <div className="flex justify-center items-center gap-1  ">
                 <div className="font-medium text-blue-600">
@@ -323,7 +329,14 @@ const ChatInput = () => {
                 </div>
                 <div className="overflow-hidden whitespace-nowrap text-ellipsis w-52">
                   {reply.content}
+                  {reply.attachments && <div className="flex flex-row gap-2">
+                    {reply.attachments.map((e, index) => (<div key={index}>
+                      {e.type}
+                    </div>
+                    ))}
+                  </div>}
                 </div>
+
               </div>
               <div className="flex justify-center items-center relative" onClick={() => { dispatch(setReplyMessage({})) }}>
                 <BsX size={20} color={'black'} style={{ position: 'absolute', width: 20, height: 20, top: 0, right: 0, borderRadius: 30 }} className="hover:bg-gray-400 bg-gray-200" />
@@ -489,7 +502,19 @@ const ChatInput = () => {
                     </span>
                     <div className="">
                       <div>
-                        {e.name.endsWith('.docx') && <BsFileEarmarkWord size={40} color='black' />}
+                        {e.name.endsWith('.docx') && <BsFileEarmarkWordFill size={40} color='blue' />}
+                        {e.name.endsWith('.doc') && <BsFileEarmarkWordFill size={40} color='blue' />}
+
+                        {e.name.endsWith('.pptx') && <BsFileEarmarkPptFill size={40} color='red' />}
+                        {e.name.endsWith('.ppt') && <BsFileEarmarkPptFill size={40} color='red' />}
+
+                        {e.name.endsWith('.xlsx') && <BsFileEarmarkXFill size={40} color='green' />}
+                        {e.name.endsWith('.xls') && <BsFileEarmarkXFill size={40} color='green' />}
+
+                        {e.name.endsWith('.rar') && <BsFileEarmarkZipFill size={40} color='purple' />}
+                        {e.name.endsWith('.zar') && <BsFileEarmarkZipFill size={40} color='purple' />}
+
+                        {e.name.endsWith('.txt') && <BsFillFileEarmarkTextFill size={40} color='black' />}
                       </div>
                       <div>
                         {e.name}
