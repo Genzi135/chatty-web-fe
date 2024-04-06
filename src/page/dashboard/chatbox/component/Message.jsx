@@ -4,7 +4,7 @@ import { BsArrow90DegDown, BsFillTrashFill, BsReplyAllFill } from 'react-icons/b
 import axios from "axios";
 import { BASE_URL } from "../../../../data/DUMMY_DATA";
 import React from "react";
-import { setCurrentMessage, setReplyMessage } from "../../../../hooks/redux/reducer";
+import { setCurrentMessage, setListMessage, setReplyMessage } from "../../../../hooks/redux/reducer";
 import { useSocket } from "../../../../hooks/context/socketContext";
 
 // eslint-disable-next-line react/prop-types
@@ -34,6 +34,26 @@ const UserMessage = ({ message, onOpenFWM }) => {
         return `${hour}:${minute}`;
     }
 
+    const getMessageByConversation = async () => {
+        //let page = 1;
+        if (currentConversation._id) {
+            try {
+                const response = await axios({
+                    url: BASE_URL + "/api/v1/conservations/" + `${currentConversation._id}/messages`,
+                    method: 'GET',
+                    headers: { Authorization: `Bearer ${userToken}` },
+                    params: {
+                        page: 1,
+                        limit: 50
+                    }
+                });
+                dispatch(setListMessage(response.data.data))
+            } catch (error) {
+                console.log(error);
+            }
+        }
+    }
+
 
     const handleDeleteMessage = async (id) => {
         try {
@@ -43,6 +63,7 @@ const UserMessage = ({ message, onOpenFWM }) => {
                 headers: { Authorization: `Bearer ${userToken}` }
             })
             console.log(response)
+            getMessageByConversation()
             // socket.emit("message:send", {
             //     ...response.data.data,
             //     conversation: currentConversation
@@ -169,7 +190,7 @@ const FriendMessage = ({ message, onOpenFWM }) => {
             </div>
             <div
                 className="shadow-xl"
-                style={{ maxWidth: '60%', borderRadius: 10, backgroundColor: "white", wordWrap: 'break-word', padding: 10, color: COLORS.text }}>
+                style={{ maxWidth: '60%', borderRadius: 10, backgroundColor: "white", wordWrap: 'break-word', padding: 10, color: message.isDelete ? 'grey' : COLORS.text }}>
                 {message.parent && message.content !== "This message has been deleted" && <div className="bg-blue-100 p-2 w-48 border-l-4 border-blue-600 rounded-lg mb-2">
                     <div className="font-medium">
                         {message.parent.name}
