@@ -94,7 +94,7 @@ const ChatInput = () => {
         }
       });
       dispatch(addMess(respone.data.data))
-      console.log(respone.data.data);
+      console.log("mess", inputMessage);
 
       dispatch(updateConversationLastMessage(currentConversation._id, respone.data.data))
 
@@ -108,44 +108,78 @@ const ChatInput = () => {
   }
 
   const handleSendIMG = async () => {
-    const files = [];
+    const readFilesPromises = [];
+
     if (inputImages) {
-      files.push(...inputImages);
-    }
-    if (inputFile) {
-      files.push(...inputFile);
-    }
-    console.log(files);
-    if (files && files.length > 0) {
-      try {
-        const respone = await axios({
-          url: BASE_URL + "/api/v1/conservations/" + `${currentConversation._id}/messages/sendFiles`,
-          method: 'POST',
-          headers: { Authorization: `Bearer ${userToken}` },
-          data: {
-            files: files,
-          }
+      Array.from(inputImages).forEach(image => {
+        const reader = new FileReader();
+
+        const promise = new Promise((resolve, reject) => {
+          reader.onload = (e) => {
+            resolve(e.target.result);
+          };
+          reader.onerror = (error) => {
+            reject(error);
+          };
         });
-        // dispatch(addMess(respone.data.data))
-        console.log(respone.data.data);
 
-        // dispatch(updateConversationLastMessage(currentConversation._id, respone.data.data))
+        reader.readAsDataURL(image);
 
-        // socket.emit("message:send", {
-        //   ...respone.data.data,
-        //   conversation: currentConversation
-        // })
-        setInputFile(null)
-        setInputImages(null)
-        setInputImage(null)
-      } catch (error) {
-        console.log(error);
-        setInputFile(null)
-        setInputImages(null)
-        setInputImage(null)
-      }
+        readFilesPromises.push(promise);
+      });
     }
+
+    if (inputFile) {
+      Array.from(inputFile).forEach(file => {
+        const reader = new FileReader();
+
+        const promise = new Promise((resolve, reject) => {
+          reader.onload = (e) => {
+            resolve(e.target.result);
+          };
+          reader.onerror = (error) => {
+            reject(error);
+          };
+        });
+
+        reader.readAsDataURL(file);
+
+        readFilesPromises.push(promise);
+      });
+    }
+
+    Promise.all(readFilesPromises)
+      .then(files => {
+        console.log(files);
+        console.log(files.length);
+
+        if (files.length > 0) {
+          return axios({
+            url: `${BASE_URL}/api/v1/conservations/${currentConversation._id}/messages/sendFilesV2`,
+            method: 'POST',
+            headers: { Authorization: `Bearer ${userToken}` },
+            data: {
+              files: files,
+            }
+          });
+        }
+      })
+      .then(response => {
+        console.log(response.data.data);
+
+        setInputFile(null);
+        setInputImages(null);
+        setInputImage(null);
+      })
+      .catch(error => {
+        console.log(error);
+        setInputFile(null);
+        setInputImages(null);
+        setInputImage(null);
+      });
   }
+
+
 
   const hanldeReplyMessage = async () => {
     console.log(replyMessage)

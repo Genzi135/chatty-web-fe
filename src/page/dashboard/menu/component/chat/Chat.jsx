@@ -78,10 +78,6 @@ export default function Chat() {
     }, [dispatch, listConversation]);
 
     React.useEffect(() => {
-        console.log(listConversation);
-    }, [listConversation])
-
-    React.useEffect(() => {
         getData();
     }, [data])
 

@@ -3,11 +3,10 @@ import { COLORS } from "../../../../../utils/COLORS";
 import React from "react";
 import axios from "axios";
 import { BASE_URL } from "../../../../../data/DUMMY_DATA";
-import UserCard from "./UserCard";
 
 const AddFriendModal = () => {
     const [phoneInput, setPhoneInput] = React.useState('');
-    const [dataSource, setDataSource] = React.useState(null);
+    const [dataSource, setDataSource] = React.useState({});
     const [report, setReport] = React.useState('');
 
     const [loading, setLoading] = React.useState(false);
@@ -52,6 +51,43 @@ const AddFriendModal = () => {
 
     }
 
+    const handleAddFriendRequest = async () => {
+        setLoading(true)
+        try {
+            const respone = await axios({
+                url: BASE_URL + "/api/v1/friends/request/" + dataSource._id,
+                method: 'post',
+                headers: { Authorization: `Bearer ${userToken}` },
+            })
+            console.log(respone)
+            handleSearch()
+        } catch (error) {
+            console.log(error)
+            setLoading(false)
+
+        }
+        setLoading(false)
+
+    }
+
+    const handleCancelFriend = async () => {
+        setLoading(true)
+        try {
+            const respone = await axios({
+                url: BASE_URL + "/api/v1/friends/cancel/" + dataSource._id,
+                method: 'post',
+                headers: { Authorization: `Bearer ${userToken}` },
+            })
+            console.log(respone)
+            handleSearch()
+        } catch (error) {
+            console.log(error)
+            setLoading(false)
+
+        }
+        setLoading(false)
+    }
+
     React.useEffect(() => {
         setReport('')
         setDataSource(null)
@@ -87,7 +123,44 @@ const AddFriendModal = () => {
                 </div>
                 <div>
                     {/* list in here */}
-                    {dataSource && <UserCard data={dataSource} />}
+                    {/* <UserCard data={dataSource} setDataSource={setDataSource} /> */}
+                    {dataSource &&
+                        (<div style={{ padding: 10, }}>
+                            <div
+                                style={{ width: "100%", height: 90, display: "flex", justifyContent: 'space-between', alignItems: "center", padding: 10, borderWidth: 1, borderRadius: 10 }}
+                            >
+                                <div style={{ display: "flex", justifyContent: 'center', alignItems: 'center', gap: 10 }} >
+                                    <div className="w-12 rounded-full">
+                                        <img src={dataSource.avatar} alt="avatar" style={{ borderRadius: 30 }} />
+                                    </div>
+                                    <div >
+                                        <div className="stat-title text-black">
+                                            {dataSource.name}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    {dataSource.friend === null ? <button
+                                        onClick={() => handleAddFriendRequest()}
+                                        className="hover:bg-blue-200"
+                                        style={{ color: COLORS.bg, borderWidth: 1, borderColor: COLORS.bg, borderRadius: 10, width: 70, height: 35, fontSize: 15, fontWeight: 500 }}>
+                                        {loading ? <div>
+                                            <span className="loading loading-dots loading-sm"></span>
+                                        </div> : <div>
+                                            ADD
+                                        </div>}
+                                    </button> : <button
+                                        onClick={() => { handleCancelFriend() }}
+                                        className=""
+                                        style={{ color: COLORS.bg, borderWidth: 1, borderColor: COLORS.bg, borderRadius: 10, width: 70, height: 35, fontSize: 15, fontWeight: 500 }}
+                                    >Cancel</button>
+                                    }
+
+                                </div>
+                            </div>
+                        </div>)
+                    }
                 </div>
             </div>
             <div style={{ display: "flex", justifyContent: 'flex-end', alignItems: "center", gap: 20, padding: 20, borderTopWidth: 1 }}>

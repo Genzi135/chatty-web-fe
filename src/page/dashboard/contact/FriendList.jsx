@@ -31,16 +31,12 @@ const FriendList = () => {
     //const userID = useSelector(state => state.user._id);
 
     const handleOpenConversation = async (id) => {
-        console.log("friend user id:")
-        console.log(id)
         try {
             const respone = await axios({
                 url: BASE_URL + "/api/v1/conservations/open/" + `${id}`,
                 method: 'post',
                 headers: { Authorization: `Bearer ${userToken}` },
             })
-            console.log("conversation:")
-            console.log(respone)
         } catch (error) {
             console.log(error)
         }
@@ -54,7 +50,6 @@ const FriendList = () => {
                 headers: { Authorization: `Bearer ${userToken}` },
 
             })
-            console.log(response)
             setDataSource(response.data.data)
         } catch (error) {
             console.log(error)
@@ -69,7 +64,6 @@ const FriendList = () => {
                 method: 'post',
                 headers: { Authorization: `Bearer ${userToken}` },
             })
-            console.log(respone)
         } catch (error) {
             console.log(error)
         }

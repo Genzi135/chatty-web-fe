@@ -1,6 +1,5 @@
 import { VscMailRead } from "react-icons/vsc";
 import { COLORS } from "../../../utils/COLORS";
-import FR from "./component/FR";
 import RS from "./component/RS";
 import RF from "./component/RF";
 import React from "react";
@@ -21,8 +20,46 @@ const FriendRequest = () => {
                 headers: { Authorization: `Bearer ${userToken}` },
 
             })
-            console.log(respone)
             setDataSource(respone.data.data)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    const handleOpenConversation = async (id) => {
+        try {
+            const respone = await axios({
+                url: BASE_URL + "/api/v1/conservations/open/" + `${id}`,
+                method: 'post',
+                headers: { Authorization: `Bearer ${userToken}` },
+
+            })
+            console.log("conversation:")
+            console.log(respone)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    const handleReject = async (id) => {
+        try {
+            const respone = await axios({
+                url: BASE_URL + "/api/v1/friends/cancel/" + `${id}`,
+                method: 'post',
+                headers: { Authorization: `Bearer ${userToken}` },
+            })
+            getData()
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    const handleAccept = async (id) => {
+        try {
+            const respone = await axios({
+                url: BASE_URL + "/api/v1/friends/accept/" + `${id}`,
+                method: 'post',
+                headers: { Authorization: `Bearer ${userToken}` },
+
+            })
+            getData()
         } catch (error) {
             console.log(error)
         }
@@ -33,75 +70,6 @@ const FriendRequest = () => {
     React.useEffect(() => {
         getData();
     }, [])
-
-    // const dataSource = {
-    //     listFriendRequest: [{
-    //         id: 1,
-    //         img: "https://i.pinimg.com/736x/25/47/c7/2547c7ecb55605fbb39e04157f157021.jpg",
-    //         name: "Phu",
-    //         reason: "from phone number",
-    //         requestText: "Hello",
-    //         dataTime: "12/12/2024"
-    //     }, {
-    //         id: 2,
-    //         img: "https://img.freepik.com/premium-photo/3d-cat-avatar-online-games-web-account-avatar_147351-47.jpg",
-    //         name: "Genzi",
-    //         reason: "from manual group",
-    //         requestText: "We have in a group together",
-    //         dataTime: "12/12/2024"
-    //     }, {
-    //         id: 3,
-    //         img: "https://i.pinimg.com/564x/49/c9/58/49c95817f95d5c1b940e3f4f71f96f18.jpg",
-    //         name: "Nana",
-    //         reason: "from phone number",
-    //         requestText: "I have your number and i wanna be your friend, can you accept me?",
-    //         dataTime: "12/12/2024"
-    //     }],
-    //     listRequestSent: [{
-    //         id: 1,
-    //         name: 'Litch',
-    //         img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ75gsWPiO29FPya84IUVex5m4P26qzSEOAH1qkZsWZwHSHrd8eiJR5wEzRU7a5Jx_BMRo&usqp=CAU",
-    //         tittle: "20/12",
-    //         dataTime: "12/12/2024"
-    //     }, {
-    //         id: 2,
-    //         name: 'Garat',
-    //         img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQz1d7dyhK9wlaNFNjp5DtZ_adkVwr8BHv8YgV6a_TK52Uos1pSpjsn3GgJEQovOWCP8sY&usqp=CAU",
-    //         tittle: "20/1",
-    //         dataTime: "12/12/2024"
-    //     }],
-    //     listRecommendedFriend: [{
-    //         id: 1,
-    //         name: "Raiden Shogun",
-    //         img: "https://upload-os-bbs.hoyolab.com/upload/2021/09/22/10653699/eda8d1a751183b8617071c3012475679_9064075400744745566.png?x-oss-process=image%2Fresize%2Cs_1000%2Fauto-orient%2C0%2Finterlace%2C1%2Fformat%2Cwebp%2Fquality%2Cq_80",
-    //         title: "From Inazuma",
-
-    //     }, {
-    //         id: 2,
-    //         name: "Nahida",
-    //         img: "https://i.ex-cdn.com/mgn.vn/files/news/2022/12/22/genshin-impact-hay-can-than-voi-nhung-nguoi-choi-co-nahida-172220.jpg",
-    //         title: "From Sumeru",
-
-    //     }, {
-    //         id: 3,
-    //         name: "ZhongLi",
-    //         img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTuBlKkJ7IqXoC3hNmUIqpPpW9cW0kpEVPCQA&usqp=CAU",
-    //         title: "From Liyue",
-
-    //     }, {
-    //         id: 4,
-    //         name: "Venti",
-    //         img: "https://fptshop.com.vn/Uploads/Originals/2023/1/18/638096547294993795_thumb.png",
-    //         title: "From Monstard",
-
-    //     }, {
-    //         id: 5,
-    //         name: "Furina",
-    //         img: "https://i.ytimg.com/vi/aau-c8l5z9c/maxresdefault.jpg",
-    //         title: "From Fontaine",
-
-    //     },],
-    // }
 
     let numFriendRequest = 0// dataSource.listFriendRequest.length;
     let numRequestSend = 0// dataSource.listRequestSent.length;
@@ -120,8 +88,31 @@ const FriendRequest = () => {
                     <h1 style={{ fontWeight: "500", color: COLORS.text, cursor: "default" }}>Friend requests ({numFriendRequest})</h1>
                 </div>
                 <div style={{ display: 'flex', flexWrap: 'wrap', padding: 20, gap: 20 }}>
-                    {dataSource.map((request) => (
-                        <FR data={request} key={request.id} />
+                    {dataSource.map((e) => (
+                        <div
+                            key={e._id}
+                            style={{ width: "32%", display: 'flex', flexDirection: 'column', justifyContent: 'space-between', backgroundColor: 'white', padding: 10, gap: 10, borderRadius: 5 }}>
+                            <div className="flex justify-start gap-4">
+                                <div className="avatar ">
+                                    <div className="w-12 rounded-full">
+                                        <img src={e.avatar} alt="avatar" />
+                                    </div>
+                                </div>
+                                <div>
+                                    <div className="text-black">
+                                        {e.name}
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="flex justify-around gap-4">
+                                <div className="bg-gray-200 flex justify-center items-center text-black hover:bg-gray-300" style={{ borderRadius: 3, width: "50%", height: 30, padding: 10, }}>
+                                    <button onClick={() => { handleReject(e._id) }}>Reject</button>
+                                </div>
+                                <div className="bg-gray-200 flex justify-center items-center text-black hover:bg-gray-300" style={{ borderRadius: 3, width: "50%", height: 30, padding: 10, }}>
+                                    <button onClick={() => { handleAccept(e._id) }}>Accept</button>
+                                </div>
+                            </div>
+                        </div>
                     ))}
                 </div>
 
