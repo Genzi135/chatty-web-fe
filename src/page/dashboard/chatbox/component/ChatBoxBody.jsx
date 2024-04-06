@@ -20,7 +20,7 @@ const ChatBody = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        getMessageByConversation()
+        // getMessageByConversation()
         setDataSource(messageData.slice().reverse());
     }, [messageData]);
 
