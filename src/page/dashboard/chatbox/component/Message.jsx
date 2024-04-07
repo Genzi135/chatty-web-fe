@@ -81,8 +81,8 @@ const UserMessage = ({ message, onOpenFWM }) => {
         dispatch(setCurrentMessage(message))
         onOpenFWM()
     }
-    const hanldeReplyMessage = async () => {
-        console.log(message.content);
+    const hanldeReplyMessage = async (message) => {
+        console.log(message);
         dispatch(setReplyMessage(message));
     }
 
@@ -143,6 +143,48 @@ const UserMessage = ({ message, onOpenFWM }) => {
                     </div>
                     <div className="text-ellipsis overflow-hidden whitespace-nowrap text-gray-500">
                         {message.parent.content}
+                    </div>
+                    <div>
+                        {message.parent.attachments && message.parent.content !== "This message has been deleted" &&
+                            <div>
+                                {message.parent.attachments.map((e, index) => (
+                                    <div className="" key={index}>
+                                        <div className="flex flex-col justify-center p-1 rounded-lg">
+                                            {e.type === 'image' &&
+                                                <div onClick={() => handleImageClick(e.url)}>
+                                                    <img src={e.url} className="cursor-pointer" style={{ width: 'auto', height: 'auto' }} />
+                                                    {/* <div className="text-ellipsis whitespace-nowrap overflow-hidden">{e.url.split("/").pop()}</div>s */}
+                                                </div>
+                                            }
+                                            {e.type === 'application' &&
+                                                <div onClick={() => { window.open(e.url) }} className="cursor-pointer flex items-center bg-blue-100 p-1 rounded-lg">
+                                                    {e.url.split(".").pop() === 'docx' && <BsFileEarmarkWordFill size={40} color='blue' />}
+                                                    {e.url.split(".").pop() === 'doc' && <BsFileEarmarkWordFill size={40} color='blue' />}
+
+                                                    {e.url.split(".").pop() === 'pptx' && <BsFileEarmarkPptFill size={40} color='red' />}
+                                                    {e.url.split(".").pop() === 'ppt' && <BsFileEarmarkPptFill size={40} color='red' />}
+
+                                                    {e.url.split(".").pop() === 'xlsx' && <BsFileEarmarkXFill size={40} color='green' />}
+                                                    {e.url.split(".").pop() === 'xls' && <BsFileEarmarkXFill size={40} color='green' />}
+
+                                                    {e.url.split(".").pop() === 'rar' && <BsFileEarmarkZipFill size={40} color='purple' />}
+                                                    {e.url.split(".").pop() === 'zar' && <BsFileEarmarkZipFill size={40} color='purple' />}
+
+                                                    {e.url.split(".").pop() === 'txt' && <BsFillFileEarmarkTextFill size={40} color='black' />}
+                                                    <div className="text-ellipsis whitespace-nowrap overflow-hidden ml-2">{e.url.split("/").pop()}</div>
+                                                </div>
+                                            }
+                                            {e.type === 'video' && <div>
+                                                <video controls width={'auto'}>
+                                                    <source src={e.url} type="video/mp4" />
+                                                </video>
+                                            </div>}
+
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        }
                     </div>
                 </div>}
                 <div style={{ wordBreak: 'break-all' }}>
@@ -268,6 +310,48 @@ const FriendMessage = ({ message, onOpenFWM }) => {
                     </div>
                     <div className="text-ellipsis overflow-hidden whitespace-nowrap text-gray-500">
                         {message.parent.content}
+                    </div>
+                    <div>
+                        {message.parent.attachments && message.parent.content !== "This message has been deleted" &&
+                            <div>
+                                {message.parent.attachments.map((e, index) => (
+                                    <div className="" key={index}>
+                                        <div className="flex flex-col justify-center p-1 rounded-lg">
+                                            {e.type === 'image' &&
+                                                <div onClick={() => handleImageClick(e.url)}>
+                                                    <img src={e.url} className="cursor-pointer" style={{ width: 'auto', height: 'auto' }} />
+                                                    {/* <div className="text-ellipsis whitespace-nowrap overflow-hidden">{e.url.split("/").pop()}</div>s */}
+                                                </div>
+                                            }
+                                            {e.type === 'application' &&
+                                                <div onClick={() => { window.open(e.url) }} className="cursor-pointer flex items-center bg-blue-100 p-1 rounded-lg">
+                                                    {e.url.split(".").pop() === 'docx' && <BsFileEarmarkWordFill size={40} color='blue' />}
+                                                    {e.url.split(".").pop() === 'doc' && <BsFileEarmarkWordFill size={40} color='blue' />}
+
+                                                    {e.url.split(".").pop() === 'pptx' && <BsFileEarmarkPptFill size={40} color='red' />}
+                                                    {e.url.split(".").pop() === 'ppt' && <BsFileEarmarkPptFill size={40} color='red' />}
+
+                                                    {e.url.split(".").pop() === 'xlsx' && <BsFileEarmarkXFill size={40} color='green' />}
+                                                    {e.url.split(".").pop() === 'xls' && <BsFileEarmarkXFill size={40} color='green' />}
+
+                                                    {e.url.split(".").pop() === 'rar' && <BsFileEarmarkZipFill size={40} color='purple' />}
+                                                    {e.url.split(".").pop() === 'zar' && <BsFileEarmarkZipFill size={40} color='purple' />}
+
+                                                    {e.url.split(".").pop() === 'txt' && <BsFillFileEarmarkTextFill size={40} color='black' />}
+                                                    <div className="text-ellipsis whitespace-nowrap overflow-hidden ml-2">{e.url.split("/").pop()}</div>
+                                                </div>
+                                            }
+                                            {e.type === 'video' && <div>
+                                                <video controls width={'auto'}>
+                                                    <source src={e.url} type="video/mp4" />
+                                                </video>
+                                            </div>}
+
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        }
                     </div>
                 </div>}
                 <div style={{ wordBreak: 'break-all' }}>

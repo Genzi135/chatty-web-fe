@@ -55,25 +55,12 @@ const ChatBody = () => {
             }
             console.log(response);
 
-            // getMessageByConversation()
-
-            //     const newListCoversation = listConversation.map(e => {
-            //         if (e._id === response.conversation._id) {
-            //             return { ...e, lastMessage: response }
-            //         }
-            //         return e;
-            //     })
-            //     dispatch(setListConversation(newListCoversation))
-
         });
 
-        // socket.on("message:delete", (respone) => {
-        //     if (respone.data.message === 'Message deleted successfully') {
-        //         console.log("delete");
-        //         getMessageByConversation();
-        //     }
+        socket.on("message:deleted", (respone) => {
+            getMessageByConversation();
 
-        // })
+        })
     }, [])
 
     useEffect(() => {
