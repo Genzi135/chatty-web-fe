@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import Message from "./Message";
 import ForwardModal from "./modal/ForwardModal";
 import { useDispatch, useSelector } from "react-redux";
-import { addMess } from "../../../../hooks/redux/reducer";
+import { addMess, setListConversation, updateConversationLastMessage } from "../../../../hooks/redux/reducer";
 import axios from "axios";
 import { useSocket } from "../../../../hooks/context/socketContext";
 import { BASE_URL } from "../../../../data/DUMMY_DATA";
@@ -10,7 +10,7 @@ import { BASE_URL } from "../../../../data/DUMMY_DATA";
 const ChatBody = () => {
     const chatContainerRef = useRef(null);
     const currentConversation = useSelector((state) => state.currentConversation);
-    const messageData = useSelector((state) => state.listMessage);
+    const listConversation = useSelector((state) => state.listConversation);
     const userToken = JSON.parse(localStorage.getItem("userToken"))
 
     const listMessage = useSelector((state) => state.listMessage);
@@ -21,41 +21,25 @@ const ChatBody = () => {
 
     const dispatch = useDispatch();
 
-    const getMessageByConversation = async () => {
-        let page = 1;
-        if (currentConversation._id) {
-            try {
-                const response = await axios({
-                    url: BASE_URL + "/api/v1/conservations/" + `${currentConversation._id}/messages`,
-                    method: 'GET',
-                    headers: { Authorization: `Bearer ${userToken}` },
-                    params: {
-                        page: page,
-                        limit: 50
-                    }
-                });
-                setDataSource(response.data.data)
-            } catch (error) {
-                console.log(error);
-            }
-        }
-    }
-
-    // useEffect(() => {
-    //     const sortedData = listMessage.slice().sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-    //     setDataSource(sortedData.slice().reverse());
-    // }, [listMessage]);
-
     useEffect(() => {
-        getMessageByConversation()
+        setDataSource(listMessage)
     }, [listMessage])
-
 
     useEffect(() => {
         socket.on("message:receive", (response) => {
-            if (response.conversation._id === currentConversation._id) {
+            if (currentConversation._id === response.conversation._id) {
                 dispatch(addMess(response))
+                console.log("add");
             }
+            const newListCoversation = listConversation.map(e => {
+                if (e._id === response.conversation._id) {
+                    console.log("cons");
+                    return { ...e, lastMessage: response }
+                }
+                return e;
+            })
+            dispatch(setListConversation(newListCoversation))
+
         });
     }, [])
 
@@ -96,7 +80,7 @@ const ChatBody = () => {
 
     return (
         <div style={{ width: "100%", height: "100%", position: "relative", overflowY: "auto", padding: 5, paddingBottom: 10, zIndex: 777 }} ref={chatContainerRef}>
-            {dataSource.slice().reverse().map((e, index) => {
+            {dataSource.map((e, index) => {
                 const showDateDivider = prevDate !== formatDate(e.createdAt);
                 prevDate = formatDate(e.createdAt);
                 return (

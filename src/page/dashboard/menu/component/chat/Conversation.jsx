@@ -8,6 +8,8 @@ const Conversation = ({ data }) => {
 
     const currentConversation = useSelector((state) => state.currentConversation);
 
+    // const listConversation = useSelector((state) => state.listConversation)
+
 
     const formatDate = (updatedAt) => {
         const today = new Date();
@@ -42,15 +44,26 @@ const Conversation = ({ data }) => {
         setHover(false);
     }, []);
 
-    // console.log(userMember, "u");
-    React.useEffect(() => {
-    }, [currentConversation])
+    // React.useEffect(() => {
+    //     listConversation.map(e => {
+    //         if (e._id == data._id) {
+    //             return {
+    //                 data: e
+    //             }
+    //         }
+    //     })
+    // }, [listConversation])
+
+
     return (
         <div>
             <div
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
-                style={{ width: "100%", height: 90, display: "flex", justifyContent: 'space-between', alignItems: "center", padding: 10, backgroundColor: currentConversation._id === data._id ? COLORS.bgConver : "white" }}
+                style={{
+                    width: "100%", height: 90, display: "flex", justifyContent: 'space-between', alignItems: "center", padding: 10,
+                    backgroundColor: currentConversation._id === data._id ? COLORS.bgConver : "white"
+                }}
                 className="hover:bg-gray-100">
                 <div style={{ display: "flex", justifyContent: 'center', alignItems: 'center', gap: 10 }} >
                     <div className="avatar">

@@ -36,7 +36,7 @@ const ChatBox = () => {
                         limit: 50
                     }
                 });
-                dispatch(setListMessage(response.data.data))
+                dispatch(setListMessage(response.data.data.slice().reverse()))
             } catch (error) {
                 console.log(error);
             }

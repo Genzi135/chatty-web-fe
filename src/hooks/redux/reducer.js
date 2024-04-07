@@ -47,6 +47,11 @@ export const addMess = (mess) => ({
     payload: mess
 })
 
+export const updateCoversation = (conversation) => ({
+    type: "UPDATE_CONVERSATION",
+    payload: conversation
+})
+
 export const updateConversationLastMessage = (conversationId, newLastMessage) => ({
     type: 'UPDATE_CONVERSATION_LAST_MESSAGE',
     payload: { conversationId, newLastMessage }
@@ -142,6 +147,17 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 listMessage: [...state.listMessage, action.payload]
             };
+        case 'UPDATE_CONVERSATION':
+            return {
+                ...state,
+                listConversation: state.listConversation.map(e => {
+                    if (e._id === action.payload._id) {
+                        return {
+                            e: action.payload
+                        }
+                    }
+                })
+            }
 
         case 'UPDATE_CONVERSATION_LAST_MESSAGE':
             const { conversationId, newLastMessage } = action.payload;

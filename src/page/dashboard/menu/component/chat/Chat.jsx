@@ -6,7 +6,7 @@ import axios from "axios";
 import { BASE_URL } from "../../../../../data/DUMMY_DATA";
 import { COLORS } from "../../../../../utils/COLORS";
 import { useDispatch, useSelector } from "react-redux";
-import { setConversation, updateConversationIsReadMessageFalse, updateConversationLastMessage } from "../../../../../hooks/redux/reducer";
+import { setConversation, setListConversation, updateConversationIsReadMessageFalse, updateConversationLastMessage } from "../../../../../hooks/redux/reducer";
 import { useSocket } from "../../../../../hooks/context/socketContext";
 
 export default function Chat() {
@@ -17,11 +17,11 @@ export default function Chat() {
 
     const dispatch = useDispatch();
 
-    const currentConversation = useSelector((state) => state.currentConversation)
+    // const currentConversation = useSelector((state) => state.currentConversation)
 
     const data = useSelector((state) => state.listConversation)
 
-    const [listConversation, setListConversation] = React.useState([]);
+    const [listConversation, setListConversations] = React.useState([]);
 
 
     const getData = async () => {
@@ -31,55 +31,52 @@ export default function Chat() {
                 method: 'get',
                 headers: { Authorization: `Bearer ${userToken}` },
             })
-            setListConversation(respone.data.data)
+            // setListConversation(respone.data.data)
+            dispatch(setListConversation(respone.data.data))
         } catch (error) {
             console.log(error)
         }
     }
 
-    const setIsReadConveration = async (id) => {
-        try {
-            const respone = await axios({
-                url: BASE_URL + "/api/v1/conservations/" + `${id}`,
-                method: 'get',
-                headers: { Authorization: `Bearer ${userToken}` },
-            })
-            dispatch(setConversation(respone.data.data))
-        } catch (error) {
-            console.log(error)
-        }
-    }
+    // const setIsReadConveration = async (id) => {
+    //     try {
+    //         const respone = await axios({
+    //             url: BASE_URL + "/api/v1/conservations/" + `${id}`,
+    //             method: 'get',
+    //             headers: { Authorization: `Bearer ${userToken}` },
+    //         })
+    //         dispatch(setConversation(respone.data.data))
+    //     } catch (error) {
+    //         console.log(error)
+    //     }
+    // }
 
     const chatClick = (conversation) => {
+        console.log(conversation);
         dispatch(setConversation(conversation))
-        setIsReadConveration(conversation._id)
     }
 
     React.useEffect(() => {
         socket.on("message:receive", (response) => {
-            listConversation.forEach((conversation) => {
-                if (response.conversation._id === conversation._id) {
-                    const updatedConversation = {
-                        ...conversation,
-                        lastMessage: response.lastMessage
-                    };
-                    dispatch(updateConversationLastMessage(updatedConversation._id, updatedConversation.lastMessage));
+            data.map((e) => {
+                if (response.conversation._id === e._id) {
+                    {
+                        return { ...e, lastMessage: response }
+                    }
                 }
-                if (response.conversation._id === conversation._id) {
-                    const updatedConversation = {
-                        ...conversation,
-                        lastMessage: response.lastMessage
-                    };
-                    dispatch(updateConversationIsReadMessageFalse(updatedConversation._id));
-                }
-            });
+                return e;
+            })
         });
-    }, [dispatch, listConversation]);
+    }, []);
 
     React.useEffect(() => {
-        getData();
-        // setListConversation(data);
+        getData()
+    }, [])
+
+    React.useEffect(() => {
+        setListConversations(data)
     }, [data])
+
 
 
 

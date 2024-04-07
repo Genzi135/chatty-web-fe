@@ -17,7 +17,7 @@ import {
 import axios from "axios";
 import { BASE_URL } from "../../../../data/DUMMY_DATA";
 import { useDispatch, useSelector } from "react-redux";
-import { addMess, setLastMessage, setReplyMessage, updateConversationLastMessage } from "../../../../hooks/redux/reducer";
+import { addMess, setLastMessage, setListConversation, setReplyMessage, updateConversationLastMessage } from "../../../../hooks/redux/reducer";
 import { useSocket } from "../../../../hooks/context/socketContext";
 
 const ChatInput = () => {
@@ -100,10 +100,15 @@ const ChatInput = () => {
         }
       });
       dispatch(addMess(respone.data.data))
-      console.log("mess", inputMessage);
+      console.log(respone.data.data);
+      const updatedCOnversation = listConversation.map(e => {
+        if (currentConversation._id === e._id) {
+          return { ...e, lastMessage: respone.data.data }
+        }
+        return e;
 
-      dispatch(updateConversationLastMessage(currentConversation._id, respone.data.data))
-
+      })
+      dispatch(setListConversation(updatedCOnversation))
       socket.emit("message:send", {
         ...respone.data.data,
         conversation: currentConversation
@@ -136,15 +141,19 @@ const ChatInput = () => {
           headers: { Authorization: `Bearer ${userToken}` },
           data: formData
         });
-        // dispatch(addMess(respone.data.data))
-        console.log(respone.data.data);
+        dispatch(addMess(respone.data.data))
+        const updatedCOnversation = listConversation.map(e => {
+          if (currentConversation._id === e._id) {
+            return { ...e, lastMessage: respone.data.data }
+          }
+          return e;
 
-        // dispatch(updateConversationLastMessage(currentConversation._id, respone.data.data))
-
-        // socket.emit("message:send", {
-        //   ...respone.data.data,
-        //   conversation: currentConversation
-        // })
+        })
+        dispatch(setListConversation(updatedCOnversation))
+        socket.emit("message:send", {
+          ...respone.data.data,
+          conversation: currentConversation
+        })
         setInputFile(null)
         setInputImages(null)
         setInputImage(null)
@@ -172,7 +181,14 @@ const ChatInput = () => {
         }
       });
       dispatch(addMess(respone.data.data))
-      dispatch(updateConversationLastMessage(currentConversation._id, respone.data.data))
+      const updatedCOnversation = listConversation.map(e => {
+        if (currentConversation._id === e._id) {
+          return { ...e, lastMessage: respone.data.data }
+        }
+        return e;
+
+      })
+      dispatch(setListConversation(updatedCOnversation))
       socket.emit("message:send", {
         ...respone.data.data,
         conversation: currentConversation
@@ -295,7 +311,7 @@ const ChatInput = () => {
               id="file"
               value={""}
               multiple
-              accept=".doc, .docx, .ppt, .pptx, .xls, .xlsx, .rar .zar .txt"
+              accept=".doc, .docx, .ppt, .pptx, .xls, .xlsx, .rar, .zar, .txt, .zip"
               onChange={(e) => {
                 const files = e.target.files;
                 if (files.length <= 5) {

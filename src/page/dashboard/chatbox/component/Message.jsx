@@ -15,7 +15,7 @@ const Message = ({ message, onOpenFWM }) => {
             {
                 // eslint-disable-next-line react/prop-types  
 
-                message.isMine ? <UserMessage message={message} onOpenFWM={onOpenFWM} /> : <FriendMessage message={message} onOpenFWM={onOpenFWM} />
+                message.sender._id === current._id ? <UserMessage message={message} onOpenFWM={onOpenFWM} /> : <FriendMessage message={message} onOpenFWM={onOpenFWM} />
             }
         </>
     )
@@ -154,8 +154,8 @@ const UserMessage = ({ message, onOpenFWM }) => {
                                 <div className="flex flex-col justify-center p-1 rounded-lg">
                                     {e.type === 'image' &&
                                         <div onClick={() => handleImageClick(e.url)} className="">
-                                            <img src={e.url} className="cursor-pointer" style={{ width: 'auto', height: 'auto', maxWidth: "50%", maxHeight: "50%" }} />
-                                            <div className="text-ellipsis whitespace-nowrap overflow-hidden">{e.url.split("/").pop()}</div>
+                                            <img src={e.url} className="cursor-pointer" style={{ width: 'auto', height: 'auto' }} />
+                                            {/* <div className="text-ellipsis whitespace-nowrap overflow-hidden">{e.url.split("/").pop()}</div> */}
                                         </div>
                                     }
                                     {e.type === 'application' &&
@@ -170,7 +170,7 @@ const UserMessage = ({ message, onOpenFWM }) => {
                                             {e.url.split(".").pop() === 'xls' && <BsFileEarmarkXFill size={40} color='green' />}
 
                                             {e.url.split(".").pop() === 'rar' && <BsFileEarmarkZipFill size={40} color='purple' />}
-                                            {e.url.split(".").pop() === 'zar' && <BsFileEarmarkZipFill size={40} color='purple' />}
+                                            {e.url.split(".").pop() === 'zip' && <BsFileEarmarkZipFill size={40} color='purple' />}
 
                                             {e.url.split(".").pop() === 'txt' && <BsFillFileEarmarkTextFill size={40} color='black' />}
                                             <div className="text-ellipsis whitespace-nowrap overflow-hidden ml-2">{e.url.split("/").pop()}</div>
@@ -274,8 +274,8 @@ const FriendMessage = ({ message, onOpenFWM }) => {
                                 <div className="flex flex-col justify-center p-1 rounded-lg">
                                     {e.type === 'image' &&
                                         <div onClick={() => handleImageClick(e.url)}>
-                                            <img src={e.url} className="cursor-pointer" style={{ width: 'auto', height: 'auto', maxWidth: "50%", maxHeight: "50%" }} />
-                                            <div className="text-ellipsis whitespace-nowrap overflow-hidden">{e.url.split("/").pop()}</div>
+                                            <img src={e.url} className="cursor-pointer" style={{ width: 'auto', height: 'auto' }} />
+                                            {/* <div className="text-ellipsis whitespace-nowrap overflow-hidden">{e.url.split("/").pop()}</div>s */}
                                         </div>
                                     }
                                     {e.type === 'application' &&

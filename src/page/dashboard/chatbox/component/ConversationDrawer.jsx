@@ -17,9 +17,6 @@ const ConversationDrawer = () => {
 
     const conversationData = useSelector((state) => state.currentConversation);
 
-
-
-
     return (<>
         <div style={{ width: 500, position: 'relative', backgroundColor: 'white', borderLeftWidth: 2 }}>
 
