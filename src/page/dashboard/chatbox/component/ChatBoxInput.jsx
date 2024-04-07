@@ -13,6 +13,7 @@ import {
   BsFileEarmarkXFill,
   BsFileEarmarkZipFill,
   BsFillFileEarmarkTextFill,
+  BsFastForwardCircle,
 } from "react-icons/bs";
 import axios from "axios";
 import { BASE_URL } from "../../../../data/DUMMY_DATA";
@@ -21,6 +22,7 @@ import { addMess, setLastMessage, setListConversation, setReplyMessage, updateCo
 import { useSocket } from "../../../../hooks/context/socketContext";
 
 const ChatInput = () => {
+  const [loading, setLoading] = useState(false);
   const [isTyping, setTyping] = useState(false);
   const [inputMessage, setInputMessage] = useState("");
   const [inputImage, setInputImage] = useState(null);
@@ -28,6 +30,7 @@ const ChatInput = () => {
   const [inputFile, setInputFile] = useState(null);
   const currentConversation = useSelector((state) => state.currentConversation);
   const userToken = JSON.parse(localStorage.getItem("userToken"));
+  const [video, setVideo] = useState(null);
 
   const replyMessage = useSelector((state) => state.replyMessage);
 
@@ -66,6 +69,14 @@ const ChatInput = () => {
     })
   }
 
+  const handleRemoveVideo = (indexToRemove) => {
+    setVideo(prev => {
+      const updateVideos = [...prev];
+      updateVideos.splice(indexToRemove, 1);
+      return updateVideos;
+    })
+  }
+
 
   useEffect(() => {
     setTyping(!!inputMessage.trim());
@@ -73,10 +84,11 @@ const ChatInput = () => {
 
   const handleSendMessage = async () => {
     console.log("rep", replyMessage);
+    setLoading(true)
     if (typeof replyMessage === 'object' && Object.keys(replyMessage).length !== 0) {
       hanldeReplyMessage();
       dispatch(setReplyMessage({}))
-    } else if (inputImage || inputFile) {
+    } else if (inputImage || inputFile || video) {
       handleSendIMG();
     } else if (inputMessage) {
       handleSendTextMessage();
@@ -86,11 +98,13 @@ const ChatInput = () => {
     setInputImages(null)
     setInputImage(null)
     setTyping(false);
+    setLoading(false)
   };
 
   const handleSendTextMessage = async () => {
 
     try {
+      setLoading(true)
       const respone = await axios({
         url: BASE_URL + "/api/v1/conservations/" + `${currentConversation._id}/messages/sendText`,
         method: 'POST',
@@ -100,7 +114,6 @@ const ChatInput = () => {
         }
       });
       dispatch(addMess(respone.data.data))
-      console.log(respone.data.data);
       const updatedCOnversation = listConversation.map(e => {
         if (currentConversation._id === e._id) {
           return { ...e, lastMessage: respone.data.data }
@@ -114,18 +127,25 @@ const ChatInput = () => {
         conversation: currentConversation
       })
       console.log(respone.data.data.content);
+      setLoading(false)
     } catch (error) {
       console.log(error);
+      setLoading(false)
     }
+    setLoading(false)
   }
 
   const handleSendIMG = async () => {
+    setLoading(true)
     const files = [];
     if (inputImages) {
       files.push(...inputImages);
     }
     if (inputFile) {
       files.push(...inputFile);
+    }
+    if (video) {
+      files.push(...video);
     }
     console.log(files);
     const formData = new FormData()
@@ -154,22 +174,28 @@ const ChatInput = () => {
           ...respone.data.data,
           conversation: currentConversation
         })
+        setVideo(null)
         setInputFile(null)
         setInputImages(null)
         setInputImage(null)
+        setLoading(false)
       } catch (error) {
         console.log(error);
+        setVideo(null)
         setInputFile(null)
         setInputImages(null)
         setInputImage(null)
+        setLoading(false)
       }
     }
+    setLoading(false)
 
   }
 
 
 
   const hanldeReplyMessage = async () => {
+    setLoading(true)
     console.log(replyMessage)
     try {
       const respone = await axios({
@@ -193,9 +219,12 @@ const ChatInput = () => {
         ...respone.data.data,
         conversation: currentConversation
       })
+      setLoading(false)
     } catch (error) {
       console.log(error);
+      setLoading(false)
     }
+    setLoading(false)
   }
 
   const enterPressed = (e) => {
@@ -240,10 +269,42 @@ const ChatInput = () => {
               justifyContent: "center",
               alignItems: "center",
               borderRadius: 4,
+              position: 'relative'
             }}
             className="hover:bg-gray-200"
           >
             <BsIntersect size={20} color={"black"} />
+            <input
+              type="file"
+              id="file"
+              accept="video/*"
+              value={""}
+              multiple
+              onChange={(e) => {
+                // setInputImage(URL.createObjectURL(e.target.files[0]));
+                const videos = e.target.files;
+                if (videos.length <= 2) {
+                  const newVideos = [];
+                  for (let i = 0; i < videos.length; i++) {
+                    if (videos[i].type.includes('video')) {
+                      newVideos.push(e.target.files[i])
+                    }
+                  }
+                  setVideo(newVideos)
+                } else {
+                  alert("Max is 2 images");
+                  e.target.value = null;
+                }
+              }}
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                width: "100%",
+                height: "100%",
+                opacity: 0,
+              }}
+            />
           </div>
           <div
             style={{
@@ -412,23 +473,25 @@ const ChatInput = () => {
               >
                 <BsEmojiSmile size={25} color={"black"} />
               </div>
-              {(isTyping || inputImage || inputFile !== null) ? (
-                <div
-                  style={{
-                    width: 55,
-                    height: 45,
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    borderRadius: 4,
-                    color: COLORS.bdSelected,
-                    fontWeight: "500",
-                  }}
-                  className="hover:bg-blue-200"
-                  onClick={handleSendMessage}
-                >
-                  SEND
-                </div>
+              {(isTyping || inputImage || inputFile || video !== null) ? (
+                loading ?
+                  (<span className="loading loading-dots loading-sm"></span>) : (<div
+                    style={{
+                      cursor: 'pointer',
+                      width: 55,
+                      height: 45,
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      borderRadius: 4,
+                      color: COLORS.bdSelected,
+                      fontWeight: "500",
+                    }}
+                    className="hover:bg-blue-200"
+                    onClick={handleSendMessage}
+                  >
+                    SEND
+                  </div>)
               ) : (
                 <div
                   style={{
@@ -539,7 +602,47 @@ const ChatInput = () => {
                   </div>
                 </div>
               ))}
+              <div className="flex items-center">
+                {video && video.map((image, index) => (
+                  <div key={index}>
+                    <div style={{ borderTopWidth: 1, marginLeft: 20, marginRight: 20 }}>
+                    </div>
+                    <div style={{ overflow: 'hidden', paddingLeft: 20, position: 'relative', width: 'auto', height: 'auto', maxWidth: 80, maxHeight: 80, paddingBottom: 20, paddingTop: 10 }}>
+                      <span style={{
+                        position: 'absolute',
+                        top: 5,
+                        right: 5,
+                        zIndex: 100,
+                        backgroundColor: COLORS.whiteBG,
+                        borderRadius: '50%',
+                        cursor: 'pointer',
+                      }}
+                        onClick={() => handleRemoveVideo(index)}
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          strokeWidth={1.5}
+                          stroke="currentColor"
+                          className="w-6 h-6"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M6 18 18 6M6 6l12 12"
+                          />
+                        </svg>
+                      </span>
+                      <div className="p-2 flex justify-center items-center bg-black rounded-xl">
+                        <BsFastForwardCircle size={30} color='white' />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
+
           </div>
 
         </div>

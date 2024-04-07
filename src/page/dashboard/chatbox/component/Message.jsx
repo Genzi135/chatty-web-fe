@@ -65,11 +65,13 @@ const UserMessage = ({ message, onOpenFWM }) => {
                 headers: { Authorization: `Bearer ${userToken}` }
             })
             console.log(response)
-            getMessageByConversation()
-            // socket.emit("message:send", {
-            //     ...response.data.data,
-            //     conversation: currentConversation
-            // })
+            getMessageByConversation();
+
+            socket.emit("message:delete", {
+                id: id,
+                conversation: currentConversation,
+            })
+
         } catch (error) {
             console.log(error)
         }
@@ -145,7 +147,6 @@ const UserMessage = ({ message, onOpenFWM }) => {
                 </div>}
                 <div style={{ wordBreak: 'break-all' }}>
                     {message.content}
-
                 </div>
                 {message.attachments && message.content !== "This message has been deleted" &&
                     <div>
@@ -176,6 +177,11 @@ const UserMessage = ({ message, onOpenFWM }) => {
                                             <div className="text-ellipsis whitespace-nowrap overflow-hidden ml-2">{e.url.split("/").pop()}</div>
                                         </div>
                                     }
+                                    {e.type === 'video' && <div>
+                                        <video controls width={'auto'}>
+                                            <source src={e.url} type="video/mp4" />
+                                        </video>
+                                    </div>}
 
                                 </div>
                             </div>
@@ -296,6 +302,11 @@ const FriendMessage = ({ message, onOpenFWM }) => {
                                             <div className="text-ellipsis whitespace-nowrap overflow-hidden ml-2">{e.url.split("/").pop()}</div>
                                         </div>
                                     }
+                                    {e.type === 'video' && <div>
+                                        <video controls width={'auto'}>
+                                            <source src={e.url} type="video/mp4" />
+                                        </video>
+                                    </div>}
 
                                 </div>
                             </div>

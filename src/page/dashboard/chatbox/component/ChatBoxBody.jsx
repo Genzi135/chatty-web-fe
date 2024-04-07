@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import Message from "./Message";
 import ForwardModal from "./modal/ForwardModal";
 import { useDispatch, useSelector } from "react-redux";
-import { addMess, setListConversation, updateConversationLastMessage } from "../../../../hooks/redux/reducer";
+import { addMess, setListConversation, setListMessage, updateConversationLastMessage } from "../../../../hooks/redux/reducer";
 import axios from "axios";
 import { useSocket } from "../../../../hooks/context/socketContext";
 import { BASE_URL } from "../../../../data/DUMMY_DATA";
@@ -21,26 +21,59 @@ const ChatBody = () => {
 
     const dispatch = useDispatch();
 
+    const getMessageByConversation = async () => {
+        let page = 1;
+        if (currentConversation._id) {
+            try {
+                const response = await axios({
+                    url: BASE_URL + "/api/v1/conservations/" + `${currentConversation._id}/messages`,
+                    method: 'GET',
+                    headers: { Authorization: `Bearer ${userToken}` },
+                    params: {
+                        page: page,
+                        limit: 50
+                    }
+                });
+                // dispatch(setListMessage(response.data.data.slice().reverse()))
+                setDataSource(response.data.data.slice().reverse())
+            } catch (error) {
+                console.log(error);
+            }
+        }
+    }
+
     useEffect(() => {
-        setDataSource(listMessage)
+        // setDataSource(listMessage)
+        // console.log(listMessage);
+        getMessageByConversation()
     }, [listMessage])
 
     useEffect(() => {
         socket.on("message:receive", (response) => {
             if (currentConversation._id === response.conversation._id) {
                 dispatch(addMess(response))
-                console.log("add");
             }
-            const newListCoversation = listConversation.map(e => {
-                if (e._id === response.conversation._id) {
-                    console.log("cons");
-                    return { ...e, lastMessage: response }
-                }
-                return e;
-            })
-            dispatch(setListConversation(newListCoversation))
+            console.log(response);
+
+            // getMessageByConversation()
+
+            //     const newListCoversation = listConversation.map(e => {
+            //         if (e._id === response.conversation._id) {
+            //             return { ...e, lastMessage: response }
+            //         }
+            //         return e;
+            //     })
+            //     dispatch(setListConversation(newListCoversation))
 
         });
+
+        // socket.on("message:delete", (respone) => {
+        //     if (respone.data.message === 'Message deleted successfully') {
+        //         console.log("delete");
+        //         getMessageByConversation();
+        //     }
+
+        // })
     }, [])
 
     useEffect(() => {

@@ -21,7 +21,7 @@ export default function Chat() {
 
     const data = useSelector((state) => state.listConversation)
 
-    const [listConversation, setListConversations] = React.useState([]);
+    const [listConversation, setListConversation] = React.useState([]);
 
 
     const getData = async () => {
@@ -31,8 +31,8 @@ export default function Chat() {
                 method: 'get',
                 headers: { Authorization: `Bearer ${userToken}` },
             })
-            // setListConversation(respone.data.data)
-            dispatch(setListConversation(respone.data.data))
+            setListConversation(respone.data.data)
+            // dispatch(setListConversation(respone.data.data))
         } catch (error) {
             console.log(error)
         }
@@ -58,24 +58,19 @@ export default function Chat() {
 
     React.useEffect(() => {
         socket.on("message:receive", (response) => {
-            data.map((e) => {
-                if (response.conversation._id === e._id) {
-                    {
-                        return { ...e, lastMessage: response }
-                    }
-                }
-                return e;
-            })
+            // getData();
+            dispatch(updateConversationLastMessage(response.conversation._id, response))
         });
     }, []);
 
     React.useEffect(() => {
         getData()
-    }, [])
-
-    React.useEffect(() => {
-        setListConversations(data)
     }, [data])
+
+    // React.useEffect(() => {
+    //     // setListConversations(data)
+    //     getData();
+    // }, [data])
 
 
 
