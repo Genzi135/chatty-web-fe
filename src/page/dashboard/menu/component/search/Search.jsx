@@ -4,6 +4,10 @@ import AddGroupModal from "./AddGroupModal";
 
 export default function Search() {
 
+    const onClose = () => {
+        document.getElementById('AddGroupModal').close()
+    }
+
     return (
         <>
             <div style={{ width: "100%", height: 70, backgroundColor: "white", display: 'flex', justifyContent: "space-around", alignItems: 'center', gap: 10, padding: 10 }}>
@@ -23,7 +27,7 @@ export default function Search() {
                     <BsPeople size={20} color={"black"} />
                 </div>
                 <dialog id="AddGroupModal" className="modal">
-                    <AddGroupModal />
+                    <AddGroupModal onClose={onClose} />
                 </dialog>
 
             </div>

@@ -88,9 +88,9 @@ const initialState = {
     },
     currentConversation: {},
     login: false,
-    message: "",
+    message: " ",
     listConversation: [],
-    replyMessage: {},
+    replyMessage: null,
     listMessage: []
 }
 

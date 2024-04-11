@@ -106,10 +106,10 @@ const FriendRequest = () => {
                             </div>
                             <div className="flex justify-around gap-4">
                                 <div className="bg-gray-200 flex justify-center items-center text-black hover:bg-gray-300" style={{ borderRadius: 3, width: "50%", height: 30, padding: 10, }}>
-                                    <button onClick={() => { handleReject(e._id) }}>Reject</button>
+                                    <button style={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }} onClick={() => { handleReject(e._id) }}>Reject</button>
                                 </div>
                                 <div className="bg-gray-200 flex justify-center items-center text-black hover:bg-gray-300" style={{ borderRadius: 3, width: "50%", height: 30, padding: 10, }}>
-                                    <button onClick={() => { handleAccept(e._id) }}>Accept</button>
+                                    <button style={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }} onClick={() => { handleAccept(e._id) }}>Accept</button>
                                 </div>
                             </div>
                         </div>

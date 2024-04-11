@@ -17,6 +17,22 @@ const AddFriendModal = () => {
         setPhoneInput(text)
     }
 
+    // const userToken = JSON.parse(localStorage.getItem("userToken"));
+
+    //const userID = useSelector(state => state.user._id);
+
+    const handleOpenConversation = async (id) => {
+        try {
+            const respone = await axios({
+                url: BASE_URL + "/api/v1/conservations/open/" + `${id}`,
+                method: 'post',
+                headers: { Authorization: `Bearer ${userToken}` },
+            })
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     const handleSearch = async () => {
         if (phoneInput.length !== 10) {
             setReport("phone number must be 10 character")
@@ -28,14 +44,12 @@ const AddFriendModal = () => {
                     url: BASE_URL + "/api/v1/users/findByPhone/" + phoneInput,
                     headers: { Authorization: `Bearer ${userToken}` },
                 })
-                console.log(respone)
                 setReport('')
                 try {
                     const res = await axios({
                         url: BASE_URL + "/api/v1/users/" + respone.data.data._id,
                         headers: { Authorization: `Bearer ${userToken}` },
                     })
-                    console.log(res)
                     setDataSource(res.data.data)
                     setReport('')
                 } catch (error) {
@@ -59,7 +73,6 @@ const AddFriendModal = () => {
                 method: 'post',
                 headers: { Authorization: `Bearer ${userToken}` },
             })
-            console.log(respone)
             handleSearch()
         } catch (error) {
             console.log(error)
@@ -69,7 +82,6 @@ const AddFriendModal = () => {
         setLoading(false)
 
     }
-
     const handleCancelFriend = async () => {
         setLoading(true)
         try {
@@ -78,7 +90,6 @@ const AddFriendModal = () => {
                 method: 'post',
                 headers: { Authorization: `Bearer ${userToken}` },
             })
-            console.log(respone)
             handleSearch()
         } catch (error) {
             console.log(error)
@@ -139,7 +150,9 @@ const AddFriendModal = () => {
                                         </div>
                                     </div>
                                 </div>
-
+                                <div className="bg-gray-200 flex justify-center items-center text-black hover:bg-gray-300" style={{ borderRadius: 3, width: "50%", height: 30, padding: 10, }}>
+                                    <button style={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }} onClick={() => { handleOpenConversation(dataSource._id) }}>Chat</button>
+                                </div>
                                 <div>
                                     {dataSource.friend === null ? <button
                                         onClick={() => handleAddFriendRequest()}

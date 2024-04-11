@@ -76,7 +76,7 @@ const ForwardModal = ({ onClose }) => {
     return (
         <div
 
-            style={{ backgroundColor: "white", width: 400, height: 600, zIndex: 666, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', padding: 10 }}>
+            style={{ backgroundColor: "white", width: 400, height: 'auto', zIndex: 666, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', padding: 10 }}>
 
             <div style={{ color: 'black' }}>
                 <div className="text-black p-3 text-lg font-semibold">
@@ -148,7 +148,7 @@ const ForwardModal = ({ onClose }) => {
                     </button>
                 </div>
             </div>
-        </div >
+        </div>
     );
 };
 

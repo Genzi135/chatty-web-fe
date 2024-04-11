@@ -53,7 +53,6 @@ const ChatBody = () => {
             if (currentConversation._id === response.conversation._id) {
                 dispatch(addMess(response))
             }
-            console.log(response);
 
         });
 
@@ -61,7 +60,7 @@ const ChatBody = () => {
             getMessageByConversation();
 
         })
-    }, [])
+    }, [listMessage])
 
     useEffect(() => {
         if (chatContainerRef.current) {
@@ -107,7 +106,7 @@ const ChatBody = () => {
                     <div key={e._id}>
                         {showDateDivider && (
                             <div style={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                                <div style={{ width: 100, height: 30, backgroundColor: 'black', display: 'flex', justifyContent: 'center', alignItems: 'center', opacity: '30%', borderRadius: 30, marginTop: 10, color: 'white' }}>{prevDate}</div>
+                                <div style={{ width: 100, height: 30, backgroundColor: 'black', display: 'flex', justifyContent: 'center', alignItems: 'center', opacity: '30%', borderRadius: 30, marginTop: 10, marginBottom: 10, color: 'white' }}>{prevDate}</div>
                             </div>
                         )}
                         <div>

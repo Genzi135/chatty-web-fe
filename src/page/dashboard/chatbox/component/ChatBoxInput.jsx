@@ -14,6 +14,8 @@ import {
   BsFileEarmarkZipFill,
   BsFillFileEarmarkTextFill,
   BsFastForwardCircle,
+  BsFolder,
+  BsCollectionPlay,
 } from "react-icons/bs";
 import axios from "axios";
 import { BASE_URL } from "../../../../data/DUMMY_DATA";
@@ -85,7 +87,7 @@ const ChatInput = () => {
   const handleSendMessage = async () => {
     console.log("rep", replyMessage);
     setLoading(true)
-    if (typeof replyMessage === 'object' && Object.keys(replyMessage).length !== 0) {
+    if (replyMessage && typeof replyMessage === 'object' && Object.keys(replyMessage).length !== 0) {
       hanldeReplyMessage();
       dispatch(setReplyMessage({}))
     } else if (inputImage || inputFile || video) {
@@ -152,6 +154,7 @@ const ChatInput = () => {
     files.forEach((file) => {
       formData.append('files', file)
     })
+    formData.append('content', inputMessage)
     console.log(formData);
     if (files && files.length > 0) {
       try {
@@ -273,7 +276,7 @@ const ChatInput = () => {
             }}
             className="hover:bg-gray-200"
           >
-            <BsIntersect size={20} color={"black"} />
+            <BsCollectionPlay size={20} color={"black"} />
             <input
               type="file"
               id="file"
@@ -281,19 +284,24 @@ const ChatInput = () => {
               value={""}
               multiple
               onChange={(e) => {
-                // setInputImage(URL.createObjectURL(e.target.files[0]));
                 const videos = e.target.files;
-                if (videos.length <= 2) {
-                  const newVideos = [];
-                  for (let i = 0; i < videos.length; i++) {
-                    if (videos[i].type.includes('video')) {
-                      newVideos.push(e.target.files[i])
-                    }
+                const maxSize = 10 * 1024 * 1024; // Maximum file size is 25MB
+                const newVideos = [];
+
+                for (let i = 0; i < videos.length; i++) {
+                  const videoSize = videos[i].size;
+                  const fileName = videos[i].name;
+                  if (videoSize <= maxSize) {
+                    newVideos.push(videos[i]);
+                  } else {
+                    alert("The file '" + fileName + "' exceeds 10MB.");
                   }
-                  setVideo(newVideos)
+                }
+
+                if (newVideos.length <= 2) {
+                  setVideo(newVideos);
                 } else {
-                  alert("Max is 2 images");
-                  e.target.value = null;
+                  alert("Only a maximum of 2 videos can be selected.");
                 }
               }}
               style={{
@@ -305,6 +313,8 @@ const ChatInput = () => {
                 opacity: 0,
               }}
             />
+
+
           </div>
           <div
             style={{
@@ -366,13 +376,13 @@ const ChatInput = () => {
             }}
             className="hover:bg-gray-200"
           >
-            <BsBandaid size={20} color="black" />
+            <BsFolder size={20} color="black" />
             <input
               type="file"
               id="file"
               value={""}
               multiple
-              accept=".doc, .docx, .ppt, .pptx, .xls, .xlsx, .rar, .zar, .txt, .zip"
+              accept=".doc, .docx, .pdf, .ppt, .pptx, .xls, .xlsx, .rar, .zar, .txt, .zip"
               onChange={(e) => {
                 const files = e.target.files;
                 if (files.length <= 5) {
@@ -586,6 +596,7 @@ const ChatInput = () => {
 
                         {e.name.endsWith('.pptx') && <BsFileEarmarkPptFill size={40} color='red' />}
                         {e.name.endsWith('.ppt') && <BsFileEarmarkPptFill size={40} color='red' />}
+                        {e.name.endsWith('.pdf') && <BsFileEarmarkPptFill size={40} color='red' />}
 
                         {e.name.endsWith('.xlsx') && <BsFileEarmarkXFill size={40} color='green' />}
                         {e.name.endsWith('.xls') && <BsFileEarmarkXFill size={40} color='green' />}

@@ -9,17 +9,26 @@ import { useSocket } from "../../../../hooks/context/socketContext";
 
 // eslint-disable-next-line react/prop-types
 const Message = ({ message, onOpenFWM }) => {
-    const current = useSelector((state) => state.user)
-    return (
-        <>
-            {
-                // eslint-disable-next-line react/prop-types  
+    const current = useSelector((state) => state.user);
 
-                message.sender._id === current._id ? <UserMessage message={message} onOpenFWM={onOpenFWM} /> : <FriendMessage message={message} onOpenFWM={onOpenFWM} />
+    // Kiểm tra tồn tại của message và message.type
+    if (message && message.type && message.type === 'notification') {
+        return <NotiMessage message={message} />;
+    } else {
+        // Kiểm tra tồn tại của message.sender và current
+        if (message && message.sender && current) {
+            // Kiểm tra xem tin nhắn có phải từ người dùng hiện tại không
+            if (message.sender._id === current._id && message.isMine === true) {
+                return <UserMessage message={message} onOpenFWM={onOpenFWM} />;
+            } else {
+                return <FriendMessage message={message} onOpenFWM={onOpenFWM} />;
             }
-        </>
-    )
+        } else {
+            return null; // Trả về null nếu không có dữ liệu để render
+        }
+    }
 }
+
 
 const UserMessage = ({ message, onOpenFWM }) => {
 
@@ -163,6 +172,7 @@ const UserMessage = ({ message, onOpenFWM }) => {
 
                                                     {e.url.split(".").pop() === 'pptx' && <BsFileEarmarkPptFill size={40} color='red' />}
                                                     {e.url.split(".").pop() === 'ppt' && <BsFileEarmarkPptFill size={40} color='red' />}
+                                                    {e.url.split(".").pop() === 'pdf' && <BsFileEarmarkPptFill size={40} color='red' />}
 
                                                     {e.url.split(".").pop() === 'xlsx' && <BsFileEarmarkXFill size={40} color='green' />}
                                                     {e.url.split(".").pop() === 'xls' && <BsFileEarmarkXFill size={40} color='green' />}
@@ -208,6 +218,8 @@ const UserMessage = ({ message, onOpenFWM }) => {
 
                                             {e.url.split(".").pop() === 'pptx' && <BsFileEarmarkPptFill size={40} color='red' />}
                                             {e.url.split(".").pop() === 'ppt' && <BsFileEarmarkPptFill size={40} color='red' />}
+                                            {e.url.split(".").pop() === 'pdf' && <BsFileEarmarkPptFill size={40} color='red' />}
+
 
                                             {e.url.split(".").pop() === 'xlsx' && <BsFileEarmarkXFill size={40} color='green' />}
                                             {e.url.split(".").pop() === 'xls' && <BsFileEarmarkXFill size={40} color='green' />}
@@ -330,6 +342,7 @@ const FriendMessage = ({ message, onOpenFWM }) => {
 
                                                     {e.url.split(".").pop() === 'pptx' && <BsFileEarmarkPptFill size={40} color='red' />}
                                                     {e.url.split(".").pop() === 'ppt' && <BsFileEarmarkPptFill size={40} color='red' />}
+                                                    {e.url.split(".").pop() === 'pdf' && <BsFileEarmarkPptFill size={40} color='red' />}
 
                                                     {e.url.split(".").pop() === 'xlsx' && <BsFileEarmarkXFill size={40} color='green' />}
                                                     {e.url.split(".").pop() === 'xls' && <BsFileEarmarkXFill size={40} color='green' />}
@@ -375,6 +388,7 @@ const FriendMessage = ({ message, onOpenFWM }) => {
 
                                             {e.url.split(".").pop() === 'pptx' && <BsFileEarmarkPptFill size={40} color='red' />}
                                             {e.url.split(".").pop() === 'ppt' && <BsFileEarmarkPptFill size={40} color='red' />}
+                                            {e.url.split(".").pop() === 'pdf' && <BsFileEarmarkPptFill size={40} color='red' />}
 
                                             {e.url.split(".").pop() === 'xlsx' && <BsFileEarmarkXFill size={40} color='green' />}
                                             {e.url.split(".").pop() === 'xls' && <BsFileEarmarkXFill size={40} color='green' />}
@@ -431,6 +445,21 @@ const FriendMessage = ({ message, onOpenFWM }) => {
             </div>}
         </div>
     )
+}
+
+const NotiMessage = (message) => {
+    return <div className="flex justify-center items-center gap-2 text-black mb-2 mt-2" >
+        <div className="flex justify-center items-center gap-2 text-black p-2 rounded-full" style={{ backgroundColor: 'rgba(169, 169, 169, 0.2)' }}>
+            <div className="avatar">
+                <div className="avatar w-6 h-6 rounded-full mr-2">
+                    <img src={message.message?.sender?.avatar} alt="avatar" />
+                </div>
+            </div>
+            <div>
+                {message.message?.content}
+            </div>
+        </div>
+    </div>
 }
 
 export default Message;

@@ -117,10 +117,10 @@ const FriendList = () => {
                                 <div>
                                     <div className="flex justify-around gap-4">
                                         <div className="bg-gray-200 flex justify-center items-center text-black hover:bg-gray-300" style={{ borderRadius: 3, width: "50%", height: 30, padding: 10, }}>
-                                            <button onClick={() => { handleOpenConversation(friend.userId) }}>Chat</button>
+                                            <button style={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }} onClick={() => { handleOpenConversation(friend.userId) }}>Chat</button>
                                         </div>
                                         <div className="bg-gray-200 flex justify-center items-center text-black hover:bg-gray-300" style={{ borderRadius: 3, width: "50%", height: 30, padding: 10, }}>
-                                            <button onClick={() => { handleRemoveFriend(friend.userId) }}>Remove</button>
+                                            <button style={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }} onClick={() => { handleRemoveFriend(friend.userId) }}>Remove</button>
                                         </div>
                                     </div>
                                 </div>

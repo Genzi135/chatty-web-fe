@@ -6,7 +6,7 @@ import axios from "axios";
 import { BASE_URL } from "../../../../../data/DUMMY_DATA";
 import { COLORS } from "../../../../../utils/COLORS";
 import { useDispatch, useSelector } from "react-redux";
-import { setConversation, setListConversation, updateConversationIsReadMessageFalse, updateConversationLastMessage } from "../../../../../hooks/redux/reducer";
+import { addMess, setConversation, setListConversation, updateConversationIsReadMessageFalse, updateConversationLastMessage } from "../../../../../hooks/redux/reducer";
 import { useSocket } from "../../../../../hooks/context/socketContext";
 
 export default function Chat() {
@@ -60,11 +60,12 @@ export default function Chat() {
         socket.on("message:receive", (response) => {
             // getData();
             dispatch(updateConversationLastMessage(response.conversation._id, response))
+            dispatch(addMess(response))
         });
     }, []);
 
     React.useEffect(() => {
-        getData()
+        getData();
     }, [data])
 
     // React.useEffect(() => {
@@ -78,7 +79,7 @@ export default function Chat() {
     return (
         <div>
             <HeaderChat />
-            <div style={{ width: "100%" }}>
+            <div style={{ width: "100%", height: 600, overflowY: 'auto' }}>
                 {listConversation.length > 0 ? (listConversation.map((conversation, index) => (
                     <div key={index} onClick={() => chatClick(conversation)}>
                         <Conversation data={conversation} />
